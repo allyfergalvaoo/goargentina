@@ -2,438 +2,227 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login | GoArgentina</title>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{
-      --primary:#0066FF;
-      --accent:#FFD500;
-      --dark:#0A0E27;
-      --light:#F8F9FF;
-      --success:#10B981;
-      --warning:#F59E0B;
-      --danger:#EF4444;
-    }
+    :root { --primary:#0066FF; --accent:#FFD500; --dark:#0A0E27; --light:#F8F9FF; }
+    *{box-sizing:border-box;margin:0;padding:0}
     body{
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-      background:var(--dark);
-      color:var(--light);
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:22px;
-      overflow:hidden;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--dark); color:var(--light);
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      padding:24px;
     }
-
-    /* Stars */
-    .stars{position:fixed;inset:0;pointer-events:none;z-index:0}
-    .star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.4;animation:twinkle 3s infinite}
-    @keyframes twinkle{0%,100%{opacity:.4}50%{opacity:1}}
-
-    /* Card */
     .card{
-      position:relative;z-index:1;
-      width:100%;max-width:560px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.14);
-      backdrop-filter:blur(14px);
-      border-radius:24px;
-      padding:22px;
-      box-shadow:0 20px 60px rgba(0,0,0,.35);
+      width:100%; max-width:520px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:18px; padding:26px;
     }
-    .header{
-      display:flex;align-items:center;gap:12px;
-      margin-bottom:10px;
-    }
-    .logo-icon{
-      width:44px;height:44px;border-radius:14px;
+    .logo{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .logo-icon{width:40px;height:40px;border-radius:12px;
       display:flex;align-items:center;justify-content:center;
       background:linear-gradient(135deg,var(--primary),var(--accent));
-      color:var(--dark);
       font-size:20px;
-      font-weight:900;
     }
-    .title{
-      font-size:22px;font-weight:950;
-      line-height:1.1;
-    }
-    .subtitle{
-      margin-top:4px;
-      font-size:13px;
-      font-weight:800;
-      color:rgba(255,255,255,.66);
-      line-height:1.45;
-    }
-
-    .pill{
-      margin:14px 0 16px;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
-      font-size:12px;
-      font-weight:900;
-      color:rgba(255,255,255,.75);
-    }
-    .dot{
-      width:8px;height:8px;border-radius:50%;
-      background:var(--accent);
-      box-shadow:0 0 0 0 rgba(255,213,0,.65);
-      animation:pulse 2s infinite;
-    }
-    @keyframes pulse{
-      0%,100%{box-shadow:0 0 0 0 rgba(255,213,0,.5)}
-      50%{box-shadow:0 0 0 10px rgba(255,213,0,0)}
-    }
-
-    label{
-      display:block;
-      font-size:12px;
-      font-weight:900;
-      color:rgba(255,255,255,.72);
-      margin:8px 0 8px;
-    }
+    h1{font-size:22px;margin:6px 0 6px}
+    p{color:rgba(255,255,255,0.7);font-size:14px;margin-bottom:18px;line-height:1.5}
+    label{display:block;font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:8px}
     input{
+      width:100%; padding:12px 14px; border-radius:12px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.12);
+      color:#fff; font-size:14px;
+      outline:none;
+    }
+    input:focus{border-color:rgba(0,102,255,0.6)}
+    .row{display:flex;gap:10px;margin-top:14px}
+    button{
       width:100%;
       padding:12px 14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
-      color:#fff;
-      font-weight:850;
-      font-size:14px;
-    }
-    input:focus{
-      outline:none;
-      border-color:rgba(0,102,255,.65);
-      background:rgba(255,255,255,.08);
-    }
-    .row{
-      display:flex;
-      gap:10px;
-      margin-top:12px;
-      flex-wrap:wrap;
-    }
-    .btn{
-      border:none;
-      cursor:pointer;
-      font-weight:950;
-      border-radius:14px;
-      padding:12px 14px;
-      transition:.15s;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-    }
-    .btn-primary{
+      border:none; border-radius:12px;
+      cursor:pointer; font-weight:700;
       background:linear-gradient(135deg,var(--primary),#0052CC);
-      color:#fff;
-      box-shadow:0 10px 26px rgba(0,102,255,.28);
-      flex:1;
-      min-width:220px;
+      color:white;
     }
-    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(0,102,255,.42)}
-    .btn-secondary{
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.14);
-      color:rgba(255,255,255,.9);
-      flex:1;
-      min-width:220px;
-    }
-    .btn-secondary:hover{background:rgba(255,255,255,.10)}
-    .btn[disabled]{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
-
-    .spinner{
-      width:16px;height:16px;border-radius:50%;
-      border:2px solid rgba(255,255,255,.35);
-      border-top-color:#fff;
-      animation:spin .8s linear infinite;
-      display:none;
-    }
-    @keyframes spin{to{transform:rotate(360deg)}}
-
+    button:disabled{opacity:0.6;cursor:not-allowed}
     .msg{
       margin-top:14px;
       padding:12px 12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
+      border-radius:12px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.10);
+      color:rgba(255,255,255,0.85);
       font-size:13px;
-      font-weight:900;
-      line-height:1.45;
       display:none;
       white-space:pre-line;
     }
-    .msg.show{display:block}
-    .msg.ok{border-color:rgba(16,185,129,.45);background:rgba(16,185,129,.10)}
-    .msg.warn{border-color:rgba(245,158,11,.45);background:rgba(245,158,11,.10)}
-    .msg.err{border-color:rgba(239,68,68,.45);background:rgba(239,68,68,.10)}
-
-    .tips{
-      margin-top:14px;
-      padding-top:14px;
-      border-top:1px solid rgba(255,255,255,.12);
-      color:rgba(255,255,255,.62);
-      font-size:12px;
-      font-weight:850;
-      line-height:1.5;
-    }
-
-    .mini-actions{
-      margin-top:10px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .link{
-      color:rgba(255,255,255,.75);
-      text-decoration:underline;
-      cursor:pointer;
-      font-weight:950;
-      font-size:12px;
-    }
+    .hint{margin-top:12px;color:rgba(255,255,255,0.5);font-size:12px;line-height:1.5}
+    a{color:var(--accent)}
   </style>
 </head>
 <body>
-  <div class="stars"></div>
-
   <div class="card">
-    <div class="header">
+    <div class="logo">
       <div class="logo-icon">🇦🇷</div>
       <div>
-        <div class="title">GoArgentina</div>
-        <div class="subtitle">
-          Login simples: digite seu email e receba um <b>link</b> para entrar.<br/>
-          <b>Sem senha</b> e <b>sem código</b>.
-        </div>
+        <div style="font-weight:900;font-size:18px;line-height:1">GoArgentina</div>
+        <div style="color:rgba(255,255,255,0.6);font-size:12px">Acesso por Magic Link</div>
       </div>
     </div>
 
-    <div class="pill"><span class="dot"></span> Magic Link (email com link)</div>
+    <h1>Entrar</h1>
+    <p>Digite seu e-mail e vamos te enviar um link mágico para acessar sua conta.</p>
 
-    <label for="email">Seu email</label>
-    <input id="email" type="email" placeholder="voce@email.com" autocomplete="email" />
+    <form id="form">
+      <label for="email">Seu e-mail</label>
+      <input id="email" type="email" placeholder="ex: seuemail@gmail.com" required />
+      <div class="row">
+        <button id="btn" type="submit">Enviar link de acesso</button>
+      </div>
+    </form>
 
-    <div class="row">
-      <button class="btn btn-primary" id="sendBtn" type="button">
-        <span class="spinner" id="spin"></span>
-        <span id="sendText">Enviar link de acesso</span>
-      </button>
-      <button class="btn btn-secondary" id="openPanelBtn" type="button" style="display:none;">
-        Ir para meu painel
-      </button>
-    </div>
+    <div id="msg" class="msg"></div>
 
-    <div class="mini-actions">
-      <span class="link" id="useLastEmail" style="display:none;">Usar último email</span>
-      <span class="link" id="clearEmail" style="display:none;">Limpar</span>
-    </div>
-
-    <div class="msg" id="msg"></div>
-
-    <div class="tips">
-      Dicas:
-      <br/>• Confira <b>Spam / Promoções</b>.
-      <br/>• O link pode demorar alguns segundos para chegar.
-      <br/>• Se você clicar no link e voltar para esta tela, o sistema deve detectar e te mandar para o painel automaticamente.
+    <div class="hint">
+      • Abra o link no <b>mesmo navegador</b> onde você pediu o acesso (para evitar inconsistências).<br>
+      • Se clicar e voltar para esta tela, normalmente é porque o link não foi “consumido” — este arquivo resolve isso.
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    // =========================
-    // 1) COLE SUAS CHAVES AQUI
-    // =========================
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    // ✅ Troque pelos seus dados:
     const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k";
 
-    // =========================
-    // 2) INIT SUPABASE
-    // =========================
-    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
-        detectSessionInUrl: true, // essencial para magic link
+        detectSessionInUrl: true
       }
     });
 
-    // =========================
-    // UI helpers
-    // =========================
+    const form = document.getElementById("form");
+    const emailEl = document.getElementById("email");
+    const btn = document.getElementById("btn");
     const msg = document.getElementById("msg");
-    const emailInput = document.getElementById("email");
-    const sendBtn = document.getElementById("sendBtn");
-    const spin = document.getElementById("spin");
-    const sendText = document.getElementById("sendText");
-    const openPanelBtn = document.getElementById("openPanelBtn");
-    const useLastEmail = document.getElementById("useLastEmail");
-    const clearEmail = document.getElementById("clearEmail");
 
-    function showMsg(type, text){
-      msg.className = "msg show " + type;
+    function showMessage(text) {
+      msg.style.display = "block";
       msg.textContent = text;
     }
-    function hideMsg(){
-      msg.className = "msg";
-      msg.textContent = "";
-    }
-    function setLoading(isLoading){
-      sendBtn.disabled = isLoading;
-      spin.style.display = isLoading ? "inline-block" : "none";
-      sendText.textContent = isLoading ? "Enviando…" : "Enviar link de acesso";
-    }
-    function isValidEmail(v){
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+    function clearUrlArtifacts() {
+      // remove hash/token da URL (evita reprocessar e deixa bonito)
+      const clean = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, clean);
     }
 
-    // =========================
-    // Absolute redirect URL
-    // (garante que funciona em Vercel e subpastas)
-    // =========================
-    function absoluteUrl(file){
-      const base = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, "/");
-      return base + file;
-    }
+    async function routeAfterLogin() {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData?.session) return;
 
-    // =========================
-    // Routing: admin vs dashboard
-    // - Se não existir profiles/role, cai no dashboard
-    // =========================
-    let redirecting = false;
+      const user = sessionData.session.user;
 
-    async function routeAfterLogin(){
-      if (redirecting) return;
-      redirecting = true;
-
-      try{
-        const { data: uData } = await sb.auth.getUser();
-        const user = uData?.user;
-        if (!user){ redirecting = false; return; }
-
-        // tenta ver role no profiles (se existir)
-        const { data: prof, error: pErr } = await sb
+      // tenta ler role no profiles; se não existir, segue como cliente
+      let role = "client";
+      try {
+        const { data: profile, error } = await supabase
           .from("profiles")
           .select("role")
           .eq("id", user.id)
-          .single();
+          .maybeSingle();
 
-        if (!pErr && prof?.role === "admin"){
-          window.location.href = "admin.html";
-        } else {
-          window.location.href = "dashboard.html";
-        }
-      } catch (e){
+        if (!error && profile?.role) role = profile.role;
+      } catch (_) {}
+
+      if (role === "admin") {
+        window.location.href = "admin.html";
+      } else {
         window.location.href = "dashboard.html";
       }
     }
 
-    // =========================
-    // Detect session on load
-    // (ex.: usuário voltou do link do email)
-    // =========================
-    (async ()=>{
-      // carregar último email
-      const last = localStorage.getItem("ga_last_email") || "";
-      if (last){
-        useLastEmail.style.display = "inline";
-        clearEmail.style.display = "inline";
-      }
+    async function consumeMagicLinkFromHashIfAny() {
+      // Seu link vem assim:
+      // login.html#access_token=...&refresh_token=...&type=magiclink
+      const hash = window.location.hash;
+      if (!hash || hash.length < 2) return;
 
-      const { data } = await sb.auth.getSession();
-      if (data?.session){
-        openPanelBtn.style.display = "inline-flex";
-        showMsg("ok", "Você já está logado.\nClique em “Ir para meu painel” ou aguarde o redirecionamento.");
-        setTimeout(routeAfterLogin, 400);
-      }
-    })();
+      const params = new URLSearchParams(hash.substring(1));
+      const access_token = params.get("access_token");
+      const refresh_token = params.get("refresh_token");
 
-    // também escuta eventos de auth (mais confiável)
-    sb.auth.onAuthStateChange(async (event, session)=>{
-      if (session?.user){
-        openPanelBtn.style.display = "inline-flex";
-        showMsg("ok", "Login confirmado! Redirecionando…");
-        await routeAfterLogin();
-      }
-    });
-
-    openPanelBtn.addEventListener("click", routeAfterLogin);
-
-    // Usar/limpar último email
-    useLastEmail.addEventListener("click", ()=>{
-      const last = localStorage.getItem("ga_last_email") || "";
-      if (last) emailInput.value = last;
-      emailInput.focus();
-    });
-    clearEmail.addEventListener("click", ()=>{
-      localStorage.removeItem("ga_last_email");
-      useLastEmail.style.display = "none";
-      clearEmail.style.display = "none";
-      showMsg("warn", "Último email limpo.");
-    });
-
-    // =========================
-    // Send Magic Link (NO CODE)
-    // =========================
-    sendBtn.addEventListener("click", async ()=>{
-      hideMsg();
-
-      const email = emailInput.value.trim().toLowerCase();
-      if (!email) return showMsg("err", "Digite seu email.");
-      if (!isValidEmail(email)) return showMsg("err", "Email inválido. Ex: nome@dominio.com");
-
-      setLoading(true);
-
-      // salva email pra facilitar
-      localStorage.setItem("ga_last_email", email);
-      useLastEmail.style.display = "inline";
-      clearEmail.style.display = "inline";
-
-      const redirectTo = absoluteUrl("login.html");
-
-      const { error } = await sb.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: redirectTo
+      if (access_token && refresh_token) {
+        const { error } = await supabase.auth.setSession({ access_token, refresh_token });
+        if (error) {
+          showMessage("❌ Não consegui finalizar o login.\n\nDetalhe: " + error.message);
+          return;
         }
+        clearUrlArtifacts();
+      }
+    }
+
+    async function consumeCodeFlowIfAny() {
+      // se um dia vier login.html?code=...
+      const url = new URL(window.location.href);
+      const code = url.searchParams.get("code");
+      if (!code) return;
+
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
+      if (error) {
+        showMessage("❌ Não consegui finalizar o login.\n\nDetalhe: " + error.message);
+        return;
+      }
+      clearUrlArtifacts();
+    }
+
+    // ✅ 1) Quando a página abre, tenta consumir o retorno do email e criar sessão
+    await consumeMagicLinkFromHashIfAny();
+    await consumeCodeFlowIfAny();
+
+    // ✅ 2) Se já existe sessão, manda direto pro lugar certo
+    await routeAfterLogin();
+
+    // ✅ 3) Enviar magic link
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = emailEl.value.trim();
+      if (!email) return;
+
+      btn.disabled = true;
+      showMessage("📨 Enviando link de acesso...");
+
+      const redirectTo = window.location.origin + "/login.html";
+
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: redirectTo }
       });
 
-      setLoading(false);
+      btn.disabled = false;
 
-      if (error){
-        // mensagens mais amigáveis
-        const msgTxt =
-          (error.message || "").toLowerCase().includes("rate limit")
-            ? "Você atingiu limite de envios por enquanto.\nTente novamente mais tarde ou use outro email para testar."
-            : error.message;
-
-        return showMsg("err", msgTxt);
+      if (error) {
+        showMessage("❌ Erro ao enviar email.\n\nDetalhe: " + error.message);
+        return;
       }
 
-      showMsg(
-        "ok",
-        "Link enviado!\nAbra seu email e clique no link para entrar.\n(Não existe código — é link mesmo.)"
+      showMessage(
+        "✅ Link enviado!\n\n" +
+        "Abra seu email e clique no link.\n" +
+        "Se não aparecer, verifique SPAM / Promoções."
       );
     });
 
-    // =========================
-    // Stars background
-    // =========================
-    const stars = document.querySelector(".stars");
-    for (let i=0;i<90;i++){
-      const s=document.createElement("div");
-      s.className="star";
-      s.style.left=Math.random()*100+"%";
-      s.style.top=Math.random()*100+"%";
-      s.style.animationDelay=Math.random()*3+"s";
-      stars.appendChild(s);
-    }
+    // ✅ 4) Se o Supabase detectar login por evento, também roteia (backup)
+    supabase.auth.onAuthStateChange(async (event) => {
+      if (event === "SIGNED_IN") {
+        await routeAfterLogin();
+      }
+    });
   </script>
 </body>
 </html>
