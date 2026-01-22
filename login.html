@@ -32,8 +32,7 @@
       width:100%; padding:12px 14px; border-radius:12px;
       background:rgba(255,255,255,0.06);
       border:1px solid rgba(255,255,255,0.12);
-      color:#fff; font-size:14px;
-      outline:none;
+      color:#fff; font-size:14px; outline:none;
     }
     input:focus{border-color:rgba(0,102,255,0.6)}
     .row{display:flex;gap:10px;margin-top:14px}
@@ -41,24 +40,24 @@
       width:100%;
       padding:12px 14px;
       border:none; border-radius:12px;
-      cursor:pointer; font-weight:700;
+      cursor:pointer; font-weight:800;
       background:linear-gradient(135deg,var(--primary),#0052CC);
       color:white;
     }
-    button:disabled{opacity:0.6;cursor:not-allowed}
+    button:disabled{opacity:0.65;cursor:not-allowed}
     .msg{
       margin-top:14px;
       padding:12px 12px;
       border-radius:12px;
       background:rgba(255,255,255,0.05);
       border:1px solid rgba(255,255,255,0.10);
-      color:rgba(255,255,255,0.85);
+      color:rgba(255,255,255,0.9);
       font-size:13px;
       display:none;
       white-space:pre-line;
     }
-    .hint{margin-top:12px;color:rgba(255,255,255,0.5);font-size:12px;line-height:1.5}
-    a{color:var(--accent)}
+    .hint{margin-top:12px;color:rgba(255,255,255,0.55);font-size:12px;line-height:1.5}
+    code{color:var(--accent)}
   </style>
 </head>
 <body>
@@ -72,7 +71,7 @@
     </div>
 
     <h1>Entrar</h1>
-    <p>Digite seu e-mail e vamos te enviar um link mágico para acessar sua conta.</p>
+    <p>Digite seu e-mail e vamos enviar um link mágico para acessar sua conta.</p>
 
     <form id="form">
       <label for="email">Seu e-mail</label>
@@ -85,19 +84,19 @@
     <div id="msg" class="msg"></div>
 
     <div class="hint">
-      • Abra o link no <b>mesmo navegador</b> onde você pediu o acesso (para evitar inconsistências).<br>
-      • Se clicar e voltar para esta tela, normalmente é porque o link não foi “consumido” — este arquivo resolve isso.
+      Dica: se você pedir o link num navegador, abra o email e clique no link no <b>mesmo navegador</b> (mesmo perfil).
     </div>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  <!-- Supabase JS (modo global, mais simples e confiável no Vercel) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    // ✅ Troque pelos seus dados:
+  <script>
+    // ✅ Suas variáveis (é ok expor URL + ANON KEY)
     const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k";
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
@@ -116,39 +115,13 @@
     }
 
     function clearUrlArtifacts() {
-      // remove hash/token da URL (evita reprocessar e deixa bonito)
-      const clean = window.location.origin + window.location.pathname;
+      const clean = window.location.origin + window.location.pathname; // /login.html
       window.history.replaceState({}, document.title, clean);
     }
 
-    async function routeAfterLogin() {
-      const { data: sessionData } = await supabase.auth.getSession();
-      if (!sessionData?.session) return;
-
-      const user = sessionData.session.user;
-
-      // tenta ler role no profiles; se não existir, segue como cliente
-      let role = "client";
-      try {
-        const { data: profile, error } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", user.id)
-          .maybeSingle();
-
-        if (!error && profile?.role) role = profile.role;
-      } catch (_) {}
-
-      if (role === "admin") {
-        window.location.href = "admin.html";
-      } else {
-        window.location.href = "dashboard.html";
-      }
-    }
-
-    async function consumeMagicLinkFromHashIfAny() {
+    async function consumeMagicLinkHashIfAny() {
       // Seu link vem assim:
-      // login.html#access_token=...&refresh_token=...&type=magiclink
+      // /login.html#access_token=...&refresh_token=...&type=magiclink
       const hash = window.location.hash;
       if (!hash || hash.length < 2) return;
 
@@ -157,8 +130,9 @@
       const refresh_token = params.get("refresh_token");
 
       if (access_token && refresh_token) {
-        const { error } = await supabase.auth.setSession({ access_token, refresh_token });
+        const { error } = await supabaseClient.auth.setSession({ access_token, refresh_token });
         if (error) {
+          console.error("setSession error:", error);
           showMessage("❌ Não consegui finalizar o login.\n\nDetalhe: " + error.message);
           return;
         }
@@ -167,60 +141,76 @@
     }
 
     async function consumeCodeFlowIfAny() {
-      // se um dia vier login.html?code=...
+      // Backup: se um dia vier /login.html?code=...
       const url = new URL(window.location.href);
       const code = url.searchParams.get("code");
       if (!code) return;
 
-      const { error } = await supabase.auth.exchangeCodeForSession(code);
+      const { error } = await supabaseClient.auth.exchangeCodeForSession(code);
       if (error) {
+        console.error("exchangeCodeForSession error:", error);
         showMessage("❌ Não consegui finalizar o login.\n\nDetalhe: " + error.message);
         return;
       }
       clearUrlArtifacts();
     }
 
-    // ✅ 1) Quando a página abre, tenta consumir o retorno do email e criar sessão
-    await consumeMagicLinkFromHashIfAny();
-    await consumeCodeFlowIfAny();
+    async function routeIfLogged() {
+      const { data } = await supabaseClient.auth.getSession();
+      if (data?.session) {
+        // simples: manda pro dashboard. (admin pode ter botão/link pro admin depois)
+        window.location.href = "dashboard.html";
+      }
+    }
 
-    // ✅ 2) Se já existe sessão, manda direto pro lugar certo
-    await routeAfterLogin();
+    // 1) Ao abrir a página: tenta consumir retorno do email e criar sessão
+    (async () => {
+      try {
+        await consumeMagicLinkHashIfAny();
+        await consumeCodeFlowIfAny();
+        await routeIfLogged();
+      } catch (e) {
+        console.error(e);
+        showMessage("❌ Erro inesperado no login. Veja o console (F12).");
+      }
+    })();
 
-    // ✅ 3) Enviar magic link
+    // 2) Envio do magic link
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const email = emailEl.value.trim();
       if (!email) return;
 
       btn.disabled = true;
       showMessage("📨 Enviando link de acesso...");
 
-      const redirectTo = window.location.origin + "/login.html";
+      try {
+        const redirectTo = window.location.origin + "/login.html";
 
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: { emailRedirectTo: redirectTo }
-      });
+        const { error } = await supabaseClient.auth.signInWithOtp({
+          email,
+          options: { emailRedirectTo: redirectTo }
+        });
 
-      btn.disabled = false;
+        if (error) {
+          console.error("signInWithOtp error:", error);
+          showMessage("❌ Não consegui enviar o email.\n\nDetalhe: " + error.message);
+          btn.disabled = false;
+          return;
+        }
 
-      if (error) {
-        showMessage("❌ Erro ao enviar email.\n\nDetalhe: " + error.message);
-        return;
-      }
-
-      showMessage(
-        "✅ Link enviado!\n\n" +
-        "Abra seu email e clique no link.\n" +
-        "Se não aparecer, verifique SPAM / Promoções."
-      );
-    });
-
-    // ✅ 4) Se o Supabase detectar login por evento, também roteia (backup)
-    supabase.auth.onAuthStateChange(async (event) => {
-      if (event === "SIGNED_IN") {
-        await routeAfterLogin();
+        showMessage(
+          "✅ Link enviado!\n\n" +
+          "Abra seu email e clique no link.\n" +
+          "Se não aparecer, verifique SPAM / Promoções.\n\n" +
+          "Obs: alguns provedores limitam envios por hora."
+        );
+      } catch (err) {
+        console.error(err);
+        showMessage("❌ Erro inesperado ao enviar.\nVeja o console (F12).");
+      } finally {
+        btn.disabled = false;
       }
     });
   </script>
