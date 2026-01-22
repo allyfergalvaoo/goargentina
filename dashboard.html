@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Painel | GoArgentina</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --primary: #0066FF; --accent: #FFD500; --dark: #0A0E27; --light: #F8F9FF; --success: #10B981; --warning: #F59E0B; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--dark); color: var(--light); line-height: 1.6; }
+.stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; opacity: 0.4; animation: twinkle 3s infinite; }
+@keyframes twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+@keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes expandDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+header { padding: 20px 0; backdrop-filter: blur(20px); background: rgba(10, 14, 39, 0.8); border-bottom: 1px solid rgba(255, 255, 255, 0.1); position: sticky; top: 0; z-index: 100; }
+.header-container { max-width: 1400px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; animation: float 3s ease-in-out infinite; }
+.user-menu { display: flex; align-items: center; gap: 20px; }
+.user-info { display: flex; align-items: center; gap: 12px; padding: 8px 16px; background: rgba(255, 255, 255, 0.05); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); }
+.user-avatar { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; }
+.user-name { font-size: 14px; font-weight: 600; }
+.logout-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.7); padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: all 0.3s; font-size: 14px; }
+.logout-btn:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+.main-container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1; }
+.welcome-section { margin-bottom: 40px; animation: slideDown 0.6s ease-out; }
+.welcome-title { font-size: clamp(28px, 5vw, 42px); font-weight: 900; margin-bottom: 8px; background: linear-gradient(135deg, #ffffff, #a0b0ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.welcome-subtitle { font-size: 18px; color: rgba(255, 255, 255, 0.6); }
+.tabs-container { margin-bottom: 30px; animation: slideUp 1s ease-out; }
+.tabs { display: flex; gap: 8px; border-bottom: 2px solid rgba(255, 255, 255, 0.1); overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { padding: 14px 24px; background: transparent; border: none; color: rgba(255, 255, 255, 0.6); cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.3s; border-bottom: 3px solid transparent; white-space: nowrap; }
+.tab:hover { color: rgba(255, 255, 255, 0.9); background: rgba(255, 255, 255, 0.05); }
+.tab.active { color: white; border-bottom-color: var(--primary); background: rgba(0, 102, 255, 0.1); }
+.tab-badge { display: inline-block; width: 20px; height: 20px; background: var(--accent); color: var(--dark); border-radius: 50%; font-size: 11px; font-weight: 700; line-height: 20px; text-align: center; margin-left: 6px; }
+.tab-content { display: none; animation: fadeIn 0.4s ease-out; }
+.tab-content.active { display: block; }
+.documents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+.document-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 28px; transition: all 0.3s; position: relative; overflow: hidden; }
+.document-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--primary), var(--accent)); transform: scaleX(0); transition: transform 0.4s; }
+.document-card:hover { transform: translateY(-4px); border-color: rgba(0, 102, 255, 0.4); background: rgba(255, 255, 255, 0.08); }
+.document-card:hover::before { transform: scaleX(1); }
+.document-card.uploaded { border-color: rgba(16, 185, 129, 0.4); }
+.document-card.uploaded::before { background: linear-gradient(90deg, var(--success), var(--accent)); transform: scaleX(1); }
+.document-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.document-icon { width: 48px; height: 48px; background: rgba(0, 102, 255, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+.document-status { display: flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(255, 255, 255, 0.1); border-radius: 12px; font-size: 12px; font-weight: 600; }
+.document-status.uploaded { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+.document-status.pending { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+.status-icon { font-size: 14px; }
+.document-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.document-description { font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 20px; line-height: 1.5; }
+.upload-area { border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.3s; }
+.upload-area:hover { border-color: var(--primary); background: rgba(0, 102, 255, 0.05); }
+.upload-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.6; }
+.upload-text { font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-bottom: 4px; }
+.upload-hint { font-size: 12px; color: rgba(255, 255, 255, 0.5); }
+.file-input { display: none; }
+.file-preview { display: none; align-items: center; gap: 12px; padding: 12px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; margin-top: 12px; }
+.file-preview.show { display: flex; }
+.file-preview-icon { font-size: 24px; }
+.file-preview-info { flex: 1; }
+.file-preview-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.file-preview-size { font-size: 11px; color: rgba(255, 255, 255, 0.5); }
+.remove-file-btn { background: rgba(239, 68, 68, 0.2); border: none; color: #EF4444; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.remove-file-btn:hover { background: rgba(239, 68, 68, 0.3); }
+.process-container { display: flex; flex-direction: column; gap: 20px; }
+.phase-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; overflow: hidden; transition: all 0.3s; position: relative; }
+.phase-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--primary), var(--accent)); opacity: 0; transition: opacity 0.3s; }
+.phase-card.current::before { opacity: 1; }
+.phase-card.current { border-color: rgba(0, 102, 255, 0.5); box-shadow: 0 8px 30px rgba(0, 102, 255, 0.15); }
+.phase-card:hover { border-color: rgba(0, 102, 255, 0.3); background: rgba(255, 255, 255, 0.07); }
+.phase-card.completed { border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.03); }
+.phase-card.completed::before { background: linear-gradient(180deg, var(--success), var(--accent)); opacity: 1; }
+.phase-header { display: flex; align-items: center; gap: 20px; padding: 24px 28px; cursor: pointer; transition: background 0.2s; }
+.phase-header:hover { background: rgba(255, 255, 255, 0.03); }
+.phase-number { width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; flex-shrink: 0; box-shadow: 0 8px 20px rgba(0, 102, 255, 0.3); position: relative; }
+.phase-card.completed .phase-number { background: linear-gradient(135deg, var(--success), var(--accent)); }
+.phase-card.current .phase-number::after { content: ''; position: absolute; top: -4px; right: -4px; width: 16px; height: 16px; background: var(--accent); border-radius: 50%; border: 3px solid var(--dark); animation: pulse-dot 2s infinite; }
+@keyframes pulse-dot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } }
+.phase-info { flex: 1; }
+.phase-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.phase-title { font-size: 20px; font-weight: 700; }
+.current-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; background: rgba(0, 102, 255, 0.2); border: 1px solid rgba(0, 102, 255, 0.5); border-radius: 12px; font-size: 11px; font-weight: 600; }
+.phase-description { font-size: 14px; color: rgba(255, 255, 255, 0.6); }
+.phase-progress-container { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.phase-progress-text { font-size: 14px; font-weight: 600; color: rgba(255, 255, 255, 0.7); }
+.phase-progress-mini { width: 80px; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
+.phase-progress-mini-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 10px; transition: width 0.3s ease; }
+.phase-card.completed .phase-progress-mini-bar { background: linear-gradient(90deg, var(--success), var(--accent)); }
+.phase-steps { padding: 0 28px 24px 98px; display: none; flex-direction: column; gap: 12px; animation: expandDown 0.3s ease-out; }
+.phase-card.expanded .phase-steps { display: flex; }
+.step-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; transition: all 0.2s; border: 1px solid transparent; pointer-events: none; }
+.step-checkmark { width: 24px; height: 24px; border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; margin-top: 2px; }
+.step-item.checked .step-checkmark { background: linear-gradient(135deg, var(--success), var(--accent)); border-color: var(--success); }
+.step-item.checked .step-checkmark::after { content: '✓'; color: white; font-size: 16px; font-weight: bold; }
+.step-content-wrapper { flex: 1; }
+.step-text { font-size: 15px; color: rgba(255, 255, 255, 0.9); line-height: 1.5; margin-bottom: 4px; }
+.step-status-label { font-size: 12px; color: rgba(255, 255, 255, 0.5); }
+.step-item.checked .step-text { text-decoration: line-through; opacity: 0.6; }
+.step-item.checked .step-status-label { color: var(--success); }
+.step-item.checked .step-status-label::before { content: '✓ '; }
+.empty-state { text-align: center; padding: 80px 20px; }
+.empty-icon { font-size: 64px; margin-bottom: 20px; opacity: 0.3; }
+.empty-title { font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+.empty-text { font-size: 16px; color: rgba(255, 255, 255, 0.6); max-width: 400px; margin: 0 auto; }
+@media (max-width: 768px) {
+  .header-container { flex-direction: column; gap: 16px; align-items: stretch; }
+  .user-menu { justify-content: space-between; }
+  .documents-grid { grid-template-columns: 1fr; }
+  .tabs { gap: 4px; }
+  .tab { padding: 12px 16px; font-size: 14px; }
+  .phase-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .phase-steps { padding-left: 28px; }
+  .phase-progress-container { align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<header>
+<div class="header-container">
+<a href="index.html" class="logo"><div class="logo-icon">🇦🇷</div><span>GoArgentina</span></a>
+<div class="user-menu">
+<div class="user-info"><div class="user-avatar">BR</div><span class="user-name">Brasileiro Silva</span></div>
+<button class="logout-btn">Sair</button>
+</div>
+</div>
+</header>
+<main class="main-container">
+<section class="welcome-section">
+<h1 class="welcome-title">Olá, Brasileiro! 👋</h1>
+<p class="welcome-subtitle">Vamos organizar seus documentos para o DNI argentino</p>
+</section>
+<div class="tabs-container">
+<div class="tabs">
+<button class="tab active" data-tab="documentos">📄 Documentos<span class="tab-badge" id="docsBadge">4</span></button>
+<button class="tab" data-tab="processo">🔄 Meu processo DNI</button>
+<button class="tab" data-tab="assessorias">🎯 Assessorias</button>
+<button class="tab" data-tab="suporte">💬 Suporte</button>
+</div>
+</div>
+<div class="tab-content active" id="documentos">
+<div class="documents-grid">
+<div class="document-card" data-doc="rg">
+<div class="document-header">
+<div class="document-icon">🪪</div>
+<div class="document-status pending" id="status-rg"><span class="status-icon">⏳</span><span>Pendente</span></div>
+</div>
+<h3 class="document-title">RG (Identidade)</h3>
+<p class="document-description">Seu documento de identidade brasileiro (RG) atualizado. Pode ser frente e verso em uma única imagem ou PDF.</p>
+<div class="upload-area" onclick="document.getElementById('file-rg').click()">
+<div class="upload-icon">📤</div>
+<div class="upload-text">Clique para enviar</div>
+<div class="upload-hint">PDF ou imagem até 5MB</div>
+</div>
+<input type="file" id="file-rg" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('rg', this)">
+<div class="file-preview" id="preview-rg">
+<span class="file-preview-icon">📄</span>
+<div class="file-preview-info">
+<div class="file-preview-name" id="filename-rg"></div>
+<div class="file-preview-size" id="filesize-rg"></div>
+</div>
+<button class="remove-file-btn" onclick="removeFile('rg')">✕</button>
+</div>
+</div>
+<div class="document-card" data-doc="antecedentes">
+<div class="document-header">
+<div class="document-icon">📋</div>
+<div class="document-status pending" id="status-antecedentes"><span class="status-icon">⏳</span><span>Pendente</span></div>
+</div>
+<h3 class="document-title">Antecedentes Criminais</h3>
+<p class="document-description">Certidão de antecedentes criminais emitida pela Polícia Federal brasileira. Pode ser obtida online gratuitamente.</p>
+<div class="upload-area" onclick="document.getElementById('file-antecedentes').click()">
+<div class="upload-icon">📤</div>
+<div class="upload-text">Clique para enviar</div>
+<div class="upload-hint">PDF ou imagem até 5MB</div>
+</div>
+<input type="file" id="file-antecedentes" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('antecedentes', this)">
+<div class="file-preview" id="preview-antecedentes">
+<span class="file-preview-icon">📄</span>
+<div class="file-preview-info">
+<div class="file-preview-name" id="filename-antecedentes"></div>
+<div class="file-preview-size" id="filesize-antecedentes"></div>
+</div>
+<button class="remove-file-btn" onclick="removeFile('antecedentes')">✕</button>
+</div>
+</div>
+<div class="document-card" data-doc="foto">
+<div class="document-header">
+<div class="document-icon">📸</div>
+<div class="document-status pending" id="status-foto"><span class="status-icon">⏳</span><span>Pendente</span></div>
+</div>
+<h3 class="document-title">Foto 3x4</h3>
+<p class="document-description">Foto recente tipo 3x4, com fundo branco e sem acessórios. A mesma utilizada para documentos oficiais.</p>
+<div class="upload-area" onclick="document.getElementById('file-foto').click()">
+<div class="upload-icon">📤</div>
+<div class="upload-text">Clique para enviar</div>
+<div class="upload-hint">JPG ou PNG até 5MB</div>
+</div>
+<input type="file" id="file-foto" class="file-input" accept=".jpg,.jpeg,.png" onchange="handleFileUpload('foto', this)">
+<div class="file-preview" id="preview-foto">
+<span class="file-preview-icon">📷</span>
+<div class="file-preview-info">
+<div class="file-preview-name" id="filename-foto"></div>
+<div class="file-preview-size" id="filesize-foto"></div>
+</div>
+<button class="remove-file-btn" onclick="removeFile('foto')">✕</button>
+</div>
+</div>
+<div class="document-card" data-doc="outros">
+<div class="document-header">
+<div class="document-icon">📁</div>
+<div class="document-status pending" id="status-outros"><span class="status-icon">⏳</span><span>Pendente</span></div>
+</div>
+<h3 class="document-title">Outros documentos</h3>
+<p class="document-description">Documentos adicionais que podem ser necessários: comprovante de endereço na Argentina, carta convite, contrato de trabalho, etc.</p>
+<div class="upload-area" onclick="document.getElementById('file-outros').click()">
+<div class="upload-icon">📤</div>
+<div class="upload-text">Clique para enviar</div>
+<div class="upload-hint">PDF ou imagem até 5MB</div>
+</div>
+<input type="file" id="file-outros" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('outros', this)">
+<div class="file-preview" id="preview-outros">
+<span class="file-preview-icon">📄</span>
+<div class="file-preview-info">
+<div class="file-preview-name" id="filename-outros"></div>
+<div class="file-preview-size" id="filesize-outros"></div>
+</div>
+<button class="remove-file-btn" onclick="removeFile('outros')">✕</button>
+</div>
+</div>
+</div>
+</div>
+<div class="tab-content" id="processo">
+<div class="process-container">
+<div class="phase-card current" data-phase="1">
+<div class="phase-header" onclick="togglePhase(1)">
+<div class="phase-number">1</div>
+<div class="phase-info">
+<div class="phase-title-row">
+<h3 class="phase-title">Documentação inicial</h3>
+<span class="current-badge">📍 Fase atual</span>
+</div>
+<p class="phase-description">Providenciar RG válido e foto recente</p>
+</div>
+<div class="phase-progress-container">
+<span class="phase-progress-text" id="phase-progress-1">0/3</span>
+<div class="phase-progress-mini">
+<div class="phase-progress-mini-bar" id="phase-bar-1" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+<div class="phase-steps" id="steps-1">
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Envio dos documentos para nossa equipe</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Upload dos documentos na plataforma correspondente</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Análise dos documentos realizada por nós</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+</div>
+</div>
+<div class="phase-card" data-phase="2">
+<div class="phase-header" onclick="togglePhase(2)">
+<div class="phase-number">2</div>
+<div class="phase-info">
+<h3 class="phase-title">Antecedentes criminais</h3>
+<p class="phase-description">Emissão do certificado de antecedentes criminais</p>
+</div>
+<div class="phase-progress-container">
+<span class="phase-progress-text" id="phase-progress-2">0/2</span>
+<div class="phase-progress-mini">
+<div class="phase-progress-mini-bar" id="phase-bar-2" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+<div class="phase-steps" id="steps-2">
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Emissão do documento</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Upload do documento após a emissão</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+</div>
+</div>
+<div class="phase-card" data-phase="3">
+<div class="phase-header" onclick="togglePhase(3)">
+<div class="phase-number">3</div>
+<div class="phase-info">
+<h3 class="phase-title">Domicílio</h3>
+<p class="phase-description">Comprovação de endereço na Argentina</p>
+</div>
+<div class="phase-progress-container">
+<span class="phase-progress-text" id="phase-progress-3">0/3</span>
+<div class="phase-progress-mini">
+<div class="phase-progress-mini-bar" id="phase-bar-3" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+<div class="phase-steps" id="steps-3">
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Agendamento do trâmite</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Retirada presencial do documento</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Upload do documento obtido</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+</div>
+</div>
+<div class="phase-card" data-phase="4">
+<div class="phase-header" onclick="togglePhase(4)">
+<div class="phase-number">4</div>
+<div class="phase-info">
+<h3 class="phase-title">Cadastro no RADEX</h3>
+<p class="phase-description">Registro no sistema migratório argentino</p>
+</div>
+<div class="phase-progress-container">
+<span class="phase-progress-text" id="phase-progress-4">0/2</span>
+<div class="phase-progress-mini">
+<div class="phase-progress-mini-bar" id="phase-bar-4" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+<div class="phase-steps" id="steps-4">
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Realização do cadastro</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Criação dos boletos correspondentes às taxas migratórias</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+</div>
+</div>
+<div class="phase-card" data-phase="5">
+<div class="phase-header" onclick="togglePhase(5)">
+<div class="phase-number">5</div>
+<div class="phase-info">
+<h3 class="phase-title">Pagamento de taxas</h3>
+<p class="phase-description">Pagamento obrigatório dos boletos gerados</p>
+</div>
+<div class="phase-progress-container">
+<span class="phase-progress-text" id="phase-progress-5">0/2</span>
+<div class="phase-progress-mini">
+<div class="phase-progress-mini-bar" id="phase-bar-5" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+<div class="phase-steps" id="steps-5">
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Pagamento dos boletos</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Upload dos comprovantes de pagamento</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+</div>
+</div>
+<div class="phase-card" data-phase="6">
+<div class="phase-header" onclick="togglePhase(6)">
+<div class="phase-number">6</div>
+<div class="phase-info">
+<h3 class="phase-title">Agendamento da cita migratória</h3>
+<p class="phase-description">Etapa presencial junto à imigração</p>
+</div>
+<div class="phase-progress-container">
+<span class="phase-progress-text" id="phase-progress-6">0/2</span>
+<div class="phase-progress-mini">
+<div class="phase-progress-mini-bar" id="phase-bar-6" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+<div class="phase-steps" id="steps-6">
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Agendamento da cita</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Comparecimento presencial na data marcada</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+</div>
+</div>
+<div class="phase-card" data-phase="7">
+<div class="phase-header" onclick="togglePhase(7)">
+<div class="phase-number">7</div>
+<div class="phase-info">
+<h3 class="phase-title">Chegada do DNI</h3>
+<p class="phase-description">Aguardando emissão do documento</p>
+</div>
+<div class="phase-progress-container">
+<span class="phase-progress-text" id="phase-progress-7">0/1</span>
+<div class="phase-progress-mini">
+<div class="phase-progress-mini-bar" id="phase-bar-7" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+<div class="phase-steps" id="steps-7">
+<div class="step-item">
+<span class="step-checkmark"></span>
+<div class="step-content-wrapper">
+<div class="step-text">Aguardar a emissão e chegada do DNI argentino</div>
+<div class="step-status-label">Pendente</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tab-content" id="assessorias">
+<div class="empty-state">
+<div class="empty-icon">🎯</div>
+<h3 class="empty-title">Assessorias em breve</h3>
+<p class="empty-text">Em breve você terá acesso a serviços de assessoria especializados para facilitar ainda mais sua mudança para a Argentina.</p>
+</div>
+</div>
+<div class="tab-content" id="suporte">
+<div class="empty-state">
+<div class="empty-icon">💬</div>
+<h3 class="empty-title">Suporte disponível</h3>
+<p class="empty-text">Nossa equipe está pronta para te ajudar! Em breve você terá acesso direto ao suporte via chat.</p>
+</div>
+</div>
+</main>
+<script>
+const starsContainer = document.querySelector('.stars');
+for (let i = 0; i < 100; i++) {
+  const star = document.createElement('div');
+  star.className = 'star';
+  star.style.left = Math.random() * 100 + '%';
+  star.style.top = Math.random() * 100 + '%';
+  star.style.animationDelay = Math.random() * 3 + 's';
+  starsContainer.appendChild(star);
+}
+const tabs = document.querySelectorAll('.tab');
+const tabContents = document.querySelectorAll('.tab-content');
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const targetTab = tab.getAttribute('data-tab');
+    tabs.forEach(t => t.classList.remove('active'));
+    tabContents.forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(targetTab).classList.add('active');
+  });
+});
+const uploadedDocs = new Set();
+function handleFileUpload(docType, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const maxSize = 5 * 1024 * 1024;
+  if (file.size > maxSize) {
+    alert('Arquivo muito grande! O tamanho máximo é 5MB.');
+    input.value = '';
+    return;
+  }
+  const preview = document.getElementById('preview-' + docType);
+  const filename = document.getElementById('filename-' + docType);
+  const filesize = document.getElementById('filesize-' + docType);
+  filename.textContent = file.name;
+  filesize.textContent = formatFileSize(file.size);
+  preview.classList.add('show');
+  const status = document.getElementById('status-' + docType);
+  status.className = 'document-status uploaded';
+  status.innerHTML = '<span class="status-icon">✓</span><span>Enviado</span>';
+  const card = document.querySelector('[data-doc="' + docType + '"]');
+  card.classList.add('uploaded');
+  uploadedDocs.add(docType);
+  updateDocsBadge();
+  const uploadArea = card.querySelector('.upload-area');
+  uploadArea.style.display = 'none';
+}
+function removeFile(docType) {
+  const input = document.getElementById('file-' + docType);
+  const preview = document.getElementById('preview-' + docType);
+  const status = document.getElementById('status-' + docType);
+  const card = document.querySelector('[data-doc="' + docType + '"]');
+  const uploadArea = card.querySelector('.upload-area');
+  input.value = '';
+  preview.classList.remove('show');
+  status.className = 'document-status pending';
+  status.innerHTML = '<span class="status-icon">⏳</span><span>Pendente</span>';
+  card.classList.remove('uploaded');
+  uploadArea.style.display = 'block';
+  uploadedDocs.delete(docType);
+  updateDocsBadge();
+}
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+function updateDocsBadge() {
+  const total = 4;
+  const uploaded = uploadedDocs.size;
+  const remaining = total - uploaded;
+  document.getElementById('docsBadge').textContent = remaining;
+}
+function togglePhase(phaseNum) {
+  const card = document.querySelector('.phase-card[data-phase="' + phaseNum + '"]');
+  card.classList.toggle('expanded');
+}
+</script>
+</body>
+</html>
