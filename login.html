@@ -4,52 +4,173 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login | GoArgentina</title>
+
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{--primary:#0066FF;--accent:#FFD500;--dark:#0A0E27;--light:#F8F9FF;--danger:#EF4444;--success:#10B981}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--dark);color:var(--light);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden}
-    .stars{position:fixed;inset:0;pointer-events:none;z-index:0}
-    .star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.4;animation:twinkle 3s infinite}
-    @keyframes twinkle{0%,100%{opacity:.4}50%{opacity:1}}
-    .card{position:relative;z-index:1;width:100%;max-width:520px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(12px);border-radius:22px;padding:22px}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:950;font-size:22px;margin-bottom:14px}
-    .logo-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--primary),var(--accent));color:var(--dark);font-size:20px}
-    .subtitle{color:rgba(255,255,255,.65);font-weight:700;margin-bottom:18px;font-size:14px;line-height:1.4}
-    .tabs{display:flex;gap:10px;margin-bottom:16px}
-    .tab{flex:1;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:rgba(255,255,255,.85);font-weight:900;cursor:pointer;transition:.15s}
-    .tab.active{border-color:rgba(0,102,255,.45);background:rgba(0,102,255,.14)}
-    .form{display:flex;flex-direction:column;gap:10px}
-    label{font-size:12px;color:rgba(255,255,255,.7);font-weight:900}
-    input{width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font-weight:800}
-    input:focus{outline:none;border-color:rgba(0,102,255,.6);background:rgba(255,255,255,.07)}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .btn{padding:12px;border-radius:14px;border:none;font-weight:950;cursor:pointer;transition:.15s}
-    .btn-primary{background:linear-gradient(135deg,var(--primary),#0052CC);color:#fff;box-shadow:0 10px 28px rgba(0,102,255,.28)}
-    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(0,102,255,.42)}
-    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.9)}
-    .btn-ghost:hover{background:rgba(255,255,255,.1)}
-    .hint{font-size:12px;color:rgba(255,255,255,.6);font-weight:800;line-height:1.4;margin-top:6px}
-    .msg{display:none;margin-top:12px;padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);font-weight:900;font-size:13px}
-    .msg.show{display:block}
-    .msg.ok{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.10)}
-    .msg.err{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.10)}
-    .divider{height:1px;background:rgba(255,255,255,.10);margin:16px 0}
-    .smalllink{font-size:12px;color:rgba(255,255,255,.7);font-weight:900;text-decoration:underline;cursor:pointer}
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root{
+      --primary:#0066FF;
+      --accent:#FFD500;
+      --dark:#0A0E27;
+      --light:#F8F9FF;
+      --success:#10B981;
+      --danger:#EF4444;
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:var(--dark);
+      color:var(--light);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      overflow:hidden;
+    }
+
+    /* Stars */
+    .stars{ position:fixed; inset:0; pointer-events:none; z-index:0; }
+    .star{
+      position:absolute; width:2px; height:2px; background:white; border-radius:50%;
+      opacity:.4; animation:twinkle 3s infinite;
+    }
+    @keyframes twinkle{ 0%,100%{opacity:.4} 50%{opacity:1} }
+
+    /* Card */
+    .card{
+      position:relative; z-index:1;
+      width:100%; max-width:520px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(12px);
+      border-radius:22px;
+      padding:22px;
+    }
+    .logo{
+      display:flex; align-items:center; gap:10px;
+      font-weight:950; font-size:22px;
+      margin-bottom:10px;
+    }
+    .logo-icon{
+      width:40px; height:40px; border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      color:var(--dark); font-size:20px;
+    }
+    .subtitle{
+      color:rgba(255,255,255,.65);
+      font-weight:700;
+      margin-bottom:16px;
+      font-size:14px;
+      line-height:1.4;
+    }
+
+    /* Tabs */
+    .tabs{ display:flex; gap:10px; margin-bottom:16px; }
+    .tab{
+      flex:1;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      color:rgba(255,255,255,.85);
+      font-weight:900;
+      cursor:pointer;
+      transition:.15s;
+    }
+    .tab.active{
+      border-color:rgba(0,102,255,.45);
+      background:rgba(0,102,255,.14);
+    }
+
+    /* Form */
+    .form{ display:flex; flex-direction:column; gap:10px; }
+    label{ font-size:12px; color:rgba(255,255,255,.7); font-weight:900; }
+    input{
+      width:100%;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      color:#fff;
+      font-weight:800;
+    }
+    input:focus{
+      outline:none;
+      border-color:rgba(0,102,255,.6);
+      background:rgba(255,255,255,.07);
+    }
+
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+    .btn{
+      padding:12px;
+      border-radius:14px;
+      border:none;
+      font-weight:950;
+      cursor:pointer;
+      transition:.15s;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,var(--primary),#0052CC);
+      color:#fff;
+      box-shadow:0 10px 28px rgba(0,102,255,.28);
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 14px 34px rgba(0,102,255,.42);
+    }
+    .btn-ghost{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.9);
+    }
+    .btn-ghost:hover{ background:rgba(255,255,255,.1); }
+
+    .hint{
+      font-size:12px;
+      color:rgba(255,255,255,.6);
+      font-weight:800;
+      line-height:1.4;
+      margin-top:6px;
+    }
+
+    .msg{
+      display:none;
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      font-weight:900;
+      font-size:13px;
+    }
+    .msg.show{ display:block; }
+    .msg.ok{ border-color:rgba(16,185,129,.4); background:rgba(16,185,129,.10); }
+    .msg.err{ border-color:rgba(239,68,68,.4); background:rgba(239,68,68,.10); }
+
+    .divider{ height:1px; background:rgba(255,255,255,.10); margin:16px 0; }
   </style>
 </head>
+
 <body>
   <div class="stars"></div>
 
   <div class="card">
-    <div class="logo"><div class="logo-icon">🇦🇷</div> GoArgentina</div>
-    <div class="subtitle">Entre com <b>senha</b> (sem emails) ou use <b>link mágico</b> (sem senha).</div>
+    <div class="logo">
+      <div class="logo-icon">🇦🇷</div>
+      GoArgentina
+    </div>
+    <div class="subtitle">
+      Entre com <b>senha</b> (sem mandar email) ou use <b>magic link</b> (email com link).
+      <br/>⚠️ <b>Não existe campo de código</b> aqui.
+    </div>
 
     <div class="tabs">
       <button class="tab active" id="tabPass">Entrar com senha</button>
       <button class="tab" id="tabLink">Entrar sem senha (link)</button>
     </div>
 
-    <!-- Form senha -->
+    <!-- LOGIN COM SENHA -->
     <div id="passBox">
       <div class="form">
         <div>
@@ -62,37 +183,36 @@
         </div>
 
         <div class="row">
-          <button class="btn btn-primary" id="btnPassLogin">Entrar</button>
-          <button class="btn btn-ghost" id="btnPassSignup">Criar conta</button>
+          <button class="btn btn-primary" id="btnPassLogin" type="button">Entrar</button>
+          <button class="btn btn-ghost" id="btnPassSignup" type="button">Criar conta</button>
         </div>
 
         <div class="hint">
-          ✔ Entrar com senha <b>não manda email</b>.<br/>
-          Obs: Se seu Supabase estiver exigindo confirmação por email no cadastro, o “Criar conta” pode mandar email (opcional nas configs).
+          ✅ “Entrar” com senha <b>não manda email</b> (ótimo pra testar).<br/>
+          Obs: “Criar conta” pode mandar email <b>se</b> você tiver confirmação por email ligada no Supabase.
         </div>
       </div>
     </div>
 
-    <!-- Form link -->
+    <!-- LOGIN COM LINK (MAGIC LINK) -->
     <div id="linkBox" style="display:none;">
       <div class="form">
         <div>
           <label>Email</label>
           <input id="linkEmail" type="email" placeholder="voce@email.com" autocomplete="email" />
         </div>
-        <button class="btn btn-primary" id="btnSendLink">Enviar link de acesso</button>
+        <button class="btn btn-primary" id="btnSendLink" type="button">Enviar link de acesso</button>
 
         <div class="hint">
-          Você vai receber um email com um <b>link</b>. Clique nele e você volta logado automaticamente.
-          (Não existe “código” mesmo — é link.)
+          Você vai receber um email com um <b>LINK</b>. Clique nele e você entra automaticamente.
         </div>
       </div>
     </div>
 
     <div class="divider"></div>
-
     <div class="hint">
-      Se clicar no link do email e cair aqui de novo, é normal: essa página detecta a sessão e te manda pro painel certo.
+      Se você clicou no link do email e caiu aqui, fica tranquilo:
+      esta página detecta a sessão e te manda pro painel.
     </div>
 
     <div class="msg" id="msgBox"></div>
@@ -100,41 +220,46 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // 1) Troque isso
+    // ✅ 1) COLE AQUI SUAS CHAVES
     const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k";
 
+    // ✅ 2) CLIENT SUPABASE
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: { persistSession:true, autoRefreshToken:true, detectSessionInUrl:true }
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true, // IMPORTANTÍSSIMO pro magic link funcionar
+      }
     });
 
     // Stars
     const stars = document.querySelector(".stars");
-    for (let i=0;i<90;i++){
-      const s=document.createElement("div");
-      s.className="star";
-      s.style.left=Math.random()*100+"%";
-      s.style.top=Math.random()*100+"%";
-      s.style.animationDelay=Math.random()*3+"s";
+    for (let i = 0; i < 90; i++) {
+      const s = document.createElement("div");
+      s.className = "star";
+      s.style.left = Math.random() * 100 + "%";
+      s.style.top = Math.random() * 100 + "%";
+      s.style.animationDelay = Math.random() * 3 + "s";
       stars.appendChild(s);
     }
 
+    // UI helpers
     const tabPass = document.getElementById("tabPass");
     const tabLink = document.getElementById("tabLink");
     const passBox = document.getElementById("passBox");
     const linkBox = document.getElementById("linkBox");
-
     const msgBox = document.getElementById("msgBox");
-    function showMsg(type, text){
-      msgBox.className = "msg show " + (type==="ok" ? "ok" : "err");
+
+    function showMsg(type, text) {
+      msgBox.className = "msg show " + (type === "ok" ? "ok" : "err");
       msgBox.textContent = text;
     }
-    function clearMsg(){
+    function clearMsg() {
       msgBox.className = "msg";
       msgBox.textContent = "";
     }
-
-    function setMode(mode){
+    function setMode(mode) {
       clearMsg();
       const isPass = mode === "pass";
       tabPass.classList.toggle("active", isPass);
@@ -142,96 +267,115 @@
       passBox.style.display = isPass ? "block" : "none";
       linkBox.style.display = isPass ? "none" : "block";
     }
+    tabPass.addEventListener("click", () => setMode("pass"));
+    tabLink.addEventListener("click", () => setMode("link"));
 
-    tabPass.addEventListener("click", ()=>setMode("pass"));
-    tabLink.addEventListener("click", ()=>setMode("link"));
-
-    function originPath(file){
+    // Util: monta URL absoluta (necessário pro redirect do email)
+    function absoluteUrl(file) {
       const base = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, "/");
       return base + file;
     }
 
-    async function routeAfterLogin(){
-      // decide admin vs client com base no profiles.role
-      const { data: u } = await sb.auth.getUser();
-      const user = u?.user;
-      if (!user) return;
+    // ✅ Roteamento pós-login: admin vs dashboard
+    let redirecting = false;
+    async function routeAfterLogin() {
+      if (redirecting) return;
+      redirecting = true;
 
-      const { data: profile } = await sb
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single();
+      try {
+        const { data: uData, error: uErr } = await sb.auth.getUser();
+        if (uErr || !uData?.user) { redirecting = false; return; }
 
-      if (profile?.role === "admin") window.location.href = "admin.html";
-      else window.location.href = "dashboard.html";
+        // Se você tiver a tabela profiles com role (admin/client)
+        // tenta ler; se der erro, manda pro dashboard como fallback
+        const { data: prof, error: pErr } = await sb
+          .from("profiles")
+          .select("role")
+          .eq("id", uData.user.id)
+          .single();
+
+        if (!pErr && prof?.role === "admin") {
+          window.location.href = "admin.html";
+        } else {
+          window.location.href = "dashboard.html";
+        }
+      } catch (e) {
+        window.location.href = "dashboard.html";
+      }
     }
 
-    // Detecta se já voltou do magic link e já tem sessão
-    (async ()=>{
+    // ✅ 3) Detecta sessão ao carregar (ex.: depois do magic link)
+    (async () => {
       const { data } = await sb.auth.getSession();
-      if (data?.session){
+      if (data?.session) {
         await routeAfterLogin();
       }
     })();
 
-    // Entrar com senha
-    document.getElementById("btnPassLogin").addEventListener("click", async ()=>{
+    // ✅ 4) Também escuta mudanças de autenticação (super confiável pro magic link)
+    sb.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        await routeAfterLogin();
+      }
+    });
+
+    // ✅ 5) LOGIN COM SENHA
+    document.getElementById("btnPassLogin").addEventListener("click", async () => {
       clearMsg();
       const email = document.getElementById("passEmail").value.trim();
       const password = document.getElementById("passPassword").value.trim();
-      if (!email || !password) return showMsg("err","Preencha email e senha.");
+      if (!email || !password) return showMsg("err", "Preencha email e senha.");
 
       const { error } = await sb.auth.signInWithPassword({ email, password });
       if (error) return showMsg("err", error.message);
 
-      showMsg("ok","Login realizado! Redirecionando…");
+      showMsg("ok", "Login feito! Redirecionando…");
       await routeAfterLogin();
     });
 
-    // Criar conta com senha
-    document.getElementById("btnPassSignup").addEventListener("click", async ()=>{
+    // ✅ 6) CRIAR CONTA COM SENHA
+    document.getElementById("btnPassSignup").addEventListener("click", async () => {
       clearMsg();
       const email = document.getElementById("passEmail").value.trim();
       const password = document.getElementById("passPassword").value.trim();
-      if (!email || !password) return showMsg("err","Preencha email e senha para criar conta.");
+      if (!email || !password) return showMsg("err", "Preencha email e senha para criar conta.");
 
-      // Se suas configs exigirem confirmação por email, vai mandar email aqui.
       const { data, error } = await sb.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: originPath("login.html"),
+          emailRedirectTo: absoluteUrl("login.html"),
         }
       });
 
       if (error) return showMsg("err", error.message);
 
-      // Se não exigir confirmação, já cria sessão e entra direto
+      // Se sua config NÃO exigir confirmação, ele já entra.
       const { data: sess } = await sb.auth.getSession();
-      if (sess?.session){
-        showMsg("ok","Conta criada e login feito! Redirecionando…");
+      if (sess?.session) {
+        showMsg("ok", "Conta criada e login feito! Redirecionando…");
         await routeAfterLogin();
       } else {
-        showMsg("ok","Conta criada! Se o projeto exigir confirmação, verifique seu email para confirmar e depois faça login.");
+        showMsg("ok", "Conta criada! Se o Supabase exigir confirmação, verifique o email e depois faça login.");
       }
     });
 
-    // Enviar magic link
-    document.getElementById("btnSendLink").addEventListener("click", async ()=>{
+    // ✅ 7) MAGIC LINK (SEM SENHA) — APENAS LINK (SEM CÓDIGO)
+    document.getElementById("btnSendLink").addEventListener("click", async () => {
       clearMsg();
       const email = document.getElementById("linkEmail").value.trim();
-      if (!email) return showMsg("err","Digite seu email.");
+      if (!email) return showMsg("err", "Digite seu email.");
 
       const { error } = await sb.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: originPath("login.html"),
+          emailRedirectTo: absoluteUrl("login.html"),
         }
       });
 
       if (error) return showMsg("err", error.message);
-      showMsg("ok","Link enviado! Abra seu email e clique no link para entrar.");
+
+      showMsg("ok", "Link enviado! Abra seu email e clique no link para entrar.");
     });
   </script>
 </body>
