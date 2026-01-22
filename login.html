@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | GoArgentina</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #0066FF;
+      --accent: #FFD500;
+      --dark: #0A0E27;
+      --light: #F8F9FF;
+      --success: #10B981;
+      --danger: #EF4444;
+      --muted: rgba(255,255,255,0.65);
+      --panel: rgba(255,255,255,0.05);
+      --border: rgba(255,255,255,0.12);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--dark);
+      color: var(--light);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star {
+      position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%;
+      opacity: 0.35; animation: twinkle 3s infinite;
+    }
+    @keyframes twinkle { 0%,100%{opacity:.35} 50%{opacity:1} }
+
+    header {
+      padding: 20px 0;
+      position: sticky; top: 0; z-index: 10;
+      backdrop-filter: blur(20px);
+      background: rgba(10, 14, 39, 0.85);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+    nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+      font-size: 22px; font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .logo-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      color: #0A0E27; font-weight: 900;
+    }
+
+    main { padding: 60px 0 80px; }
+    .wrap { display: grid; place-items: center; }
+
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 28px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute; left: 0; top: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff, #a0b0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle { color: var(--muted); font-size: 14px; line-height: 1.5; margin-bottom: 22px; }
+
+    .form {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+
+    label { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.85); }
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    input:focus { border-color: rgba(0,102,255,0.7); background: rgba(255,255,255,0.09); }
+
+    .row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+      border: none;
+      cursor: pointer;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 14px;
+      transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #0052CC);
+      color: #fff;
+      box-shadow: 0 12px 40px rgba(0,102,255,0.35);
+      flex: 1;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 18px 55px rgba(0,102,255,0.55); }
+    .btn-ghost {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.9);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.10); transform: translateY(-1px); }
+
+    .hint {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.45;
+      margin-top: 6px;
+    }
+
+    .status {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      display: none;
+      font-size: 13px;
+      line-height: 1.4;
+      color: rgba(255,255,255,0.85);
+    }
+    .status.show { display: block; }
+    .status.ok { border-color: rgba(16,185,129,0.35); background: rgba(16,185,129,0.08); }
+    .status.err { border-color: rgba(239,68,68,0.35); background: rgba(239,68,68,0.08); }
+
+    .divider {
+      margin: 18px 0;
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .small {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .hidden { display: none; }
+
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      color: rgba(255,255,255,0.45);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      position: relative; z-index: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stars"></div>
+
+  <header>
+    <div class="container">
+      <nav>
+        <a class="logo" href="index.html" aria-label="GoArgentina">
+          <div class="logo-icon">🇦🇷</div>
+          <span>GoArgentina</span>
+        </a>
+        <button class="btn btn-ghost" id="goHomeBtn" type="button">Voltar</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container wrap">
+      <div class="card">
+        <h1>Entrar</h1>
+        <p class="subtitle">
+          Digite seu email e você vai receber um <b>código</b> para acessar seu painel.
+        </p>
+
+        <!-- Etapa 1: enviar código -->
+        <div id="stepEmail">
+          <div class="form">
+            <div>
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="seuemail@exemplo.com" autocomplete="email" />
+              <div class="hint">Use o mesmo email que você passou no WhatsApp.</div>
+            </div>
+
+            <div class="row">
+              <button class="btn btn-primary" id="sendCodeBtn" type="button">Enviar código</button>
+            </div>
+
+            <div class="status" id="statusBox"></div>
+          </div>
+        </div>
+
+        <!-- Etapa 2: validar código -->
+        <div id="stepCode" class="hidden">
+          <div class="divider"></div>
+
+          <div class="form">
+            <div>
+              <label for="code">Código</label>
+              <input id="code" inputmode="numeric" placeholder="Digite o código do email" autocomplete="one-time-code" />
+              <div class="hint">Se não achar, confira Spam/Promoções.</div>
+            </div>
+
+            <div class="row">
+              <button class="btn btn-primary" id="verifyBtn" type="button">Entrar</button>
+              <button class="btn btn-ghost" id="resendBtn" type="button">Reenviar</button>
+              <button class="btn btn-ghost" id="changeEmailBtn" type="button">Trocar email</button>
+            </div>
+
+            <div class="status" id="statusBox2"></div>
+
+            <div class="small" style="margin-top: 8px;">
+              Dica: às vezes o Supabase manda “link mágico” em vez de código. Se chegar um link, clique nele — você entra do mesmo jeito.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      © GoArgentina • Painel de acesso
+    </div>
+  </footer>
+
+  <!-- Supabase JS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    // ✅ 1) COLE AQUI OS DADOS DO SUPABASE (Settings → API)
+    const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k";
+
+    // (opcional) Se você colocou login.html nos Redirect URLs, isso ajuda no fluxo de link mágico.
+    const EMAIL_REDIRECT_TO = window.location.origin + "/login.html";
+
+    // Cria o client
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    });
+
+    // UI helpers
+    const stepEmail = document.getElementById("stepEmail");
+    const stepCode = document.getElementById("stepCode");
+
+    const emailInput = document.getElementById("email");
+    const codeInput = document.getElementById("code");
+
+    const sendCodeBtn = document.getElementById("sendCodeBtn");
+    const verifyBtn = document.getElementById("verifyBtn");
+    const resendBtn = document.getElementById("resendBtn");
+    const changeEmailBtn = document.getElementById("changeEmailBtn");
+
+    const statusBox = document.getElementById("statusBox");
+    const statusBox2 = document.getElementById("statusBox2");
+
+    const goHomeBtn = document.getElementById("goHomeBtn");
+    goHomeBtn.addEventListener("click", () => window.location.href = "index.html");
+
+    function setLoading(btn, isLoading) {
+      btn.disabled = isLoading;
+      btn.style.opacity = isLoading ? "0.7" : "1";
+      btn.style.cursor = isLoading ? "not-allowed" : "pointer";
+    }
+
+    function showStatus(el, type, msg) {
+      el.className = "status show " + (type === "ok" ? "ok" : "err");
+      el.textContent = msg;
+    }
+
+    function clearStatus(el) {
+      el.className = "status";
+      el.textContent = "";
+    }
+
+    function goToStep(step) {
+      if (step === "email") {
+        stepEmail.classList.remove("hidden");
+        stepCode.classList.add("hidden");
+        clearStatus(statusBox);
+        clearStatus(statusBox2);
+      } else {
+        stepEmail.classList.add("hidden");
+        stepCode.classList.remove("hidden");
+        clearStatus(statusBox2);
+      }
+    }
+
+    async function redirectByRole() {
+      // pega usuário
+      const { data: userData, error: userErr } = await sb.auth.getUser();
+      if (userErr || !userData?.user) return;
+
+      // busca role no profiles
+      const { data: profile, error: profErr } = await sb
+        .from("profiles")
+        .select("role")
+        .eq("id", userData.user.id)
+        .single();
+
+      // fallback: se der erro, manda pro dashboard
+      if (profErr || !profile?.role) {
+        window.location.href = "dashboard.html";
+        return;
+      }
+
+      if (profile.role === "admin") window.location.href = "admin.html";
+      else window.location.href = "dashboard.html";
+    }
+
+    // Se já estiver logado, redireciona automaticamente
+    (async () => {
+      const { data } = await sb.auth.getSession();
+      if (data?.session) {
+        await redirectByRole();
+      }
+    })();
+
+    // ETAPA 1: enviar código
+    async function sendCode() {
+      clearStatus(statusBox);
+
+      const email = (emailInput.value || "").trim().toLowerCase();
+      if (!email) {
+        showStatus(statusBox, "err", "Digite seu email para receber o código.");
+        return;
+      }
+
+      setLoading(sendCodeBtn, true);
+
+      try {
+        const { error } = await sb.auth.signInWithOtp({
+          email,
+          options: {
+            emailRedirectTo: EMAIL_REDIRECT_TO
+          }
+        });
+
+        if (error) {
+          const msg = String(error.message || "");
+
+          // Mensagem amigável se o email não estiver cadastrado (signups desativados)
+          if (msg.toLowerCase().includes("signups not allowed")) {
+            showStatus(statusBox, "err", "Esse email ainda não está cadastrado. Fale conosco no WhatsApp para criarmos seu acesso.");
+          } else {
+            showStatus(statusBox, "err", "Não consegui enviar o código. Tente novamente em instantes.");
+          }
+          return;
+        }
+
+        showStatus(statusBox, "ok", "Código enviado! Verifique seu email e digite o código abaixo.");
+        goToStep("code");
+        codeInput.focus();
+      } catch (e) {
+        showStatus(statusBox, "err", "Erro inesperado ao enviar o código. Tente novamente.");
+      } finally {
+        setLoading(sendCodeBtn, false);
+      }
+    }
+
+    // ETAPA 2: verificar código
+    async function verifyCode() {
+      clearStatus(statusBox2);
+
+      const email = (emailInput.value || "").trim().toLowerCase();
+      const code = (codeInput.value || "").trim();
+
+      if (!email) {
+        showStatus(statusBox2, "err", "Volte e preencha o email.");
+        return;
+      }
+      if (!code) {
+        showStatus(statusBox2, "err", "Digite o código que chegou no seu email.");
+        return;
+      }
+
+      setLoading(verifyBtn, true);
+
+      try {
+        const { data, error } = await sb.auth.verifyOtp({
+          email,
+          token: code,
+          type: "email"
+        });
+
+        if (error) {
+          showStatus(statusBox2, "err", "Código inválido ou expirado. Tente reenviar.");
+          return;
+        }
+
+        if (data?.session) {
+          showStatus(statusBox2, "ok", "Login aprovado! Entrando...");
+          await redirectByRole();
+        } else {
+          // Se por algum motivo não veio sessão, tenta pegar sessão atual
+          const { data: s } = await sb.auth.getSession();
+          if (s?.session) {
+            await redirectByRole();
+          } else {
+            showStatus(statusBox2, "err", "Não consegui iniciar a sessão. Tente novamente.");
+          }
+        }
+      } catch (e) {
+        showStatus(statusBox2, "err", "Erro ao validar código. Tente novamente.");
+      } finally {
+        setLoading(verifyBtn, false);
+      }
+    }
+
+    // Botões e atalhos
+    sendCodeBtn.addEventListener("click", sendCode);
+    verifyBtn.addEventListener("click", verifyCode);
+    resendBtn.addEventListener("click", sendCode);
+
+    changeEmailBtn.addEventListener("click", () => {
+      goToStep("email");
+      emailInput.focus();
+    });
+
+    emailInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") sendCode();
+    });
+
+    codeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") verifyCode();
+    });
+  </script>
+</body>
+</html>

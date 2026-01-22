@@ -6,7 +6,7 @@
 <title>Meu Painel | GoArgentina</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-:root { --primary: #0066FF; --accent: #FFD500; --dark: #0A0E27; --light: #F8F9FF; --success: #10B981; --warning: #F59E0B; }
+:root { --primary: #0066FF; --accent: #FFD500; --dark: #0A0E27; --light: #F8F9FF; --success: #10B981; --warning: #F59E0B; --danger:#EF4444; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--dark); color: var(--light); line-height: 1.6; }
 .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; opacity: 0.4; animation: twinkle 3s infinite; }
@@ -16,20 +16,28 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes expandDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
 header { padding: 20px 0; backdrop-filter: blur(20px); background: rgba(10, 14, 39, 0.8); border-bottom: 1px solid rgba(255, 255, 255, 0.1); position: sticky; top: 0; z-index: 100; }
-.header-container { max-width: 1400px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+.header-container { max-width: 1400px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; gap:16px; }
 .logo { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 10px; text-decoration: none; }
 .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; animation: float 3s ease-in-out infinite; }
-.user-menu { display: flex; align-items: center; gap: 20px; }
+.user-menu { display: flex; align-items: center; gap: 12px; flex-wrap:wrap; justify-content:flex-end; }
 .user-info { display: flex; align-items: center; gap: 12px; padding: 8px 16px; background: rgba(255, 255, 255, 0.05); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); }
-.user-avatar { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; }
+.user-avatar { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; color: var(--dark); }
 .user-name { font-size: 14px; font-weight: 600; }
 .logout-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.7); padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: all 0.3s; font-size: 14px; }
 .logout-btn:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+
 .main-container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1; }
 .welcome-section { margin-bottom: 40px; animation: slideDown 0.6s ease-out; }
 .welcome-title { font-size: clamp(28px, 5vw, 42px); font-weight: 900; margin-bottom: 8px; background: linear-gradient(135deg, #ffffff, #a0b0ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .welcome-subtitle { font-size: 18px; color: rgba(255, 255, 255, 0.6); }
+
+.notice { margin-top: 12px; padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); font-size: 13px; color: rgba(255,255,255,0.85); display:none; }
+.notice.show { display:block; }
+.notice.ok { border-color: rgba(16,185,129,0.35); background: rgba(16,185,129,0.08); }
+.notice.err { border-color: rgba(239,68,68,0.35); background: rgba(239,68,68,0.08); }
+
 .tabs-container { margin-bottom: 30px; animation: slideUp 1s ease-out; }
 .tabs { display: flex; gap: 8px; border-bottom: 2px solid rgba(255, 255, 255, 0.1); overflow-x: auto; scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
@@ -37,8 +45,10 @@ header { padding: 20px 0; backdrop-filter: blur(20px); background: rgba(10, 14, 
 .tab:hover { color: rgba(255, 255, 255, 0.9); background: rgba(255, 255, 255, 0.05); }
 .tab.active { color: white; border-bottom-color: var(--primary); background: rgba(0, 102, 255, 0.1); }
 .tab-badge { display: inline-block; width: 20px; height: 20px; background: var(--accent); color: var(--dark); border-radius: 50%; font-size: 11px; font-weight: 700; line-height: 20px; text-align: center; margin-left: 6px; }
+
 .tab-content { display: none; animation: fadeIn 0.4s ease-out; }
 .tab-content.active { display: block; }
+
 .documents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
 .document-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 28px; transition: all 0.3s; position: relative; overflow: hidden; }
 .document-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--primary), var(--accent)); transform: scaleX(0); transition: transform 0.4s; }
@@ -46,52 +56,66 @@ header { padding: 20px 0; backdrop-filter: blur(20px); background: rgba(10, 14, 
 .document-card:hover::before { transform: scaleX(1); }
 .document-card.uploaded { border-color: rgba(16, 185, 129, 0.4); }
 .document-card.uploaded::before { background: linear-gradient(90deg, var(--success), var(--accent)); transform: scaleX(1); }
-.document-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.document-card.approved { border-color: rgba(16, 185, 129, 0.55); background: rgba(16,185,129,0.05); }
+.document-card.rejected { border-color: rgba(239,68,68,0.55); background: rgba(239,68,68,0.05); }
+
+.document-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap:10px; }
 .document-icon { width: 48px; height: 48px; background: rgba(0, 102, 255, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
-.document-status { display: flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(255, 255, 255, 0.1); border-radius: 12px; font-size: 12px; font-weight: 600; }
-.document-status.uploaded { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+.document-status { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(255, 255, 255, 0.1); border-radius: 12px; font-size: 12px; font-weight: 700; }
 .document-status.pending { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
-.status-icon { font-size: 14px; }
+.document-status.uploaded { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+.document-status.approved { background: rgba(16, 185, 129, 0.25); color: var(--success); }
+.document-status.rejected { background: rgba(239, 68, 68, 0.22); color: var(--danger); }
+
 .document-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
 .document-description { font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 20px; line-height: 1.5; }
+
 .upload-area { border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.3s; }
 .upload-area:hover { border-color: var(--primary); background: rgba(0, 102, 255, 0.05); }
 .upload-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.6; }
 .upload-text { font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-bottom: 4px; }
 .upload-hint { font-size: 12px; color: rgba(255, 255, 255, 0.5); }
 .file-input { display: none; }
-.file-preview { display: none; align-items: center; gap: 12px; padding: 12px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; margin-top: 12px; }
+
+.file-preview { display: none; align-items: center; gap: 12px; padding: 12px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; margin-top: 12px; border: 1px solid rgba(255,255,255,0.08); }
 .file-preview.show { display: flex; }
-.file-preview-icon { font-size: 24px; }
-.file-preview-info { flex: 1; }
-.file-preview-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-.file-preview-size { font-size: 11px; color: rgba(255, 255, 255, 0.5); }
-.remove-file-btn { background: rgba(239, 68, 68, 0.2); border: none; color: #EF4444; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-.remove-file-btn:hover { background: rgba(239, 68, 68, 0.3); }
+.file-preview-icon { font-size: 22px; opacity: 0.9; }
+.file-preview-info { flex: 1; min-width:0; }
+.file-preview-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-preview-size { font-size: 11px; color: rgba(255, 255, 255, 0.55); }
+
+.doc-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.small-btn { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: rgba(255,255,255,0.9); padding: 8px 12px; border-radius: 10px; cursor:pointer; font-weight:700; font-size: 12px; transition: all 0.2s; }
+.small-btn:hover { background: rgba(0, 102, 255, 0.18); border-color: rgba(0,102,255,0.45); }
+.small-btn.danger:hover { background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.45); }
+.small-btn:disabled { opacity:0.55; cursor:not-allowed; }
+
 .process-container { display: flex; flex-direction: column; gap: 20px; }
 .phase-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; overflow: hidden; transition: all 0.3s; position: relative; }
 .phase-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--primary), var(--accent)); opacity: 0; transition: opacity 0.3s; }
 .phase-card.current::before { opacity: 1; }
 .phase-card.current { border-color: rgba(0, 102, 255, 0.5); box-shadow: 0 8px 30px rgba(0, 102, 255, 0.15); }
-.phase-card:hover { border-color: rgba(0, 102, 255, 0.3); background: rgba(255, 255, 255, 0.07); }
 .phase-card.completed { border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.03); }
 .phase-card.completed::before { background: linear-gradient(180deg, var(--success), var(--accent)); opacity: 1; }
+
 .phase-header { display: flex; align-items: center; gap: 20px; padding: 24px 28px; cursor: pointer; transition: background 0.2s; }
 .phase-header:hover { background: rgba(255, 255, 255, 0.03); }
-.phase-number { width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; flex-shrink: 0; box-shadow: 0 8px 20px rgba(0, 102, 255, 0.3); position: relative; }
+.phase-number { width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; flex-shrink: 0; box-shadow: 0 8px 20px rgba(0, 102, 255, 0.3); position: relative; color: var(--dark); }
 .phase-card.completed .phase-number { background: linear-gradient(135deg, var(--success), var(--accent)); }
-.phase-card.current .phase-number::after { content: ''; position: absolute; top: -4px; right: -4px; width: 16px; height: 16px; background: var(--accent); border-radius: 50%; border: 3px solid var(--dark); animation: pulse-dot 2s infinite; }
-@keyframes pulse-dot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } }
+
 .phase-info { flex: 1; }
-.phase-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-.phase-title { font-size: 20px; font-weight: 700; }
-.current-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; background: rgba(0, 102, 255, 0.2); border: 1px solid rgba(0, 102, 255, 0.5); border-radius: 12px; font-size: 11px; font-weight: 600; }
+.phase-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; flex-wrap:wrap; }
+.phase-title { font-size: 20px; font-weight: 800; }
+.current-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; background: rgba(0, 102, 255, 0.2); border: 1px solid rgba(0, 102, 255, 0.5); border-radius: 12px; font-size: 11px; font-weight: 700; }
+.completed-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; background: rgba(16, 185, 129, 0.18); border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 12px; font-size: 11px; font-weight: 800; color: var(--success); }
 .phase-description { font-size: 14px; color: rgba(255, 255, 255, 0.6); }
+
 .phase-progress-container { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-.phase-progress-text { font-size: 14px; font-weight: 600; color: rgba(255, 255, 255, 0.7); }
-.phase-progress-mini { width: 80px; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
+.phase-progress-text { font-size: 13px; font-weight: 800; color: rgba(255, 255, 255, 0.7); }
+.phase-progress-mini { width: 100px; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
 .phase-progress-mini-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 10px; transition: width 0.3s ease; }
 .phase-card.completed .phase-progress-mini-bar { background: linear-gradient(90deg, var(--success), var(--accent)); }
+
 .phase-steps { padding: 0 28px 24px 98px; display: none; flex-direction: column; gap: 12px; animation: expandDown 0.3s ease-out; }
 .phase-card.expanded .phase-steps { display: flex; }
 .step-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; transition: all 0.2s; border: 1px solid transparent; pointer-events: none; }
@@ -104,10 +128,27 @@ header { padding: 20px 0; backdrop-filter: blur(20px); background: rgba(10, 14, 
 .step-item.checked .step-text { text-decoration: line-through; opacity: 0.6; }
 .step-item.checked .step-status-label { color: var(--success); }
 .step-item.checked .step-status-label::before { content: '✓ '; }
+
 .empty-state { text-align: center; padding: 80px 20px; }
 .empty-icon { font-size: 64px; margin-bottom: 20px; opacity: 0.3; }
-.empty-title { font-size: 24px; font-weight: 700; margin-bottom: 12px; }
-.empty-text { font-size: 16px; color: rgba(255, 255, 255, 0.6); max-width: 400px; margin: 0 auto; }
+.empty-title { font-size: 24px; font-weight: 800; margin-bottom: 12px; }
+.empty-text { font-size: 16px; color: rgba(255, 255, 255, 0.6); max-width: 420px; margin: 0 auto; }
+
+.loading-overlay {
+  position: fixed; inset:0; z-index: 9999;
+  background: rgba(10,14,39,0.72); backdrop-filter: blur(10px);
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;
+}
+.loading-overlay.hidden { display:none; }
+.spinner {
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 4px solid rgba(255,255,255,0.15);
+  border-top-color: rgba(255,255,255,0.85);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { color: rgba(255,255,255,0.85); font-weight: 800; font-size: 14px; }
+
 @media (max-width: 768px) {
   .header-container { flex-direction: column; gap: 16px; align-items: stretch; }
   .user-menu { justify-content: space-between; }
@@ -120,369 +161,361 @@ header { padding: 20px 0; backdrop-filter: blur(20px); background: rgba(10, 14, 
 }
 </style>
 </head>
+
 <body>
 <div class="stars"></div>
+
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">Carregando seu painel…</div>
+</div>
+
 <header>
-<div class="header-container">
-<a href="index.html" class="logo"><div class="logo-icon">🇦🇷</div><span>GoArgentina</span></a>
-<div class="user-menu">
-<div class="user-info"><div class="user-avatar">BR</div><span class="user-name">Brasileiro Silva</span></div>
-<button class="logout-btn">Sair</button>
-</div>
-</div>
+  <div class="header-container">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🇦🇷</div><span>GoArgentina</span>
+    </a>
+
+    <div class="user-menu">
+      <div class="user-info" title="Conta">
+        <div class="user-avatar" id="userAvatar">BR</div>
+        <span class="user-name" id="userName">Carregando…</span>
+      </div>
+      <button class="logout-btn" id="logoutBtn">Sair</button>
+    </div>
+  </div>
 </header>
+
 <main class="main-container">
-<section class="welcome-section">
-<h1 class="welcome-title">Olá, Brasileiro! 👋</h1>
-<p class="welcome-subtitle">Vamos organizar seus documentos para o DNI argentino</p>
-</section>
-<div class="tabs-container">
-<div class="tabs">
-<button class="tab active" data-tab="documentos">📄 Documentos<span class="tab-badge" id="docsBadge">4</span></button>
-<button class="tab" data-tab="processo">🔄 Meu processo DNI</button>
-<button class="tab" data-tab="assessorias">🎯 Assessorias</button>
-<button class="tab" data-tab="suporte">💬 Suporte</button>
-</div>
-</div>
-<div class="tab-content active" id="documentos">
-<div class="documents-grid">
-<div class="document-card" data-doc="rg">
-<div class="document-header">
-<div class="document-icon">🪪</div>
-<div class="document-status pending" id="status-rg"><span class="status-icon">⏳</span><span>Pendente</span></div>
-</div>
-<h3 class="document-title">RG (Identidade)</h3>
-<p class="document-description">Seu documento de identidade brasileiro (RG) atualizado. Pode ser frente e verso em uma única imagem ou PDF.</p>
-<div class="upload-area" onclick="document.getElementById('file-rg').click()">
-<div class="upload-icon">📤</div>
-<div class="upload-text">Clique para enviar</div>
-<div class="upload-hint">PDF ou imagem até 5MB</div>
-</div>
-<input type="file" id="file-rg" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('rg', this)">
-<div class="file-preview" id="preview-rg">
-<span class="file-preview-icon">📄</span>
-<div class="file-preview-info">
-<div class="file-preview-name" id="filename-rg"></div>
-<div class="file-preview-size" id="filesize-rg"></div>
-</div>
-<button class="remove-file-btn" onclick="removeFile('rg')">✕</button>
-</div>
-</div>
-<div class="document-card" data-doc="antecedentes">
-<div class="document-header">
-<div class="document-icon">📋</div>
-<div class="document-status pending" id="status-antecedentes"><span class="status-icon">⏳</span><span>Pendente</span></div>
-</div>
-<h3 class="document-title">Antecedentes Criminais</h3>
-<p class="document-description">Certidão de antecedentes criminais emitida pela Polícia Federal brasileira. Pode ser obtida online gratuitamente.</p>
-<div class="upload-area" onclick="document.getElementById('file-antecedentes').click()">
-<div class="upload-icon">📤</div>
-<div class="upload-text">Clique para enviar</div>
-<div class="upload-hint">PDF ou imagem até 5MB</div>
-</div>
-<input type="file" id="file-antecedentes" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('antecedentes', this)">
-<div class="file-preview" id="preview-antecedentes">
-<span class="file-preview-icon">📄</span>
-<div class="file-preview-info">
-<div class="file-preview-name" id="filename-antecedentes"></div>
-<div class="file-preview-size" id="filesize-antecedentes"></div>
-</div>
-<button class="remove-file-btn" onclick="removeFile('antecedentes')">✕</button>
-</div>
-</div>
-<div class="document-card" data-doc="foto">
-<div class="document-header">
-<div class="document-icon">📸</div>
-<div class="document-status pending" id="status-foto"><span class="status-icon">⏳</span><span>Pendente</span></div>
-</div>
-<h3 class="document-title">Foto 3x4</h3>
-<p class="document-description">Foto recente tipo 3x4, com fundo branco e sem acessórios. A mesma utilizada para documentos oficiais.</p>
-<div class="upload-area" onclick="document.getElementById('file-foto').click()">
-<div class="upload-icon">📤</div>
-<div class="upload-text">Clique para enviar</div>
-<div class="upload-hint">JPG ou PNG até 5MB</div>
-</div>
-<input type="file" id="file-foto" class="file-input" accept=".jpg,.jpeg,.png" onchange="handleFileUpload('foto', this)">
-<div class="file-preview" id="preview-foto">
-<span class="file-preview-icon">📷</span>
-<div class="file-preview-info">
-<div class="file-preview-name" id="filename-foto"></div>
-<div class="file-preview-size" id="filesize-foto"></div>
-</div>
-<button class="remove-file-btn" onclick="removeFile('foto')">✕</button>
-</div>
-</div>
-<div class="document-card" data-doc="outros">
-<div class="document-header">
-<div class="document-icon">📁</div>
-<div class="document-status pending" id="status-outros"><span class="status-icon">⏳</span><span>Pendente</span></div>
-</div>
-<h3 class="document-title">Outros documentos</h3>
-<p class="document-description">Documentos adicionais que podem ser necessários: comprovante de endereço na Argentina, carta convite, contrato de trabalho, etc.</p>
-<div class="upload-area" onclick="document.getElementById('file-outros').click()">
-<div class="upload-icon">📤</div>
-<div class="upload-text">Clique para enviar</div>
-<div class="upload-hint">PDF ou imagem até 5MB</div>
-</div>
-<input type="file" id="file-outros" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('outros', this)">
-<div class="file-preview" id="preview-outros">
-<span class="file-preview-icon">📄</span>
-<div class="file-preview-info">
-<div class="file-preview-name" id="filename-outros"></div>
-<div class="file-preview-size" id="filesize-outros"></div>
-</div>
-<button class="remove-file-btn" onclick="removeFile('outros')">✕</button>
-</div>
-</div>
-</div>
-</div>
-<div class="tab-content" id="processo">
-<div class="process-container">
-<div class="phase-card current" data-phase="1">
-<div class="phase-header" onclick="togglePhase(1)">
-<div class="phase-number">1</div>
-<div class="phase-info">
-<div class="phase-title-row">
-<h3 class="phase-title">Documentação inicial</h3>
-<span class="current-badge">📍 Fase atual</span>
-</div>
-<p class="phase-description">Providenciar RG válido e foto recente</p>
-</div>
-<div class="phase-progress-container">
-<span class="phase-progress-text" id="phase-progress-1">0/3</span>
-<div class="phase-progress-mini">
-<div class="phase-progress-mini-bar" id="phase-bar-1" style="width: 0%;"></div>
-</div>
-</div>
-</div>
-<div class="phase-steps" id="steps-1">
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Envio dos documentos para nossa equipe</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Upload dos documentos na plataforma correspondente</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Análise dos documentos realizada por nós</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-</div>
-</div>
-<div class="phase-card" data-phase="2">
-<div class="phase-header" onclick="togglePhase(2)">
-<div class="phase-number">2</div>
-<div class="phase-info">
-<h3 class="phase-title">Antecedentes criminais</h3>
-<p class="phase-description">Emissão do certificado de antecedentes criminais</p>
-</div>
-<div class="phase-progress-container">
-<span class="phase-progress-text" id="phase-progress-2">0/2</span>
-<div class="phase-progress-mini">
-<div class="phase-progress-mini-bar" id="phase-bar-2" style="width: 0%;"></div>
-</div>
-</div>
-</div>
-<div class="phase-steps" id="steps-2">
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Emissão do documento</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Upload do documento após a emissão</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-</div>
-</div>
-<div class="phase-card" data-phase="3">
-<div class="phase-header" onclick="togglePhase(3)">
-<div class="phase-number">3</div>
-<div class="phase-info">
-<h3 class="phase-title">Domicílio</h3>
-<p class="phase-description">Comprovação de endereço na Argentina</p>
-</div>
-<div class="phase-progress-container">
-<span class="phase-progress-text" id="phase-progress-3">0/3</span>
-<div class="phase-progress-mini">
-<div class="phase-progress-mini-bar" id="phase-bar-3" style="width: 0%;"></div>
-</div>
-</div>
-</div>
-<div class="phase-steps" id="steps-3">
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Agendamento do trâmite</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Retirada presencial do documento</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Upload do documento obtido</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-</div>
-</div>
-<div class="phase-card" data-phase="4">
-<div class="phase-header" onclick="togglePhase(4)">
-<div class="phase-number">4</div>
-<div class="phase-info">
-<h3 class="phase-title">Cadastro no RADEX</h3>
-<p class="phase-description">Registro no sistema migratório argentino</p>
-</div>
-<div class="phase-progress-container">
-<span class="phase-progress-text" id="phase-progress-4">0/2</span>
-<div class="phase-progress-mini">
-<div class="phase-progress-mini-bar" id="phase-bar-4" style="width: 0%;"></div>
-</div>
-</div>
-</div>
-<div class="phase-steps" id="steps-4">
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Realização do cadastro</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Criação dos boletos correspondentes às taxas migratórias</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-</div>
-</div>
-<div class="phase-card" data-phase="5">
-<div class="phase-header" onclick="togglePhase(5)">
-<div class="phase-number">5</div>
-<div class="phase-info">
-<h3 class="phase-title">Pagamento de taxas</h3>
-<p class="phase-description">Pagamento obrigatório dos boletos gerados</p>
-</div>
-<div class="phase-progress-container">
-<span class="phase-progress-text" id="phase-progress-5">0/2</span>
-<div class="phase-progress-mini">
-<div class="phase-progress-mini-bar" id="phase-bar-5" style="width: 0%;"></div>
-</div>
-</div>
-</div>
-<div class="phase-steps" id="steps-5">
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Pagamento dos boletos</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Upload dos comprovantes de pagamento</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-</div>
-</div>
-<div class="phase-card" data-phase="6">
-<div class="phase-header" onclick="togglePhase(6)">
-<div class="phase-number">6</div>
-<div class="phase-info">
-<h3 class="phase-title">Agendamento da cita migratória</h3>
-<p class="phase-description">Etapa presencial junto à imigração</p>
-</div>
-<div class="phase-progress-container">
-<span class="phase-progress-text" id="phase-progress-6">0/2</span>
-<div class="phase-progress-mini">
-<div class="phase-progress-mini-bar" id="phase-bar-6" style="width: 0%;"></div>
-</div>
-</div>
-</div>
-<div class="phase-steps" id="steps-6">
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Agendamento da cita</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Comparecimento presencial na data marcada</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-</div>
-</div>
-<div class="phase-card" data-phase="7">
-<div class="phase-header" onclick="togglePhase(7)">
-<div class="phase-number">7</div>
-<div class="phase-info">
-<h3 class="phase-title">Chegada do DNI</h3>
-<p class="phase-description">Aguardando emissão do documento</p>
-</div>
-<div class="phase-progress-container">
-<span class="phase-progress-text" id="phase-progress-7">0/1</span>
-<div class="phase-progress-mini">
-<div class="phase-progress-mini-bar" id="phase-bar-7" style="width: 0%;"></div>
-</div>
-</div>
-</div>
-<div class="phase-steps" id="steps-7">
-<div class="step-item">
-<span class="step-checkmark"></span>
-<div class="step-content-wrapper">
-<div class="step-text">Aguardar a emissão e chegada do DNI argentino</div>
-<div class="step-status-label">Pendente</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="tab-content" id="assessorias">
-<div class="empty-state">
-<div class="empty-icon">🎯</div>
-<h3 class="empty-title">Assessorias em breve</h3>
-<p class="empty-text">Em breve você terá acesso a serviços de assessoria especializados para facilitar ainda mais sua mudança para a Argentina.</p>
-</div>
-</div>
-<div class="tab-content" id="suporte">
-<div class="empty-state">
-<div class="empty-icon">💬</div>
-<h3 class="empty-title">Suporte disponível</h3>
-<p class="empty-text">Nossa equipe está pronta para te ajudar! Em breve você terá acesso direto ao suporte via chat.</p>
-</div>
-</div>
+  <section class="welcome-section">
+    <h1 class="welcome-title" id="welcomeTitle">Olá! 👋</h1>
+    <p class="welcome-subtitle" id="welcomeSubtitle">Vamos organizar seus documentos para o DNI argentino</p>
+    <div class="notice" id="noticeBox"></div>
+  </section>
+
+  <div class="tabs-container">
+    <div class="tabs">
+      <button class="tab active" data-tab="documentos">📄 Documentos<span class="tab-badge" id="docsBadge">4</span></button>
+      <button class="tab" data-tab="processo">🔄 Meu processo DNI</button>
+      <button class="tab" data-tab="suporte">💬 Suporte</button>
+    </div>
+  </div>
+
+  <!-- TAB: DOCUMENTOS -->
+  <div class="tab-content active" id="documentos">
+    <div class="documents-grid">
+
+      <!-- RG -->
+      <div class="document-card" data-doc="rg" id="card-rg">
+        <div class="document-header">
+          <div class="document-icon">🪪</div>
+          <div class="document-status pending" id="status-rg"><span>⏳</span><span>Pendente</span></div>
+        </div>
+        <h3 class="document-title">RG (Identidade)</h3>
+        <p class="document-description">Seu RG atualizado. Pode ser frente e verso no mesmo PDF ou imagem.</p>
+
+        <div class="upload-area" id="uploadarea-rg" onclick="document.getElementById('file-rg').click()">
+          <div class="upload-icon">📤</div>
+          <div class="upload-text">Clique para enviar</div>
+          <div class="upload-hint">PDF ou imagem até 5MB</div>
+        </div>
+        <input type="file" id="file-rg" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+
+        <div class="file-preview" id="preview-rg">
+          <span class="file-preview-icon">📄</span>
+          <div class="file-preview-info">
+            <div class="file-preview-name" id="filename-rg">-</div>
+            <div class="file-preview-size" id="filesize-rg">-</div>
+            <div class="doc-actions" style="margin-top:10px;">
+              <button class="small-btn" id="view-rg" type="button">👁️ Visualizar</button>
+              <button class="small-btn danger" id="remove-rg" type="button">✕ Remover</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Antecedentes -->
+      <div class="document-card" data-doc="antecedentes" id="card-antecedentes">
+        <div class="document-header">
+          <div class="document-icon">📋</div>
+          <div class="document-status pending" id="status-antecedentes"><span>⏳</span><span>Pendente</span></div>
+        </div>
+        <h3 class="document-title">Antecedentes Criminais</h3>
+        <p class="document-description">Certidão da Polícia Federal (Brasil). Se precisar, te orientamos no suporte.</p>
+
+        <div class="upload-area" id="uploadarea-antecedentes" onclick="document.getElementById('file-antecedentes').click()">
+          <div class="upload-icon">📤</div>
+          <div class="upload-text">Clique para enviar</div>
+          <div class="upload-hint">PDF ou imagem até 5MB</div>
+        </div>
+        <input type="file" id="file-antecedentes" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+
+        <div class="file-preview" id="preview-antecedentes">
+          <span class="file-preview-icon">📄</span>
+          <div class="file-preview-info">
+            <div class="file-preview-name" id="filename-antecedentes">-</div>
+            <div class="file-preview-size" id="filesize-antecedentes">-</div>
+            <div class="doc-actions" style="margin-top:10px;">
+              <button class="small-btn" id="view-antecedentes" type="button">👁️ Visualizar</button>
+              <button class="small-btn danger" id="remove-antecedentes" type="button">✕ Remover</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Foto -->
+      <div class="document-card" data-doc="foto" id="card-foto">
+        <div class="document-header">
+          <div class="document-icon">📸</div>
+          <div class="document-status pending" id="status-foto"><span>⏳</span><span>Pendente</span></div>
+        </div>
+        <h3 class="document-title">Foto 3x4</h3>
+        <p class="document-description">Foto recente (fundo branco). JPG ou PNG.</p>
+
+        <div class="upload-area" id="uploadarea-foto" onclick="document.getElementById('file-foto').click()">
+          <div class="upload-icon">📤</div>
+          <div class="upload-text">Clique para enviar</div>
+          <div class="upload-hint">JPG ou PNG até 5MB</div>
+        </div>
+        <input type="file" id="file-foto" class="file-input" accept=".jpg,.jpeg,.png">
+
+        <div class="file-preview" id="preview-foto">
+          <span class="file-preview-icon">📷</span>
+          <div class="file-preview-info">
+            <div class="file-preview-name" id="filename-foto">-</div>
+            <div class="file-preview-size" id="filesize-foto">-</div>
+            <div class="doc-actions" style="margin-top:10px;">
+              <button class="small-btn" id="view-foto" type="button">👁️ Visualizar</button>
+              <button class="small-btn danger" id="remove-foto" type="button">✕ Remover</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outros -->
+      <div class="document-card" data-doc="outros" id="card-outros">
+        <div class="document-header">
+          <div class="document-icon">📁</div>
+          <div class="document-status pending" id="status-outros"><span>⏳</span><span>Pendente</span></div>
+        </div>
+        <h3 class="document-title">Outros documentos</h3>
+        <p class="document-description">Se necessário: domicílio, contrato, carta convite, etc.</p>
+
+        <div class="upload-area" id="uploadarea-outros" onclick="document.getElementById('file-outros').click()">
+          <div class="upload-icon">📤</div>
+          <div class="upload-text">Clique para enviar</div>
+          <div class="upload-hint">PDF ou imagem até 5MB</div>
+        </div>
+        <input type="file" id="file-outros" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+
+        <div class="file-preview" id="preview-outros">
+          <span class="file-preview-icon">📄</span>
+          <div class="file-preview-info">
+            <div class="file-preview-name" id="filename-outros">-</div>
+            <div class="file-preview-size" id="filesize-outros">-</div>
+            <div class="doc-actions" style="margin-top:10px;">
+              <button class="small-btn" id="view-outros" type="button">👁️ Visualizar</button>
+              <button class="small-btn danger" id="remove-outros" type="button">✕ Remover</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB: PROCESSO -->
+  <div class="tab-content" id="processo">
+    <div class="process-container">
+
+      <div class="phase-card" data-phase="1">
+        <div class="phase-header" onclick="togglePhase(1)">
+          <div class="phase-number">1</div>
+          <div class="phase-info">
+            <div class="phase-title-row">
+              <h3 class="phase-title">Documentação inicial</h3>
+              <span class="current-badge" data-badge="current" style="display:none;">📍 Fase atual</span>
+              <span class="completed-badge" data-badge="done" style="display:none;">✓ Concluída</span>
+            </div>
+            <p class="phase-description">Providenciar RG válido e foto recente</p>
+          </div>
+          <div class="phase-progress-container">
+            <span class="phase-progress-text" id="phase-progress-1">—</span>
+            <div class="phase-progress-mini"><div class="phase-progress-mini-bar" id="phase-bar-1" style="width: 0%;"></div></div>
+          </div>
+        </div>
+        <div class="phase-steps" id="steps-1">
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Envio dos documentos para nossa equipe</div><div class="step-status-label">Pendente</div></div></div>
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Upload dos documentos na plataforma correspondente</div><div class="step-status-label">Pendente</div></div></div>
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Análise dos documentos realizada por nós</div><div class="step-status-label">Pendente</div></div></div>
+        </div>
+      </div>
+
+      <div class="phase-card" data-phase="2">
+        <div class="phase-header" onclick="togglePhase(2)">
+          <div class="phase-number">2</div>
+          <div class="phase-info">
+            <div class="phase-title-row">
+              <h3 class="phase-title">Antecedentes criminais</h3>
+              <span class="current-badge" data-badge="current" style="display:none;">📍 Fase atual</span>
+              <span class="completed-badge" data-badge="done" style="display:none;">✓ Concluída</span>
+            </div>
+            <p class="phase-description">Emissão do certificado de antecedentes</p>
+          </div>
+          <div class="phase-progress-container">
+            <span class="phase-progress-text" id="phase-progress-2">—</span>
+            <div class="phase-progress-mini"><div class="phase-progress-mini-bar" id="phase-bar-2" style="width: 0%;"></div></div>
+          </div>
+        </div>
+        <div class="phase-steps" id="steps-2">
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Emissão do documento</div><div class="step-status-label">Pendente</div></div></div>
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Upload do documento após a emissão</div><div class="step-status-label">Pendente</div></div></div>
+        </div>
+      </div>
+
+      <div class="phase-card" data-phase="3">
+        <div class="phase-header" onclick="togglePhase(3)">
+          <div class="phase-number">3</div>
+          <div class="phase-info">
+            <div class="phase-title-row">
+              <h3 class="phase-title">Domicílio</h3>
+              <span class="current-badge" data-badge="current" style="display:none;">📍 Fase atual</span>
+              <span class="completed-badge" data-badge="done" style="display:none;">✓ Concluída</span>
+            </div>
+            <p class="phase-description">Comprovação de endereço na Argentina</p>
+          </div>
+          <div class="phase-progress-container">
+            <span class="phase-progress-text" id="phase-progress-3">—</span>
+            <div class="phase-progress-mini"><div class="phase-progress-mini-bar" id="phase-bar-3" style="width: 0%;"></div></div>
+          </div>
+        </div>
+        <div class="phase-steps" id="steps-3">
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Agendamento do trâmite</div><div class="step-status-label">Pendente</div></div></div>
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Retirada presencial do documento</div><div class="step-status-label">Pendente</div></div></div>
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Upload do documento obtido</div><div class="step-status-label">Pendente</div></div></div>
+        </div>
+      </div>
+
+      <div class="phase-card" data-phase="4">
+        <div class="phase-header" onclick="togglePhase(4)">
+          <div class="phase-number">4</div>
+          <div class="phase-info">
+            <div class="phase-title-row">
+              <h3 class="phase-title">Cadastro no RADEX</h3>
+              <span class="current-badge" data-badge="current" style="display:none;">📍 Fase atual</span>
+              <span class="completed-badge" data-badge="done" style="display:none;">✓ Concluída</span>
+            </div>
+            <p class="phase-description">Registro no sistema migratório argentino</p>
+          </div>
+          <div class="phase-progress-container">
+            <span class="phase-progress-text" id="phase-progress-4">—</span>
+            <div class="phase-progress-mini"><div class="phase-progress-mini-bar" id="phase-bar-4" style="width: 0%;"></div></div>
+          </div>
+        </div>
+        <div class="phase-steps" id="steps-4">
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Realização do cadastro</div><div class="step-status-label">Pendente</div></div></div>
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Criação dos boletos das taxas migratórias</div><div class="step-status-label">Pendente</div></div></div>
+        </div>
+      </div>
+
+      <div class="phase-card" data-phase="5">
+        <div class="phase-header" onclick="togglePhase(5)">
+          <div class="phase-number">5</div>
+          <div class="phase-info">
+            <div class="phase-title-row">
+              <h3 class="phase-title">Pagamento de taxas</h3>
+              <span class="current-badge" data-badge="current" style="display:none;">📍 Fase atual</span>
+              <span class="completed-badge" data-badge="done" style="display:none;">✓ Concluída</span>
+            </div>
+            <p class="phase-description">Pagamento obrigatório dos boletos</p>
+          </div>
+          <div class="phase-progress-container">
+            <span class="phase-progress-text" id="phase-progress-5">—</span>
+            <div class="phase-progress-mini"><div class="phase-progress-mini-bar" id="phase-bar-5" style="width: 0%;"></div></div>
+          </div>
+        </div>
+        <div class="phase-steps" id="steps-5">
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Pagamento dos boletos</div><div class="step-status-label">Pendente</div></div></div>
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Upload dos comprovantes</div><div class="step-status-label">Pendente</div></div></div>
+        </div>
+      </div>
+
+      <div class="phase-card" data-phase="6">
+        <div class="phase-header" onclick="togglePhase(6)">
+          <div class="phase-number">6</div>
+          <div class="phase-info">
+            <div class="phase-title-row">
+              <h3 class="phase-title">Agendamento da cita</h3>
+              <span class="current-badge" data-badge="current" style="display:none;">📍 Fase atual</span>
+              <span class="completed-badge" data-badge="done" style="display:none;">✓ Concluída</span>
+            </div>
+            <p class="phase-description">Etapa presencial junto à imigração</p>
+          </div>
+          <div class="phase-progress-container">
+            <span class="phase-progress-text" id="phase-progress-6">—</span>
+            <div class="phase-progress-mini"><div class="phase-progress-mini-bar" id="phase-bar-6" style="width: 0%;"></div></div>
+          </div>
+        </div>
+        <div class="phase-steps" id="steps-6">
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Agendamento da cita</div><div class="step-status-label">Pendente</div></div></div>
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Comparecimento presencial</div><div class="step-status-label">Pendente</div></div></div>
+        </div>
+      </div>
+
+      <div class="phase-card" data-phase="7">
+        <div class="phase-header" onclick="togglePhase(7)">
+          <div class="phase-number">7</div>
+          <div class="phase-info">
+            <div class="phase-title-row">
+              <h3 class="phase-title">Chegada do DNI</h3>
+              <span class="current-badge" data-badge="current" style="display:none;">📍 Fase atual</span>
+              <span class="completed-badge" data-badge="done" style="display:none;">✓ Concluída</span>
+            </div>
+            <p class="phase-description">Aguardando emissão do documento</p>
+          </div>
+          <div class="phase-progress-container">
+            <span class="phase-progress-text" id="phase-progress-7">—</span>
+            <div class="phase-progress-mini"><div class="phase-progress-mini-bar" id="phase-bar-7" style="width: 0%;"></div></div>
+          </div>
+        </div>
+        <div class="phase-steps" id="steps-7">
+          <div class="step-item"><span class="step-checkmark"></span><div class="step-content-wrapper"><div class="step-text">Aguardar a emissão e chegada do DNI argentino</div><div class="step-status-label">Pendente</div></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB: SUPORTE -->
+  <div class="tab-content" id="suporte">
+    <div class="empty-state">
+      <div class="empty-icon">💬</div>
+      <h3 class="empty-title">Suporte</h3>
+      <p class="empty-text">Se precisar de ajuda, chame a gente no WhatsApp (por enquanto o chat interno vem depois).</p>
+    </div>
+  </div>
 </main>
+
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+/* =========================
+   1) CONFIG (trocar só isso)
+========================= */
+const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
+const SUPABASE_ANON_KEY = "COLE_AQUIeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k_SUA_SUPABASE_ANON_KEY";
+
+/* =========================
+   2) CLIENT
+========================= */
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+});
+
+/* =========================
+   3) ESTRELAS
+========================= */
 const starsContainer = document.querySelector('.stars');
 for (let i = 0; i < 100; i++) {
   const star = document.createElement('div');
@@ -492,6 +525,10 @@ for (let i = 0; i < 100; i++) {
   star.style.animationDelay = Math.random() * 3 + 's';
   starsContainer.appendChild(star);
 }
+
+/* =========================
+   4) TABS
+========================= */
 const tabs = document.querySelectorAll('.tab');
 const tabContents = document.querySelectorAll('.tab-content');
 tabs.forEach(tab => {
@@ -503,62 +540,485 @@ tabs.forEach(tab => {
     document.getElementById(targetTab).classList.add('active');
   });
 });
-const uploadedDocs = new Set();
-function handleFileUpload(docType, input) {
-  const file = input.files[0];
-  if (!file) return;
-  const maxSize = 5 * 1024 * 1024;
-  if (file.size > maxSize) {
-    alert('Arquivo muito grande! O tamanho máximo é 5MB.');
-    input.value = '';
-    return;
-  }
-  const preview = document.getElementById('preview-' + docType);
-  const filename = document.getElementById('filename-' + docType);
-  const filesize = document.getElementById('filesize-' + docType);
-  filename.textContent = file.name;
-  filesize.textContent = formatFileSize(file.size);
-  preview.classList.add('show');
-  const status = document.getElementById('status-' + docType);
-  status.className = 'document-status uploaded';
-  status.innerHTML = '<span class="status-icon">✓</span><span>Enviado</span>';
-  const card = document.querySelector('[data-doc="' + docType + '"]');
-  card.classList.add('uploaded');
-  uploadedDocs.add(docType);
-  updateDocsBadge();
-  const uploadArea = card.querySelector('.upload-area');
-  uploadArea.style.display = 'none';
+
+/* =========================
+   5) HELPERS UI
+========================= */
+const loadingEl = document.getElementById("loading");
+const noticeBox = document.getElementById("noticeBox");
+
+function setLoading(show, text) {
+  if (text) document.querySelector(".loading-text").textContent = text;
+  loadingEl.classList.toggle("hidden", !show);
 }
-function removeFile(docType) {
-  const input = document.getElementById('file-' + docType);
-  const preview = document.getElementById('preview-' + docType);
-  const status = document.getElementById('status-' + docType);
-  const card = document.querySelector('[data-doc="' + docType + '"]');
-  const uploadArea = card.querySelector('.upload-area');
-  input.value = '';
-  preview.classList.remove('show');
-  status.className = 'document-status pending';
-  status.innerHTML = '<span class="status-icon">⏳</span><span>Pendente</span>';
-  card.classList.remove('uploaded');
-  uploadArea.style.display = 'block';
-  uploadedDocs.delete(docType);
-  updateDocsBadge();
+
+function showNotice(type, msg) {
+  noticeBox.className = "notice show " + (type === "ok" ? "ok" : "err");
+  noticeBox.textContent = msg;
 }
+
+function hideNotice() {
+  noticeBox.className = "notice";
+  noticeBox.textContent = "";
+}
+
 function formatFileSize(bytes) {
   if (bytes < 1024) return bytes + ' B';
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
   return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
 }
+
+function safeName(name) {
+  return (name || "arquivo")
+    .replace(/\s+/g, "_")
+    .replace(/[^a-zA-Z0-9._-]/g, "")
+    .slice(0, 120);
+}
+
+function filenameFromPath(path) {
+  if (!path) return null;
+  const parts = path.split("/");
+  return parts[parts.length - 1] || path;
+}
+
+/* =========================
+   6) ESTADO GLOBAL
+========================= */
+let currentUser = null;
+let currentProfile = null;
+let docsMap = new Map(); // doc_type -> row
+let currentPhase = 1;
+
+const DOC_TYPES = ["rg", "antecedentes", "foto", "outros"];
+const DOC_META = {
+  rg: { icon: "📄" },
+  antecedentes: { icon: "📄" },
+  foto: { icon: "📷" },
+  outros: { icon: "📄" }
+};
+
+/* =========================
+   7) AUTH GUARD + LOAD DATA
+========================= */
+async function init() {
+  setLoading(true, "Carregando seu painel…");
+
+  // session
+  const { data: sessionData } = await sb.auth.getSession();
+  if (!sessionData?.session) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  // user
+  const { data: userData, error: userErr } = await sb.auth.getUser();
+  if (userErr || !userData?.user) {
+    window.location.href = "login.html";
+    return;
+  }
+  currentUser = userData.user;
+
+  // profile (pra pegar role e nome)
+  const { data: profile, error: profErr } = await sb
+    .from("profiles")
+    .select("id, email, full_name, role")
+    .eq("id", currentUser.id)
+    .single();
+
+  if (profErr) {
+    showNotice("err", "Não consegui carregar seu perfil. Tente recarregar a página.");
+    setLoading(false);
+    return;
+  }
+  currentProfile = profile;
+
+  // Se for admin, manda pro admin
+  if (currentProfile.role === "admin") {
+    window.location.href = "admin.html";
+    return;
+  }
+
+  renderHeaderUser(profile);
+
+  // processo
+  const { data: proc, error: procErr } = await sb
+    .from("dni_process")
+    .select("current_phase, updated_at")
+    .eq("user_id", currentUser.id)
+    .single();
+
+  if (!procErr && proc?.current_phase) {
+    currentPhase = proc.current_phase;
+  }
+
+  // docs
+  const { data: docs, error: docsErr } = await sb
+    .from("documents")
+    .select("doc_type, status, storage_path, uploaded_at, approved_at")
+    .eq("user_id", currentUser.id);
+
+  if (docsErr) {
+    showNotice("err", "Não consegui carregar seus documentos. Tente recarregar a página.");
+    setLoading(false);
+    return;
+  }
+
+  docsMap = new Map();
+  (docs || []).forEach(d => docsMap.set(d.doc_type, d));
+
+  // Renderiza tudo
+  renderAllDocs();
+  updateDocsBadge();
+  renderProcessPhases(currentPhase);
+
+  // Eventos inputs
+  wireUploadInputs();
+
+  // Logout
+  document.getElementById("logoutBtn").addEventListener("click", logout);
+
+  setLoading(false);
+}
+
+function renderHeaderUser(profile) {
+  const name = (profile.full_name || "").trim();
+  const email = (profile.email || "").trim();
+  const display = name || (email ? email.split("@")[0] : "Cliente");
+
+  document.getElementById("userName").textContent = display;
+  document.getElementById("welcomeTitle").textContent = `Olá, ${display}! 👋`;
+
+  // avatar 2 letras
+  const initials = display
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(p => p[0].toUpperCase())
+    .join("") || "BR";
+
+  document.getElementById("userAvatar").textContent = initials;
+}
+
+async function logout() {
+  setLoading(true, "Saindo…");
+  await sb.auth.signOut();
+  window.location.href = "login.html";
+}
+
+/* =========================
+   8) DOCUMENTOS: RENDER
+========================= */
+function setDocUI(docType, state) {
+  const row = docsMap.get(docType) || { doc_type: docType, status: "pending", storage_path: null };
+
+  const statusEl = document.getElementById(`status-${docType}`);
+  const card = document.getElementById(`card-${docType}`);
+  const uploadArea = document.getElementById(`uploadarea-${docType}`);
+  const preview = document.getElementById(`preview-${docType}`);
+  const fileNameEl = document.getElementById(`filename-${docType}`);
+  const fileSizeEl = document.getElementById(`filesize-${docType}`);
+
+  const viewBtn = document.getElementById(`view-${docType}`);
+  const removeBtn = document.getElementById(`remove-${docType}`);
+
+  // base
+  card.classList.remove("uploaded", "approved", "rejected");
+  statusEl.className = "document-status pending";
+  statusEl.innerHTML = `<span>⏳</span><span>Pendente</span>`;
+
+  preview.classList.remove("show");
+  uploadArea.style.display = "block";
+
+  // status
+  if (row.status === "uploaded") {
+    card.classList.add("uploaded");
+    statusEl.className = "document-status uploaded";
+    statusEl.innerHTML = `<span>✓</span><span>Enviado</span>`;
+  }
+
+  if (row.status === "approved") {
+    card.classList.add("approved");
+    statusEl.className = "document-status approved";
+    statusEl.innerHTML = `<span>✅</span><span>Aprovado</span>`;
+  }
+
+  if (row.status === "rejected") {
+    card.classList.add("rejected");
+    statusEl.className = "document-status rejected";
+    statusEl.innerHTML = `<span>⚠️</span><span>Rejeitado</span>`;
+  }
+
+  // se tem arquivo
+  if (row.storage_path) {
+    preview.classList.add("show");
+    uploadArea.style.display = "none";
+
+    const fname = filenameFromPath(row.storage_path);
+    fileNameEl.textContent = fname || "Arquivo enviado";
+
+    // não temos tamanho no banco; mostra uma info simples
+    const uploadedAt = row.uploaded_at ? new Date(row.uploaded_at).toLocaleString("pt-BR") : "";
+    fileSizeEl.textContent = uploadedAt ? `Enviado em ${uploadedAt}` : "Arquivo enviado";
+
+    viewBtn.disabled = false;
+    removeBtn.disabled = (row.status === "approved"); // se aprovado, bloqueia remover
+  } else {
+    viewBtn.disabled = true;
+    removeBtn.disabled = true;
+  }
+
+  // Se rejeitado, deixa reenviar (uploadArea aparece)
+  if (row.status === "rejected") {
+    uploadArea.style.display = "block";
+    preview.classList.remove("show");
+  }
+}
+
+function renderAllDocs() {
+  DOC_TYPES.forEach(dt => setDocUI(dt));
+}
+
 function updateDocsBadge() {
   const total = 4;
-  const uploaded = uploadedDocs.size;
-  const remaining = total - uploaded;
-  document.getElementById('docsBadge').textContent = remaining;
+  let uploadedOrApproved = 0;
+  DOC_TYPES.forEach(dt => {
+    const row = docsMap.get(dt);
+    if (row && (row.status === "uploaded" || row.status === "approved")) uploadedOrApproved++;
+  });
+  const remaining = total - uploadedOrApproved;
+  document.getElementById("docsBadge").textContent = remaining;
 }
+
+/* =========================
+   9) UPLOAD / VIEW / REMOVE
+========================= */
+function wireUploadInputs() {
+  // bind upload inputs
+  DOC_TYPES.forEach(docType => {
+    const input = document.getElementById(`file-${docType}`);
+    input.addEventListener("change", async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      await handleUpload(docType, file);
+      input.value = "";
+    });
+
+    // view
+    document.getElementById(`view-${docType}`).addEventListener("click", async (e) => {
+      e.preventDefault();
+      await viewDoc(docType);
+    });
+
+    // remove
+    document.getElementById(`remove-${docType}`).addEventListener("click", async (e) => {
+      e.preventDefault();
+      await removeDoc(docType);
+    });
+  });
+}
+
+async function handleUpload(docType, file) {
+  hideNotice();
+
+  const maxSize = 5 * 1024 * 1024;
+  if (file.size > maxSize) {
+    showNotice("err", "Arquivo muito grande! O tamanho máximo é 5MB.");
+    return;
+  }
+
+  setLoading(true, "Enviando arquivo…");
+
+  try {
+    // caminho obrigatório: "<user_id>/<docType>/arquivo"
+    const path = `${currentUser.id}/${docType}/${Date.now()}_${safeName(file.name)}`;
+
+    // upload
+    const { error: upErr } = await sb
+      .storage
+      .from("documents")
+      .upload(path, file, { upsert: false });
+
+    if (upErr) {
+      showNotice("err", "Não consegui enviar o arquivo. Tente novamente.");
+      setLoading(false);
+      return;
+    }
+
+    // update doc row
+    const nowIso = new Date().toISOString();
+    const { data: updated, error: dbErr } = await sb
+      .from("documents")
+      .update({
+        storage_path: path,
+        status: "uploaded",
+        uploaded_at: nowIso,
+        approved_at: null
+      })
+      .eq("user_id", currentUser.id)
+      .eq("doc_type", docType)
+      .select("doc_type, status, storage_path, uploaded_at, approved_at")
+      .single();
+
+    if (dbErr) {
+      showNotice("err", "Envio feito, mas não consegui salvar o status no sistema. Recarregue a página.");
+      setLoading(false);
+      return;
+    }
+
+    docsMap.set(docType, updated);
+    setDocUI(docType);
+    updateDocsBadge();
+    showNotice("ok", "Documento enviado com sucesso!");
+  } catch (e) {
+    showNotice("err", "Erro inesperado no envio. Tente novamente.");
+  } finally {
+    setLoading(false);
+  }
+}
+
+async function viewDoc(docType) {
+  hideNotice();
+  const row = docsMap.get(docType);
+  if (!row?.storage_path) return;
+
+  setLoading(true, "Abrindo arquivo…");
+  try {
+    // bucket é privado => precisa signed URL
+    const { data, error } = await sb
+      .storage
+      .from("documents")
+      .createSignedUrl(row.storage_path, 60); // 60s
+
+    if (error || !data?.signedUrl) {
+      showNotice("err", "Não consegui abrir o arquivo agora. Tente novamente.");
+      setLoading(false);
+      return;
+    }
+
+    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+  } catch (e) {
+    showNotice("err", "Erro ao abrir arquivo.");
+  } finally {
+    setLoading(false);
+  }
+}
+
+async function removeDoc(docType) {
+  hideNotice();
+  const row = docsMap.get(docType);
+  if (!row?.storage_path) return;
+
+  if (row.status === "approved") {
+    showNotice("err", "Esse documento já foi aprovado e não pode ser removido. Se precisar trocar, fale com o suporte.");
+    return;
+  }
+
+  const ok = confirm("Tem certeza que deseja remover este arquivo?");
+  if (!ok) return;
+
+  setLoading(true, "Removendo arquivo…");
+
+  try {
+    // remove do storage
+    const { error: rmErr } = await sb
+      .storage
+      .from("documents")
+      .remove([row.storage_path]);
+
+    if (rmErr) {
+      showNotice("err", "Não consegui remover o arquivo. Tente novamente.");
+      setLoading(false);
+      return;
+    }
+
+    // update db
+    const { data: updated, error: dbErr } = await sb
+      .from("documents")
+      .update({
+        storage_path: null,
+        status: "pending",
+        uploaded_at: null,
+        approved_at: null
+      })
+      .eq("user_id", currentUser.id)
+      .eq("doc_type", docType)
+      .select("doc_type, status, storage_path, uploaded_at, approved_at")
+      .single();
+
+    if (dbErr) {
+      showNotice("err", "Arquivo removido, mas não consegui atualizar o status. Recarregue a página.");
+      setLoading(false);
+      return;
+    }
+
+    docsMap.set(docType, updated);
+    setDocUI(docType);
+    updateDocsBadge();
+    showNotice("ok", "Arquivo removido.");
+  } catch (e) {
+    showNotice("err", "Erro inesperado ao remover.");
+  } finally {
+    setLoading(false);
+  }
+}
+
+/* =========================
+   10) PROCESSO (fase atual)
+========================= */
 function togglePhase(phaseNum) {
   const card = document.querySelector('.phase-card[data-phase="' + phaseNum + '"]');
   card.classList.toggle('expanded');
 }
+
+function renderProcessPhases(cur) {
+  // mapeamento de "passos" só pra barra visual (não é dado real)
+  const totalSteps = { 1:3, 2:2, 3:3, 4:2, 5:2, 6:2, 7:1 };
+
+  for (let i = 1; i <= 7; i++) {
+    const card = document.querySelector(`.phase-card[data-phase="${i}"]`);
+    const bar = document.getElementById(`phase-bar-${i}`);
+    const text = document.getElementById(`phase-progress-${i}`);
+
+    const badgeCurrent = card.querySelector(`[data-badge="current"]`);
+    const badgeDone = card.querySelector(`[data-badge="done"]`);
+
+    // reset
+    card.classList.remove("current", "completed");
+    if (badgeCurrent) badgeCurrent.style.display = "none";
+    if (badgeDone) badgeDone.style.display = "none";
+
+    if (i < cur) {
+      card.classList.add("completed");
+      if (badgeDone) badgeDone.style.display = "inline-flex";
+      bar.style.width = "100%";
+      text.textContent = `${totalSteps[i]}/${totalSteps[i]}`;
+      markSteps(card, true);
+    } else if (i === cur) {
+      card.classList.add("current");
+      if (badgeCurrent) badgeCurrent.style.display = "inline-flex";
+      bar.style.width = "55%";
+      text.textContent = "Em andamento";
+      markSteps(card, false);
+    } else {
+      bar.style.width = "0%";
+      text.textContent = `0/${totalSteps[i]}`;
+      markSteps(card, false);
+    }
+  }
+}
+
+function markSteps(card, completed) {
+  const steps = card.querySelectorAll(".step-item");
+  steps.forEach(s => {
+    if (completed) s.classList.add("checked");
+    else s.classList.remove("checked");
+  });
+}
+
+/* =========================
+   11) START
+========================= */
+init();
 </script>
 </body>
 </html>
