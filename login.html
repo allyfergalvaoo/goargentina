@@ -84,19 +84,19 @@
     <div id="msg" class="msg"></div>
 
     <div class="hint">
-      Dica: se você pedir o link num navegador, abra o email e clique no link no <b>mesmo navegador</b> (mesmo perfil).
+      Se você pedir o link num navegador, abra o email e clique no link no <b>mesmo navegador</b> (mesmo perfil).
     </div>
   </div>
 
-  <!-- Supabase JS (modo global, mais simples e confiável no Vercel) -->
+  <!-- Supabase JS (global) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    // ✅ Suas variáveis (é ok expor URL + ANON KEY)
+    // ✅ Suas variáveis (URL + ANON key podem ficar no front)
     const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k";
 
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
@@ -120,8 +120,7 @@
     }
 
     async function consumeMagicLinkHashIfAny() {
-      // Seu link vem assim:
-      // /login.html#access_token=...&refresh_token=...&type=magiclink
+      // Ex: login.html#access_token=...&refresh_token=...&type=magiclink
       const hash = window.location.hash;
       if (!hash || hash.length < 2) return;
 
@@ -130,7 +129,7 @@
       const refresh_token = params.get("refresh_token");
 
       if (access_token && refresh_token) {
-        const { error } = await supabaseClient.auth.setSession({ access_token, refresh_token });
+        const { error } = await sb.auth.setSession({ access_token, refresh_token });
         if (error) {
           console.error("setSession error:", error);
           showMessage("❌ Não consegui finalizar o login.\n\nDetalhe: " + error.message);
@@ -141,12 +140,12 @@
     }
 
     async function consumeCodeFlowIfAny() {
-      // Backup: se um dia vier /login.html?code=...
+      // Backup: login.html?code=...
       const url = new URL(window.location.href);
       const code = url.searchParams.get("code");
       if (!code) return;
 
-      const { error } = await supabaseClient.auth.exchangeCodeForSession(code);
+      const { error } = await sb.auth.exchangeCodeForSession(code);
       if (error) {
         console.error("exchangeCodeForSession error:", error);
         showMessage("❌ Não consegui finalizar o login.\n\nDetalhe: " + error.message);
@@ -156,14 +155,43 @@
     }
 
     async function routeIfLogged() {
-      const { data } = await supabaseClient.auth.getSession();
+      const { data } = await sb.auth.getSession();
       if (data?.session) {
-        // simples: manda pro dashboard. (admin pode ter botão/link pro admin depois)
         window.location.href = "dashboard.html";
       }
     }
 
-    // 1) Ao abrir a página: tenta consumir retorno do email e criar sessão
+    // ✅ Envia magic link via FETCH direto (sem AbortController do SDK)
+    async function sendMagicLink(email) {
+      const redirectTo = window.location.origin + "/login.html";
+      const url = SUPABASE_URL + "/auth/v1/otp?redirect_to=" + encodeURIComponent(redirectTo);
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          create_user: true
+        })
+      });
+
+      // Se der erro, tenta ler o JSON do Supabase
+      let payload = null;
+      try { payload = await res.json(); } catch (_) {}
+
+      if (!res.ok) {
+        const detail = payload?.msg || payload?.error_description || payload?.error || JSON.stringify(payload) || ("HTTP " + res.status);
+        throw new Error(detail);
+      }
+
+      return true;
+    }
+
+    // 1) Ao abrir: tenta consumir retorno do email e logar
     (async () => {
       try {
         await consumeMagicLinkHashIfAny();
@@ -171,11 +199,11 @@
         await routeIfLogged();
       } catch (e) {
         console.error(e);
-        showMessage("❌ Erro inesperado no login. Veja o console (F12).");
+        showMessage("❌ Erro no login. Veja o console (F12).");
       }
     })();
 
-    // 2) Envio do magic link
+    // 2) Clique no botão: envia magic link
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -186,29 +214,16 @@
       showMessage("📨 Enviando link de acesso...");
 
       try {
-        const redirectTo = window.location.origin + "/login.html";
-
-        const { error } = await supabaseClient.auth.signInWithOtp({
-          email,
-          options: { emailRedirectTo: redirectTo }
-        });
-
-        if (error) {
-          console.error("signInWithOtp error:", error);
-          showMessage("❌ Não consegui enviar o email.\n\nDetalhe: " + error.message);
-          btn.disabled = false;
-          return;
-        }
+        await sendMagicLink(email);
 
         showMessage(
           "✅ Link enviado!\n\n" +
           "Abra seu email e clique no link.\n" +
-          "Se não aparecer, verifique SPAM / Promoções.\n\n" +
-          "Obs: alguns provedores limitam envios por hora."
+          "Se não aparecer, verifique SPAM / Promoções."
         );
       } catch (err) {
-        console.error(err);
-        showMessage("❌ Erro inesperado ao enviar.\nVeja o console (F12).");
+        console.error("sendMagicLink error:", err);
+        showMessage("❌ Não consegui enviar o email.\n\nDetalhe: " + (err?.message || err));
       } finally {
         btn.disabled = false;
       }
