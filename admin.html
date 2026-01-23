@@ -18,6 +18,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; backg
 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 @keyframes slideDown { from{opacity:0; transform:translateY(-20px)} to{opacity:1; transform:translateY(0)} }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes spin { to { transform:rotate(360deg) } }
 
 header {
   padding:20px 0; backdrop-filter:blur(20px); background:rgba(10,14,39,.95);
@@ -198,6 +199,7 @@ header {
 .phase-name { font-size:13px; font-weight:950; margin-bottom:2px; }
 .phase-desc { font-size:12px; color:rgba(255,255,255,.55); font-weight:800; }
 .phase-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+
 .btn-small {
   padding:8px 10px; font-size:12px; font-weight:950;
   border-radius:10px; border:1px solid rgba(255,255,255,.12);
@@ -206,6 +208,7 @@ header {
 .btn-small:hover { background:rgba(0,102,255,.18); border-color:rgba(0,102,255,.4); }
 .btn-small.success:hover { background:rgba(16,185,129,.18); border-color:rgba(16,185,129,.4); }
 .btn-small.danger:hover { background:rgba(239,68,68,.18); border-color:rgba(239,68,68,.4); }
+.btn-small:disabled { opacity:.45; cursor:not-allowed; }
 
 .documents-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:12px; }
 .doc-card {
@@ -248,8 +251,104 @@ header {
   border-top-color: rgba(255,255,255,.85);
   animation: spin .9s linear infinite;
 }
-@keyframes spin { to { transform:rotate(360deg) } }
 .loading-text { color:rgba(255,255,255,.85); font-weight:950; font-size:14px; }
+
+/* Steps editor */
+.steps-toolbar{
+  display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+  margin-bottom:10px;
+}
+.steps-meta{
+  display:flex; flex-direction:column; gap:2px;
+}
+.steps-title{
+  font-size:13px; font-weight:950;
+}
+.steps-sub{
+  font-size:12px; color:rgba(255,255,255,.55); font-weight:800;
+}
+.steps-list{
+  display:flex; flex-direction:column; gap:10px;
+}
+.step-row{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;
+  padding:12px;
+}
+.step-top{
+  display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap;
+}
+.step-badge{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 10px; border-radius:999px; font-size:12px; font-weight:950;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+}
+.step-badge.done{
+  border-color:rgba(16,185,129,.35);
+  background:rgba(16,185,129,.14);
+  color:var(--success);
+}
+.step-badge.pending{
+  border-color:rgba(245,158,11,.28);
+  background:rgba(245,158,11,.10);
+  color:var(--warning);
+}
+.step-fields{
+  display:grid; grid-template-columns:1fr; gap:8px; margin-top:10px;
+}
+.input{
+  width:100%;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  color:#fff; font-weight:800; font-size:13px;
+}
+.input:focus{ outline:none; border-color:rgba(0,102,255,.55); background:rgba(255,255,255,.08); }
+.input::placeholder{ color:rgba(255,255,255,.4); font-weight:800; }
+.step-actions{
+  display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; margin-top:10px;
+}
+.checkbox-row{
+  display:flex; align-items:center; gap:10px;
+  font-size:12px; color:rgba(255,255,255,.8); font-weight:900;
+}
+.checkbox-row input{ width:16px; height:16px; accent-color: var(--primary); }
+
+/* Messages */
+.msg-toolbar{
+  display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+  margin-bottom:10px;
+}
+.msg-list{
+  display:flex; flex-direction:column; gap:10px; margin-top:10px;
+}
+.msg-item{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;
+  padding:12px;
+}
+.msg-head{
+  display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap;
+}
+.msg-title{ font-weight:950; font-size:13px; }
+.msg-meta{ font-size:12px; color:rgba(255,255,255,.55); font-weight:800; }
+.msg-body{ margin-top:8px; font-size:13px; color:rgba(255,255,255,.85); font-weight:800; white-space:pre-wrap; }
+.tag{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:4px 10px; border-radius:999px;
+  font-size:11px; font-weight:950;
+  border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06);
+}
+.tag.info{ border-color:rgba(0,102,255,.35); background:rgba(0,102,255,.14); color:#9ec2ff; }
+.tag.update{ border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.14); color:var(--success); }
+.tag.warning{ border-color:rgba(245,158,11,.28); background:rgba(245,158,11,.10); color:var(--warning); }
+.tag.success{ border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.14); color:var(--success); }
+.tag.unread{ border-color:rgba(245,158,11,.28); background:rgba(245,158,11,.10); color:var(--warning); }
+.tag.read{ border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.14); color:var(--success); }
 
 @media (max-width:1200px){
   .table-header, .client-row { grid-template-columns: 2fr 1.4fr 1fr 1fr 120px; }
@@ -296,7 +395,7 @@ header {
 <main class="main-container">
   <div class="page-header">
     <h1 class="page-title">Painel Administrativo</h1>
-    <p class="page-subtitle">Gerencie clientes, fases e documentos do processo de DNI</p>
+    <p class="page-subtitle">Gerencie clientes, fases, passos, documentos e mensagens</p>
     <div class="notice" id="noticeBox"></div>
   </div>
 
@@ -358,6 +457,9 @@ header {
           <div class="info-row"><span class="info-label">User ID</span><span class="info-value" id="detailId" style="font-family:ui-monospace, SFMono-Regular, Menlo, monospace;">-</span></div>
           <div class="info-row"><span class="info-label">Criado em</span><span class="info-value" id="detailCreated">-</span></div>
           <div class="info-row"><span class="info-label">Fase atual</span><span class="info-value" id="detailPhase">-</span></div>
+          <div class="small" style="margin-top:10px; color:rgba(255,255,255,.55); font-weight:800;">
+            Clique em uma fase para editar os passos dela.
+          </div>
         </div>
 
         <div class="detail-section">
@@ -366,12 +468,35 @@ header {
         </div>
       </div>
 
+      <!-- Steps editor -->
+      <div class="detail-section" style="margin-bottom:16px;">
+        <div class="section-title">🧩 Passos da fase</div>
+
+        <div class="steps-toolbar">
+          <div class="steps-meta">
+            <div class="steps-title" id="stepsPhaseTitle">Selecione uma fase</div>
+            <div class="steps-sub" id="stepsPhaseSub">Você pode criar passos padrão, adicionar novos e marcar como concluído.</div>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+            <button class="btn-small" id="reloadStepsBtn">↻ Recarregar</button>
+            <button class="btn-small" id="seedStepsBtn">✨ Gerar passos padrão</button>
+            <button class="btn-small success" id="addStepBtn">➕ Adicionar passo</button>
+          </div>
+        </div>
+
+        <div class="steps-list" id="stepsList"></div>
+
+        <div class="small" style="margin-top:10px; color:rgba(255,255,255,.55); font-weight:800;">
+          Observação: os passos ficam na tabela <b>phase_steps</b>. “Concluído” usa <b>is_completed</b> (e salva <b>completed_at</b>).
+        </div>
+      </div>
+
       <div class="detail-section" style="margin-bottom:16px;">
         <div class="section-title">📄 Documentos</div>
         <div class="documents-grid" id="documentsGrid"></div>
       </div>
 
-      <div class="detail-section">
+      <div class="detail-section" style="margin-bottom:16px;">
         <div class="section-title">📝 Notas Internas</div>
         <textarea class="notes-area" id="clientNotes" placeholder="Notas internas sobre este cliente…"></textarea>
         <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:12px; flex-wrap:wrap;">
@@ -379,9 +504,43 @@ header {
           <button class="btn-small success" id="saveNotesBtn">Salvar Notas</button>
         </div>
         <div class="small" style="margin-top:10px; color:rgba(255,255,255,.55); font-weight:800;">
-          Se aparecer erro ao salvar, provavelmente a tabela <b>admin_notes</b> não existe.
+          Se aparecer erro ao salvar, provavelmente a tabela <b>admin_notes</b> não existe ou RLS bloqueou.
         </div>
       </div>
+
+      <!-- Messages to client -->
+      <div class="detail-section">
+        <div class="section-title">📨 Mensagens para o cliente</div>
+
+        <div class="msg-toolbar">
+          <div class="small" style="color:rgba(255,255,255,.7); font-weight:800;">
+            Envie atualizações/dicas/solicitações. Isso aparece na caixa de entrada do cliente.
+          </div>
+          <button class="btn-small" id="reloadMsgsBtn">↻ Recarregar</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 220px; gap:10px;">
+          <input class="input" id="msgTitle" placeholder="Título da mensagem (ex: Precisamos do comprovante de endereço)" />
+          <select class="input" id="msgType" style="appearance:auto;">
+            <option value="info">info</option>
+            <option value="update">update</option>
+            <option value="warning">warning</option>
+            <option value="success">success</option>
+          </select>
+        </div>
+
+        <textarea class="notes-area" id="msgBody" placeholder="Digite a mensagem para o cliente…"></textarea>
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:12px; flex-wrap:wrap;">
+          <button class="btn-small success" id="sendMsgBtn">Enviar mensagem</button>
+        </div>
+
+        <div class="msg-list" id="msgList"></div>
+
+        <div class="small" style="margin-top:10px; color:rgba(255,255,255,.55); font-weight:800;">
+          Tabela: <b>client_messages</b> (o cliente só vê as próprias mensagens via RLS).
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -423,7 +582,7 @@ header {
 
 <script>
 /* =========================
-   1) CONFIG (trocar só isso)
+   1) CONFIG
 ========================= */
 const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k";
@@ -469,6 +628,11 @@ function filenameFromPath(path){
   const p = path.split("/");
   return p[p.length-1] || path;
 }
+function escapeHTML(s=""){
+  return String(s).replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
+}
 
 /* =========================
    4) Stars
@@ -484,7 +648,7 @@ for (let i=0;i<100;i++){
 }
 
 /* =========================
-   5) Data & constants
+   5) Constants
 ========================= */
 const phases = [
   { id:1, name:"Documentação inicial", desc:"RG e foto" },
@@ -496,6 +660,39 @@ const phases = [
   { id:7, name:"DNI emitido", desc:"Documento pronto" }
 ];
 
+// passos padrão (para botão "Gerar passos padrão")
+const defaultSteps = {
+  1: [
+    { title:"Envio dos documentos para nossa equipe", desc:"Fazer upload do RG e foto 3x4" },
+    { title:"Upload dos documentos na plataforma correspondente", desc:"Documentos serão enviados ao sistema argentino" },
+    { title:"Análise dos documentos realizada por nós", desc:"Revisão e aprovação dos documentos" },
+  ],
+  2: [
+    { title:"Emissão do documento", desc:"Solicitação/obtenção da certidão" },
+    { title:"Upload do documento após a emissão", desc:"Enviar o arquivo assim que estiver disponível" },
+  ],
+  3: [
+    { title:"Agendamento do trâmite", desc:"Definir data/horário" },
+    { title:"Retirada presencial do documento", desc:"Comparecer conforme instruções" },
+    { title:"Upload do documento obtido", desc:"Enviar comprovante/documento final" },
+  ],
+  4: [
+    { title:"Realização do cadastro", desc:"Cadastro no sistema migratório" },
+    { title:"Criação dos boletos das taxas migratórias", desc:"Gerar e organizar os pagamentos" },
+  ],
+  5: [
+    { title:"Pagamento dos boletos", desc:"Pagar conforme orientações" },
+    { title:"Upload dos comprovantes", desc:"Enviar comprovantes para validação" },
+  ],
+  6: [
+    { title:"Agendamento da cita", desc:"Escolher data disponível" },
+    { title:"Comparecimento presencial", desc:"Comparecer com documentos" },
+  ],
+  7: [
+    { title:"Aguardar a emissão e chegada do DNI argentino", desc:"Acompanhar prazos e orientações" },
+  ],
+};
+
 const docsCatalog = [
   { doc_type:"rg", name:"RG (Identidade)", icon:"🪪" },
   { doc_type:"antecedentes", name:"Antecedentes Criminais", icon:"📋" },
@@ -503,18 +700,25 @@ const docsCatalog = [
   { doc_type:"outros", name:"Outros Documentos", icon:"📁" },
 ];
 
+/* =========================
+   6) State
+========================= */
 let adminUser = null;
 let adminProfile = null;
 
-let clientsRaw = [];        // profiles (role=client)
-let processMap = new Map(); // user_id -> { current_phase, updated_at }
-let docsMap = new Map();    // user_id -> Map(doc_type -> docRow)
+let clientsRaw = [];
+let processMap = new Map();     // user_id -> { current_phase, updated_at }
+let docsMap = new Map();        // user_id -> Map(doc_type -> docRow)
 
 let filteredClients = [];
 let currentClientId = null;
 
+let selectedPhaseId = null;     // fase selecionada para editar passos
+let stepsByPhase = new Map();   // phase_number -> rows[]
+let clientMessages = [];        // mensagens do cliente atual
+
 /* =========================
-   6) Auth guard + init
+   7) Auth guard + init
 ========================= */
 async function init(){
   setLoading(true, "Validando acesso…");
@@ -581,6 +785,29 @@ function wireEvents(){
   document.getElementById("saveNotesBtn").addEventListener("click", saveNotes);
   document.getElementById("reloadNotesBtn").addEventListener("click", loadNotesForCurrentClient);
 
+  // steps buttons
+  document.getElementById("reloadStepsBtn").addEventListener("click", async ()=>{
+    if (!currentClientId) return;
+    await loadStepsForClient(currentClientId);
+    renderStepsEditor(selectedPhaseId);
+  });
+  document.getElementById("seedStepsBtn").addEventListener("click", async ()=>{
+    if (!currentClientId || !selectedPhaseId) return;
+    await seedDefaultSteps(currentClientId, selectedPhaseId);
+  });
+  document.getElementById("addStepBtn").addEventListener("click", async ()=>{
+    if (!currentClientId || !selectedPhaseId) return;
+    await addNewStep(currentClientId, selectedPhaseId);
+  });
+
+  // messages
+  document.getElementById("reloadMsgsBtn").addEventListener("click", async ()=>{
+    if (!currentClientId) return;
+    await loadMessagesForClient(currentClientId);
+    renderMessages();
+  });
+  document.getElementById("sendMsgBtn").addEventListener("click", sendMessageToClient);
+
   // new client modal
   document.getElementById("newClientBtn").addEventListener("click", openNewClientModal);
   document.getElementById("closeNewClientModal").addEventListener("click", closeNewClientModal);
@@ -606,13 +833,12 @@ async function logout(){
 }
 
 /* =========================
-   7) Load data
+   8) Load data
 ========================= */
 async function loadAll(){
   hideNotice();
   setLoading(true, "Carregando clientes…");
 
-  // 1) clients
   const { data: clients, error: cErr } = await sb
     .from("profiles")
     .select("id, email, full_name, role, created_at")
@@ -626,22 +852,18 @@ async function loadAll(){
   }
 
   clientsRaw = clients || [];
-
   const ids = clientsRaw.map(c => c.id);
   processMap = new Map();
   docsMap = new Map();
 
-  // 2) processes
   if (ids.length){
     const { data: procs } = await sb
       .from("dni_process")
       .select("user_id, current_phase, updated_at")
       .in("user_id", ids);
-
     (procs || []).forEach(p => processMap.set(p.user_id, p));
   }
 
-  // 3) docs
   if (ids.length){
     const { data: docs } = await sb
       .from("documents")
@@ -654,9 +876,7 @@ async function loadAll(){
     });
   }
 
-  // stats
   renderStats();
-  // list
   renderClients(document.getElementById("searchInput").value || "");
 
   setLoading(false);
@@ -664,7 +884,6 @@ async function loadAll(){
 
 function renderStats(){
   const total = clientsRaw.length;
-
   let completed = 0;
   let active = 0;
 
@@ -675,7 +894,6 @@ function renderStats(){
   clientsRaw.forEach(c => {
     const proc = processMap.get(c.id);
     const phase = proc?.current_phase || 1;
-
     if (phase >= 7) completed++;
     else active++;
 
@@ -690,7 +908,7 @@ function renderStats(){
 }
 
 /* =========================
-   8) Render clients table
+   9) Render clients table
 ========================= */
 function docsUploadedCountFor(userId){
   const perUser = docsMap.get(userId);
@@ -737,11 +955,11 @@ function renderClients(filter){
 
     row.innerHTML = `
       <div>
-        <div class="client-name">${c.full_name || "(Sem nome)"}</div>
-        <div class="client-email">${c.email || "-"}</div>
+        <div class="client-name">${escapeHTML(c.full_name || "(Sem nome)")}</div>
+        <div class="client-email">${escapeHTML(c.email || "-")}</div>
       </div>
       <div>
-        <div class="small">${c.email || "-"}</div>
+        <div class="small">${escapeHTML(c.email || "-")}</div>
         <div class="client-email">${fmtDate(c.created_at)}</div>
       </div>
       <div class="hide-md">
@@ -757,7 +975,7 @@ function renderClients(filter){
         <button class="action-btn" type="button">Ver</button>
       </div>
     `;
-    // evita clique no botão duplicar
+
     row.querySelector("button").addEventListener("click", (e)=>{
       e.stopPropagation();
       openClientModal(c.id);
@@ -768,10 +986,14 @@ function renderClients(filter){
 }
 
 /* =========================
-   9) Client modal
+   10) Client modal (open)
 ========================= */
-function openClientModal(userId){
+async function openClientModal(userId){
   currentClientId = userId;
+  selectedPhaseId = null;
+  stepsByPhase = new Map();
+  clientMessages = [];
+
   const client = clientsRaw.find(c => c.id === userId);
   if (!client) return;
 
@@ -788,7 +1010,19 @@ function openClientModal(userId){
 
   renderPhases(userId, phase);
   renderDocs(userId);
-  loadNotesForCurrentClient();
+
+  // load notes + steps + msgs
+  await Promise.all([
+    loadNotesForCurrentClient(),
+    loadStepsForClient(userId),
+    loadMessagesForClient(userId)
+  ]);
+
+  // seleciona por padrão a fase atual do processo
+  selectedPhaseId = phase;
+  updateStepsHeader(selectedPhaseId);
+  renderStepsEditor(selectedPhaseId);
+  renderMessages();
 
   document.getElementById("clientDetailModal").classList.add("active");
 }
@@ -796,8 +1030,14 @@ function openClientModal(userId){
 function closeClientModal(){
   document.getElementById("clientDetailModal").classList.remove("active");
   currentClientId = null;
+  selectedPhaseId = null;
+  stepsByPhase = new Map();
+  clientMessages = [];
 }
 
+/* =========================
+   11) Phases (set current)
+========================= */
 function renderPhases(userId, currentPhase){
   const container = document.getElementById("phasesList");
   container.innerHTML = "";
@@ -811,8 +1051,8 @@ function renderPhases(userId, currentPhase){
 
     div.innerHTML = `
       <div style="flex:1;">
-        <div class="phase-name">${ph.id}. ${ph.name}</div>
-        <div class="phase-desc">${ph.desc}</div>
+        <div class="phase-name">${ph.id}. ${escapeHTML(ph.name)}</div>
+        <div class="phase-desc">${escapeHTML(ph.desc)}</div>
       </div>
       <div class="phase-actions">
         ${isDone ? `<button class="btn-small success" type="button" disabled>✓ Concluída</button>` : ""}
@@ -820,9 +1060,19 @@ function renderPhases(userId, currentPhase){
       </div>
     `;
 
+    // clique no card seleciona para editar passos
+    div.addEventListener("click", (e)=>{
+      // se clicar no botão, evita duplicar
+      if (e.target && e.target.tagName === "BUTTON") return;
+      selectedPhaseId = ph.id;
+      updateStepsHeader(selectedPhaseId);
+      renderStepsEditor(selectedPhaseId);
+    });
+
     const btn = div.querySelector(".phase-actions button:not([disabled])");
     if (btn){
-      btn.addEventListener("click", async ()=>{
+      btn.addEventListener("click", async (e)=>{
+        e.stopPropagation();
         await setClientPhase(userId, ph.id);
       });
     }
@@ -837,7 +1087,6 @@ async function setClientPhase(userId, phaseId){
 
   const nowIso = new Date().toISOString();
 
-  // upsert para garantir que existe linha
   const { data, error } = await sb
     .from("dni_process")
     .upsert({ user_id: userId, current_phase: phaseId, updated_at: nowIso }, { onConflict:"user_id" })
@@ -852,12 +1101,17 @@ async function setClientPhase(userId, phaseId){
 
   processMap.set(userId, data);
 
-  // atualiza list + modal
   renderStats();
   renderClients(document.getElementById("searchInput").value || "");
+
   if (currentClientId === userId){
     document.getElementById("detailPhase").textContent = `Fase ${phaseId}`;
     renderPhases(userId, phaseId);
+
+    // ao mudar fase, também seleciona ela pra editar passos
+    selectedPhaseId = phaseId;
+    updateStepsHeader(selectedPhaseId);
+    renderStepsEditor(selectedPhaseId);
   }
 
   showNotice("ok", `Fase atualizada para Fase ${phaseId}.`);
@@ -865,7 +1119,7 @@ async function setClientPhase(userId, phaseId){
 }
 
 /* =========================
-   10) Documents (view / approve / reject / remove)
+   12) Documents (view / approve / reject / remove)
 ========================= */
 function docRowFor(userId, docType){
   const perUser = docsMap.get(userId);
@@ -890,7 +1144,7 @@ function renderDocs(userId){
     const badge = docStatusBadge(status);
 
     const fileInfo = row?.storage_path
-      ? `Arquivo: ${filenameFromPath(row.storage_path)}`
+      ? `Arquivo: ${escapeHTML(filenameFromPath(row.storage_path))}`
       : "Sem envio ainda";
 
     const timeInfo = row?.uploaded_at ? `Enviado em ${fmtDate(row.uploaded_at)}` : "";
@@ -903,7 +1157,7 @@ function renderDocs(userId){
         <div class="doc-icon">${dc.icon}</div>
         <div class="doc-status ${badge.cls}">${badge.txt}</div>
       </div>
-      <div class="doc-title">${dc.name}</div>
+      <div class="doc-title">${escapeHTML(dc.name)}</div>
       <div class="doc-info">${fileInfo}${timeInfo ? "<br>"+timeInfo : ""}</div>
       <div class="doc-actions">
         <button class="btn-small" type="button" ${row?.storage_path ? "" : "disabled"}>👁️ Ver</button>
@@ -968,10 +1222,7 @@ async function updateDocStatus(userId, docType, status){
   setLoading(true, "Atualizando documento…");
 
   const nowIso = new Date().toISOString();
-  const patch = {
-    status,
-    approved_at: status === "approved" ? nowIso : null
-  };
+  const patch = { status, approved_at: status === "approved" ? nowIso : null };
 
   const { data, error } = await sb
     .from("documents")
@@ -1008,7 +1259,6 @@ async function removeDocFile(userId, docType, storagePath){
     return;
   }
 
-  // volta pra pending
   const { data, error } = await sb
     .from("documents")
     .update({ storage_path:null, status:"pending", uploaded_at:null, approved_at:null })
@@ -1034,24 +1284,20 @@ async function removeDocFile(userId, docType, storagePath){
 }
 
 /* =========================
-   11) Notes (admin_notes)
-   Espera tabela: admin_notes (user_id PK/unique, notes text, updated_at, created_at)
+   13) Notes (admin_notes)
 ========================= */
 async function loadNotesForCurrentClient(){
   if (!currentClientId) return;
   document.getElementById("clientNotes").value = "";
-  hideNotice();
 
   const { data, error } = await sb
     .from("admin_notes")
     .select("user_id, notes, updated_at")
     .eq("user_id", currentClientId)
-    .single();
+    .maybeSingle();
 
-  if (error){
-    // se tabela não existe ou não tem linha, só ignora silenciosamente
-    return;
-  }
+  // se não existir linha, OK
+  if (error) return;
 
   document.getElementById("clientNotes").value = data?.notes || "";
 }
@@ -1079,7 +1325,419 @@ async function saveNotes(){
 }
 
 /* =========================
-   12) New client modal
+   14) Steps (phase_steps)
+========================= */
+function updateStepsHeader(phaseId){
+  const t = document.getElementById("stepsPhaseTitle");
+  const sub = document.getElementById("stepsPhaseSub");
+
+  if (!phaseId){
+    t.textContent = "Selecione uma fase";
+    sub.textContent = "Clique em uma fase ao lado para editar os passos dela.";
+    return;
+  }
+
+  const ph = phases.find(p => p.id === phaseId);
+  t.textContent = `Fase ${phaseId}: ${ph ? ph.name : ""}`;
+  sub.textContent = "Edite título/descrição, marque como concluído e envie novos passos.";
+}
+
+async function loadStepsForClient(userId){
+  stepsByPhase = new Map();
+
+  const { data, error } = await sb
+    .from("phase_steps")
+    .select("id, user_id, phase_number, step_number, step_title, step_description, is_completed, completed_at, created_at, updated_at")
+    .eq("user_id", userId)
+    .order("phase_number", { ascending:true })
+    .order("step_number", { ascending:true });
+
+  if (error){
+    // se RLS ou tabela não existir, editor fica vazio
+    return;
+  }
+
+  (data || []).forEach(r => {
+    if (!stepsByPhase.has(r.phase_number)) stepsByPhase.set(r.phase_number, []);
+    stepsByPhase.get(r.phase_number).push(r);
+  });
+}
+
+function renderStepsEditor(phaseId){
+  const list = document.getElementById("stepsList");
+  list.innerHTML = "";
+
+  // desabilita botões se não houver fase selecionada
+  document.getElementById("seedStepsBtn").disabled = !phaseId;
+  document.getElementById("addStepBtn").disabled = !phaseId;
+  document.getElementById("reloadStepsBtn").disabled = !currentClientId;
+
+  if (!phaseId){
+    list.innerHTML = `
+      <div class="step-row" style="text-align:center;">
+        <div class="small" style="color:rgba(255,255,255,.7); font-weight:900;">
+          Selecione uma fase para ver/editar os passos.
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const rows = stepsByPhase.get(phaseId) || [];
+
+  if (!rows.length){
+    list.innerHTML = `
+      <div class="step-row" style="text-align:center;">
+        <div class="small" style="color:rgba(255,255,255,.7); font-weight:900;">
+          Nenhum passo criado no banco para esta fase.
+        </div>
+        <div class="small" style="margin-top:6px; color:rgba(255,255,255,.55); font-weight:800;">
+          Clique em <b>✨ Gerar passos padrão</b> ou <b>➕ Adicionar passo</b>.
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  rows.forEach(step => {
+    const isDone = !!step.is_completed;
+
+    const card = document.createElement("div");
+    card.className = "step-row";
+    card.innerHTML = `
+      <div class="step-top">
+        <div style="flex:1;">
+          <div class="small" style="font-weight:950; color:rgba(255,255,255,.9);">
+            Passo ${step.step_number}
+          </div>
+          <div class="small" style="margin-top:2px; color:rgba(255,255,255,.55);">
+            ${step.updated_at ? "Atualizado: " + fmtDate(step.updated_at) : ""}
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:center;">
+          <span class="step-badge ${isDone ? "done" : "pending"}">${isDone ? "✓ Concluído" : "⏳ Pendente"}</span>
+        </div>
+      </div>
+
+      <div class="step-fields">
+        <input class="input" data-k="title" value="${escapeHTML(step.step_title || "")}" placeholder="Título do passo" />
+        <textarea class="notes-area" data-k="desc" style="min-height:90px;" placeholder="Descrição (opcional)">${escapeHTML(step.step_description || "")}</textarea>
+
+        <label class="checkbox-row">
+          <input type="checkbox" data-k="done" ${isDone ? "checked" : ""} />
+          Marcar como concluído
+        </label>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn-small" type="button" data-action="save">Salvar</button>
+        <button class="btn-small danger" type="button" data-action="delete">Excluir</button>
+      </div>
+    `;
+
+    const titleEl = card.querySelector('[data-k="title"]');
+    const descEl = card.querySelector('[data-k="desc"]');
+    const doneEl = card.querySelector('[data-k="done"]');
+
+    card.querySelector('[data-action="save"]').addEventListener("click", async ()=>{
+      await saveStep(step.id, {
+        step_title: titleEl.value || "",
+        step_description: descEl.value || "",
+        is_completed: !!doneEl.checked
+      });
+    });
+
+    card.querySelector('[data-action="delete"]').addEventListener("click", async ()=>{
+      const ok = confirm("Excluir este passo? (isso remove do banco)");
+      if (!ok) return;
+      await deleteStep(step.id);
+    });
+
+    // salvar status rapidamente ao marcar/desmarcar
+    doneEl.addEventListener("change", async ()=>{
+      await saveStep(step.id, {
+        step_title: titleEl.value || "",
+        step_description: descEl.value || "",
+        is_completed: !!doneEl.checked
+      }, true);
+    });
+
+    list.appendChild(card);
+  });
+}
+
+async function seedDefaultSteps(userId, phaseId){
+  hideNotice();
+  setLoading(true, "Gerando passos padrão…");
+
+  const existing = stepsByPhase.get(phaseId) || [];
+  if (existing.length){
+    setLoading(false);
+    showNotice("err", "Já existem passos nesta fase. Exclua ou edite os existentes.");
+    return;
+  }
+
+  const items = defaultSteps[phaseId] || [];
+  if (!items.length){
+    setLoading(false);
+    showNotice("err", "Não há passos padrão configurados para esta fase.");
+    return;
+  }
+
+  const payload = items.map((it, idx) => ({
+    user_id: userId,
+    phase_number: phaseId,
+    step_number: idx + 1,
+    step_title: it.title,
+    step_description: it.desc || "",
+    is_completed: false,
+    completed_at: null
+  }));
+
+  const { error } = await sb
+    .from("phase_steps")
+    .upsert(payload, { onConflict: "user_id,phase_number,step_number" });
+
+  if (error){
+    showNotice("err", "Falha ao criar passos. Verifique RLS/policies da tabela phase_steps.");
+    setLoading(false);
+    return;
+  }
+
+  await loadStepsForClient(userId);
+  renderStepsEditor(phaseId);
+  showNotice("ok", "Passos padrão criados!");
+  setLoading(false);
+}
+
+async function addNewStep(userId, phaseId){
+  const title = prompt("Título do novo passo:");
+  if (!title) return;
+
+  const desc = prompt("Descrição (opcional):") || "";
+
+  hideNotice();
+  setLoading(true, "Criando passo…");
+
+  const rows = stepsByPhase.get(phaseId) || [];
+  const maxNum = rows.reduce((acc, r) => Math.max(acc, r.step_number || 0), 0);
+  const nextNum = maxNum + 1;
+
+  const { error } = await sb
+    .from("phase_steps")
+    .insert({
+      user_id: userId,
+      phase_number: phaseId,
+      step_number: nextNum,
+      step_title: title,
+      step_description: desc,
+      is_completed: false,
+      completed_at: null
+    });
+
+  if (error){
+    showNotice("err", "Falha ao criar passo. Verifique RLS/policies ou conflito de step_number.");
+    setLoading(false);
+    return;
+  }
+
+  await loadStepsForClient(userId);
+  renderStepsEditor(phaseId);
+  showNotice("ok", "Passo criado!");
+  setLoading(false);
+}
+
+async function saveStep(stepId, patch, silent=false){
+  if (!currentClientId || !selectedPhaseId) return;
+
+  const nowIso = new Date().toISOString();
+  const finalPatch = {
+    step_title: patch.step_title,
+    step_description: patch.step_description,
+    is_completed: !!patch.is_completed,
+    completed_at: patch.is_completed ? nowIso : null
+  };
+
+  if (!silent){
+    hideNotice();
+    setLoading(true, "Salvando passo…");
+  }
+
+  const { error } = await sb
+    .from("phase_steps")
+    .update(finalPatch)
+    .eq("id", stepId);
+
+  if (error){
+    if (!silent) setLoading(false);
+    showNotice("err", "Falha ao salvar passo. Verifique RLS/policies.");
+    return;
+  }
+
+  await loadStepsForClient(currentClientId);
+  renderStepsEditor(selectedPhaseId);
+
+  if (!silent){
+    showNotice("ok", "Passo salvo!");
+    setLoading(false);
+  }
+}
+
+async function deleteStep(stepId){
+  if (!currentClientId || !selectedPhaseId) return;
+
+  hideNotice();
+  setLoading(true, "Excluindo passo…");
+
+  const { error } = await sb
+    .from("phase_steps")
+    .delete()
+    .eq("id", stepId);
+
+  if (error){
+    showNotice("err", "Falha ao excluir passo. Verifique RLS/policies.");
+    setLoading(false);
+    return;
+  }
+
+  await loadStepsForClient(currentClientId);
+  renderStepsEditor(selectedPhaseId);
+
+  showNotice("ok", "Passo excluído!");
+  setLoading(false);
+}
+
+/* =========================
+   15) Messages (client_messages)
+========================= */
+async function loadMessagesForClient(userId){
+  clientMessages = [];
+  const { data, error } = await sb
+    .from("client_messages")
+    .select("id, user_id, title, message, message_type, is_read, created_at")
+    .eq("user_id", userId)
+    .order("created_at", { ascending:false })
+    .limit(30);
+
+  if (error) return;
+  clientMessages = data || [];
+}
+
+function renderMessages(){
+  const list = document.getElementById("msgList");
+  list.innerHTML = "";
+
+  if (!currentClientId){
+    list.innerHTML = `<div class="small" style="color:rgba(255,255,255,.7); font-weight:900;">Selecione um cliente.</div>`;
+    return;
+  }
+
+  if (!clientMessages.length){
+    list.innerHTML = `
+      <div class="msg-item" style="text-align:center;">
+        <div class="small" style="color:rgba(255,255,255,.7); font-weight:900;">Nenhuma mensagem enviada ainda.</div>
+      </div>
+    `;
+    return;
+  }
+
+  clientMessages.forEach(m => {
+    const type = (m.message_type || "info");
+    const readTag = m.is_read ? "read" : "unread";
+
+    const div = document.createElement("div");
+    div.className = "msg-item";
+    div.innerHTML = `
+      <div class="msg-head">
+        <div style="flex:1;">
+          <div class="msg-title">${escapeHTML(m.title || "(Sem título)")}</div>
+          <div class="msg-meta">${fmtDate(m.created_at)}</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:center;">
+          <span class="tag ${type}">${escapeHTML(type)}</span>
+          <span class="tag ${readTag}">${m.is_read ? "Lida" : "Nova"}</span>
+          <button class="btn-small danger" type="button" data-action="del">Apagar</button>
+        </div>
+      </div>
+      <div class="msg-body">${escapeHTML(m.message || "")}</div>
+    `;
+
+    div.querySelector('[data-action="del"]').addEventListener("click", async ()=>{
+      const ok = confirm("Apagar esta mensagem?");
+      if (!ok) return;
+      await deleteMessage(m.id);
+    });
+
+    list.appendChild(div);
+  });
+}
+
+async function sendMessageToClient(){
+  if (!currentClientId) return;
+
+  const title = (document.getElementById("msgTitle").value || "").trim();
+  const message = (document.getElementById("msgBody").value || "").trim();
+  const message_type = document.getElementById("msgType").value || "info";
+
+  if (!title || !message){
+    showNotice("err", "Preencha título e mensagem.");
+    return;
+  }
+
+  hideNotice();
+  setLoading(true, "Enviando mensagem…");
+
+  const { error } = await sb
+    .from("client_messages")
+    .insert({
+      user_id: currentClientId,
+      title,
+      message,
+      message_type,
+      is_read: false
+    });
+
+  if (error){
+    showNotice("err", "Falha ao enviar. Verifique RLS/policies da tabela client_messages.");
+    setLoading(false);
+    return;
+  }
+
+  document.getElementById("msgTitle").value = "";
+  document.getElementById("msgBody").value = "";
+  document.getElementById("msgType").value = "info";
+
+  await loadMessagesForClient(currentClientId);
+  renderMessages();
+
+  showNotice("ok", "Mensagem enviada!");
+  setLoading(false);
+}
+
+async function deleteMessage(msgId){
+  hideNotice();
+  setLoading(true, "Apagando mensagem…");
+
+  const { error } = await sb
+    .from("client_messages")
+    .delete()
+    .eq("id", msgId);
+
+  if (error){
+    showNotice("err", "Falha ao apagar mensagem. Verifique RLS/policies.");
+    setLoading(false);
+    return;
+  }
+
+  await loadMessagesForClient(currentClientId);
+  renderMessages();
+
+  showNotice("ok", "Mensagem apagada!");
+  setLoading(false);
+}
+
+/* =========================
+   16) New client modal
 ========================= */
 function openNewClientModal(){
   document.getElementById("newClientModal").classList.add("active");
