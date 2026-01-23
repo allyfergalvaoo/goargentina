@@ -66,7 +66,7 @@
     .logout-btn:hover{ background:rgba(255,255,255,.1); color:#fff; }
 
     .main-container{ max-width:1200px; margin:0 auto; padding:34px 20px; position:relative; z-index:1; }
-    .page-header{ margin-bottom:16px; animation:slideDown .6s ease-out; }
+    .page-header{ margin-bottom:20px; animation:slideDown .6s ease-out; }
     .page-title{
       font-size:clamp(26px,4vw,34px); font-weight:950; margin-bottom:6px;
       background:linear-gradient(135deg,#fff,#a0b0ff);
@@ -111,9 +111,6 @@
     .section{ display:none; animation:fadeIn .25s ease-out; }
     .section.active{ display:block; }
 
-    .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-    @media (max-width:900px){ .grid-2{ grid-template-columns:1fr; } }
-
     .card{
       background:rgba(255,255,255,.05); backdrop-filter:blur(10px);
       border:1px solid rgba(255,255,255,.1); border-radius:18px;
@@ -121,6 +118,251 @@
     }
     .card-title{ font-size:15px; font-weight:950; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
     .small{ font-size:13px; color:rgba(255,255,255,.72); font-weight:800; }
+
+    /* ========================================
+       TIMELINE HORIZONTAL (7 FASES)
+    ======================================== */
+    .timeline-wrapper{
+      margin:24px 0 32px;
+      padding:20px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+    }
+    .timeline-title{
+      font-size:16px; font-weight:950; margin-bottom:20px;
+      text-align:center;
+      background:linear-gradient(135deg,#fff,#a0b0ff);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    }
+    .timeline-container{
+      position:relative;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      padding:0 12px;
+    }
+    .timeline-line{
+      position:absolute;
+      top:50%;
+      left:12px;
+      right:12px;
+      height:4px;
+      background:rgba(255,255,255,.1);
+      border-radius:999px;
+      transform:translateY(-50%);
+      z-index:0;
+    }
+    .timeline-progress{
+      position:absolute;
+      top:0;
+      left:0;
+      height:100%;
+      background:linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius:999px;
+      transition:width .6s ease-out;
+    }
+    .timeline-phase{
+      position:relative;
+      z-index:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+      flex:1;
+      cursor:default;
+    }
+    .timeline-dot{
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      background:rgba(255,255,255,.08);
+      border:3px solid rgba(255,255,255,.2);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+      font-weight:950;
+      color:rgba(255,255,255,.5);
+      transition:.3s;
+    }
+    .timeline-phase.done .timeline-dot{
+      background:rgba(16,185,129,.2);
+      border-color:rgba(16,185,129,.6);
+      color:var(--success);
+    }
+    .timeline-phase.current .timeline-dot{
+      background:linear-gradient(135deg, var(--primary), var(--accent));
+      border-color:rgba(0,102,255,.8);
+      color:var(--dark);
+      box-shadow:0 0 20px rgba(0,102,255,.5);
+      transform:scale(1.2);
+    }
+    .timeline-label{
+      font-size:11px;
+      font-weight:950;
+      color:rgba(255,255,255,.5);
+      text-align:center;
+      line-height:1.2;
+      max-width:80px;
+    }
+    .timeline-phase.current .timeline-label{
+      color:rgba(255,255,255,.95);
+    }
+    .timeline-phase.done .timeline-label{
+      color:rgba(255,255,255,.7);
+    }
+
+    /* ========================================
+       CARD DA FASE ATUAL (VERTICAL)
+    ======================================== */
+    .current-phase-card{
+      background:rgba(255,255,255,.05);
+      border:2px solid rgba(0,102,255,.3);
+      border-radius:20px;
+      padding:24px;
+      margin-bottom:24px;
+      box-shadow:0 10px 40px rgba(0,102,255,.15);
+    }
+    .current-phase-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:20px;
+      padding-bottom:16px;
+      border-bottom:1px solid rgba(255,255,255,.1);
+    }
+    .current-phase-info{
+      flex:1;
+    }
+    .current-phase-number{
+      font-size:13px;
+      font-weight:950;
+      color:rgba(0,102,255,.9);
+      margin-bottom:4px;
+    }
+    .current-phase-name{
+      font-size:22px;
+      font-weight:950;
+      background:linear-gradient(135deg,#fff,#a0b0ff);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      margin-bottom:4px;
+    }
+    .current-phase-desc{
+      font-size:13px;
+      color:rgba(255,255,255,.6);
+      font-weight:800;
+    }
+    .current-phase-badge{
+      padding:8px 16px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:950;
+      background:rgba(0,102,255,.15);
+      border:1px solid rgba(0,102,255,.4);
+      color:#9ec2ff;
+      white-space:nowrap;
+    }
+
+    .steps-vertical{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .step-item{
+      display:flex;
+      align-items:flex-start;
+      gap:14px;
+      padding:16px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      transition:.2s;
+      cursor:default;
+    }
+    .step-item:hover{
+      background:rgba(255,255,255,.06);
+      border-color:rgba(255,255,255,.15);
+    }
+    .step-item.done{
+      border-color:rgba(16,185,129,.3);
+      background:rgba(16,185,129,.04);
+    }
+    .step-item.current{
+      border-color:rgba(0,102,255,.4);
+      background:rgba(0,102,255,.08);
+      box-shadow:0 4px 16px rgba(0,102,255,.15);
+    }
+    .step-check{
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      border:3px solid rgba(255,255,255,.2);
+      background:rgba(255,255,255,.04);
+      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      transition:.2s;
+    }
+    .step-item.done .step-check{
+      border-color:rgba(16,185,129,.6);
+      background:rgba(16,185,129,.2);
+      color:var(--success);
+    }
+    .step-item.current .step-check{
+      border-color:rgba(0,102,255,.7);
+      background:linear-gradient(135deg, var(--primary), var(--accent));
+      color:var(--dark);
+      box-shadow:0 0 12px rgba(0,102,255,.4);
+    }
+    .step-content{
+      flex:1;
+    }
+    .step-number-label{
+      font-size:12px;
+      font-weight:950;
+      color:rgba(255,255,255,.5);
+      margin-bottom:4px;
+    }
+    .step-item.current .step-number-label{
+      color:rgba(0,102,255,.9);
+    }
+    .step-text{
+      font-size:15px;
+      font-weight:900;
+      color:rgba(255,255,255,.9);
+      line-height:1.4;
+    }
+    .step-status-badge{
+      margin-top:8px;
+      display:inline-flex;
+      padding:4px 12px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:950;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+    }
+    .step-item.done .step-status-badge{
+      border-color:rgba(16,185,129,.3);
+      background:rgba(16,185,129,.1);
+      color:var(--success);
+    }
+    .step-item.current .step-status-badge{
+      border-color:rgba(0,102,255,.35);
+      background:rgba(0,102,255,.12);
+      color:#9ec2ff;
+    }
+    .step-item.pending .step-status-badge{
+      border-color:rgba(245,158,11,.25);
+      background:rgba(245,158,11,.08);
+      color:var(--warning);
+    }
 
     .documents-grid{
       display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:12px;
@@ -157,61 +399,6 @@
     .btn-small.danger:hover{ background:rgba(239,68,68,.18); border-color:rgba(239,68,68,.4); }
     .btn-small:disabled{ opacity:.45; cursor:not-allowed; }
 
-    .phase-grid{
-      display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px;
-      margin-top:10px;
-    }
-    .phase-card{
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.1);
-      border-radius:16px; padding:16px; transition:.15s;
-    }
-    .phase-card.current{ border-color:rgba(0,102,255,.42); background:rgba(0,102,255,.08); }
-    .phase-card.completed{ border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.05); }
-
-    .phase-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
-    .phase-title{ font-weight:950; font-size:14px; }
-    .phase-desc{ font-size:12px; color:rgba(255,255,255,.55); font-weight:800; margin-top:2px; }
-    .status-pill{
-      display:inline-flex; align-items:center; gap:6px;
-      padding:6px 10px; border-radius:999px; font-size:12px; font-weight:950;
-      border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06);
-      white-space:nowrap;
-    }
-    .status-pill.current{ border-color:rgba(0,102,255,.35); background:rgba(0,102,255,.14); color:#9ec2ff; }
-    .status-pill.done{ border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.14); color:var(--success); }
-
-    .progress-wrap{ margin-top:12px; }
-    .progress-bar{
-      width:100%; height:8px; border-radius:999px;
-      background:rgba(255,255,255,.08); overflow:hidden;
-      border:1px solid rgba(255,255,255,.1);
-    }
-    .progress-fill{ height:100%; width:0%; background:linear-gradient(135deg,var(--primary),var(--accent)); transition:.25s; }
-    .progress-text{ margin-top:8px; font-size:12px; color:rgba(255,255,255,.65); font-weight:900; display:flex; justify-content:space-between; }
-
-    .steps-list{ margin-top:12px; display:flex; flex-direction:column; gap:8px; }
-    .step-item{
-      display:flex; align-items:flex-start; gap:10px;
-      padding:10px 12px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:12px;
-    }
-    .step-check{
-      width:18px; height:18px; border-radius:999px;
-      border:2px solid rgba(255,255,255,.25);
-      margin-top:2px;
-      flex:0 0 auto;
-    }
-    .step-item.checked .step-check{
-      border-color:rgba(16,185,129,.65);
-      background:rgba(16,185,129,.25);
-    }
-    .step-text{ font-size:12.5px; font-weight:900; color:rgba(255,255,255,.9); }
-    .step-sub{ margin-top:2px; font-size:12px; color:rgba(255,255,255,.55); font-weight:800; }
-    .step-status-label{ margin-top:6px; font-size:11px; font-weight:950; color:rgba(255,255,255,.65); }
-
     .loading-overlay{
       position:fixed; inset:0; z-index:9999;
       background:rgba(10,14,39,.72); backdrop-filter:blur(10px);
@@ -247,6 +434,34 @@
     .empty-icon{ font-size:44px; opacity:.35; margin-bottom:8px; }
     .empty-title{ font-size:15px; font-weight:950; }
     .empty-text{ font-size:13px; color:rgba(255,255,255,.6); font-weight:800; margin-top:4px; }
+
+    @media (max-width:768px){
+      .timeline-container{
+        flex-direction:column;
+        gap:20px;
+      }
+      .timeline-line{
+        left:50%;
+        top:12px;
+        bottom:12px;
+        width:4px;
+        height:auto;
+        transform:translateX(-50%);
+      }
+      .timeline-progress{
+        width:100% !important;
+      }
+      .timeline-phase{
+        flex-direction:row;
+        width:100%;
+        justify-content:flex-start;
+        gap:12px;
+      }
+      .timeline-label{
+        text-align:left;
+        max-width:none;
+      }
+    }
   </style>
 </head>
 
@@ -277,18 +492,35 @@
   <main class="main-container">
     <div class="page-header">
       <h1 class="page-title">Seu painel</h1>
-      <p class="page-subtitle">Envie documentos, acompanhe fases e receba atualizações</p>
+      <p class="page-subtitle">Acompanhe o progresso do seu DNI argentino em tempo real</p>
       <div class="notice" id="noticeBox"></div>
     </div>
 
     <div class="tabs">
-      <button class="tab-btn active" data-tab="docs">📄 Documentos</button>
-      <button class="tab-btn" data-tab="process">🧭 Processo</button>
+      <button class="tab-btn active" data-tab="process">🧭 Processo</button>
+      <button class="tab-btn" data-tab="docs">📄 Documentos</button>
       <button class="tab-btn" data-tab="support">💬 Suporte <span class="tab-badge" id="supportBadge">0</span></button>
     </div>
 
+    <!-- PROCESSO (TIMELINE + FASE ATUAL) -->
+    <section class="section active" id="tab-process">
+      <!-- TIMELINE HORIZONTAL DAS 7 FASES -->
+      <div class="timeline-wrapper">
+        <div class="timeline-title">Progresso do Processo (7 Fases)</div>
+        <div class="timeline-container">
+          <div class="timeline-line">
+            <div class="timeline-progress" id="timelineProgress"></div>
+          </div>
+          <div id="timelinePhases"></div>
+        </div>
+      </div>
+
+      <!-- CARD DA FASE ATUAL COM PASSOS VERTICAIS -->
+      <div class="current-phase-card" id="currentPhaseCard"></div>
+    </section>
+
     <!-- DOCUMENTOS -->
-    <section class="section active" id="tab-docs">
+    <section class="section" id="tab-docs">
       <div class="card">
         <div class="card-title">📄 Seus documentos</div>
         <div class="small">Faça upload dos arquivos. Após envio, nossa equipe revisa e aprova.</div>
@@ -298,16 +530,6 @@
         <div class="small" style="margin-top:12px; color:rgba(255,255,255,.55);">
           Dica: prefira imagens nítidas ou PDF. Se um documento for rejeitado, reenvie uma versão melhor.
         </div>
-      </div>
-    </section>
-
-    <!-- PROCESSO -->
-    <section class="section" id="tab-process">
-      <div class="card">
-        <div class="card-title">🧭 Processo (7 fases)</div>
-        <div class="small">Você vê o andamento por fase. Se existirem passos personalizados no sistema, eles aparecem aqui.</div>
-
-        <div class="phase-grid" id="phaseGrid" style="margin-top:14px;"></div>
       </div>
     </section>
 
@@ -429,8 +651,8 @@
       { id:7, name:"DNI emitido", desc:"Documento pronto" }
     ];
 
-    // Fallback (se ainda não existir phase_steps pro cliente no banco)
-    const fallbackSteps = {
+    // PASSOS FIXOS POR FASE
+    const phaseSteps = {
       1: [
         "Envio dos documentos para nossa equipe",
         "Upload dos documentos na plataforma correspondente",
@@ -473,9 +695,9 @@
     let currentProfile = null;
 
     let currentPhase = 1;
-    let docsMap = new Map();      // doc_type -> row
-    let stepsByPhase = new Map(); // phase_number -> rows[]
-    let inboxMsgs = [];           // client_messages
+    let currentStep = 1;
+    let docsMap = new Map();
+    let inboxMsgs = [];
 
     /* =========================
        6) Tabs
@@ -572,44 +794,51 @@
       await Promise.all([
         loadProcess(),
         loadDocuments(),
-        loadPhaseSteps(),
         loadInboxMessages()
       ]);
 
+      renderTimeline();
+      renderCurrentPhaseCard();
       renderDocuments();
-      renderProcessPhases(currentPhase);
       renderInbox();
 
       setLoading(false);
     }
 
     async function loadProcess(){
-      // busca/garante processo
+      // busca/garante processo - AGORA COM CURRENT_STEP
       const { data, error } = await sb
         .from("dni_process")
-        .select("user_id, current_phase, updated_at")
+        .select("user_id, current_phase, current_step, updated_at")
         .eq("user_id", currentUser.id)
         .maybeSingle();
 
       if (error){
-        // se algo travar por RLS, mostra só o básico
         currentPhase = 1;
+        currentStep = 1;
         return;
       }
 
       if (!data){
-        // tenta criar linha (se houver policy/triggers)
+        // tenta criar linha
         const nowIso = new Date().toISOString();
         const { data: created } = await sb
           .from("dni_process")
-          .upsert({ user_id: currentUser.id, current_phase: 1, updated_at: nowIso }, { onConflict:"user_id" })
-          .select("current_phase")
+          .upsert({ 
+            user_id: currentUser.id, 
+            current_phase: 1, 
+            current_step: 1, 
+            updated_at: nowIso 
+          }, { onConflict:"user_id" })
+          .select("current_phase, current_step")
           .maybeSingle();
         currentPhase = created?.current_phase || 1;
+        currentStep = created?.current_step || 1;
         return;
       }
 
       currentPhase = data.current_phase || 1;
+      currentStep = data.current_step || 1;
     }
 
     async function loadDocuments(){
@@ -628,25 +857,6 @@
       (data || []).forEach(d => docsMap.set(d.doc_type, d));
     }
 
-    async function loadPhaseSteps(){
-      stepsByPhase = new Map();
-
-      const { data, error } = await sb
-        .from("phase_steps")
-        .select("phase_number, step_number, step_title, step_description, status")
-        .eq("user_id", currentUser.id)
-        .order("phase_number", { ascending:true })
-        .order("step_number", { ascending:true });
-
-      // Se a tabela ainda não existir ou RLS bloquear, só usa fallback
-      if (error || !data || !data.length) return;
-
-      data.forEach(r => {
-        if (!stepsByPhase.has(r.phase_number)) stepsByPhase.set(r.phase_number, []);
-        stepsByPhase.get(r.phase_number).push(r);
-      });
-    }
-
     async function loadInboxMessages(){
       inboxMsgs = [];
 
@@ -662,7 +872,105 @@
     }
 
     /* =========================
-       9) Documents UI
+       9) TIMELINE HORIZONTAL
+    ========================= */
+    function renderTimeline(){
+      const container = document.getElementById("timelinePhases");
+      container.innerHTML = "";
+
+      const progressBar = document.getElementById("timelineProgress");
+      
+      // Calcula progresso (0-100%)
+      const totalPhases = 7;
+      const progressPct = ((currentPhase - 1) / (totalPhases - 1)) * 100;
+      progressBar.style.width = Math.min(100, Math.max(0, progressPct)) + "%";
+
+      phases.forEach(ph => {
+        const isDone = ph.id < currentPhase;
+        const isCurrent = ph.id === currentPhase;
+
+        const div = document.createElement("div");
+        div.className = `timeline-phase ${isDone ? "done" : (isCurrent ? "current" : "")}`;
+
+        const icon = isDone ? "✓" : (isCurrent ? "●" : ph.id);
+
+        div.innerHTML = `
+          <div class="timeline-dot">${icon}</div>
+          <div class="timeline-label">${ph.name}</div>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    /* =========================
+       10) CARD DA FASE ATUAL (VERTICAL)
+    ========================= */
+    function renderCurrentPhaseCard(){
+      const card = document.getElementById("currentPhaseCard");
+
+      const phaseInfo = phases.find(p => p.id === currentPhase);
+      if (!phaseInfo){
+        card.innerHTML = '<div class="small" style="text-align:center; padding:20px;">Fase não encontrada</div>';
+        return;
+      }
+
+      const steps = phaseSteps[currentPhase] || [];
+
+      let stepsHTML = "";
+      steps.forEach((stepText, idx) => {
+        const stepNum = idx + 1;
+        const isDone = stepNum < currentStep;
+        const isCurrent = stepNum === currentStep;
+
+        let itemClass = "";
+        let checkIcon = "";
+        let statusText = "";
+        
+        if (isDone){
+          itemClass = "done";
+          checkIcon = "✓";
+          statusText = "✓ Concluído";
+        } else if (isCurrent){
+          itemClass = "current";
+          checkIcon = "●";
+          statusText = "📍 Passo atual";
+        } else {
+          itemClass = "pending";
+          checkIcon = stepNum;
+          statusText = "⏳ Pendente";
+        }
+
+        stepsHTML += `
+          <div class="step-item ${itemClass}">
+            <div class="step-check">${checkIcon}</div>
+            <div class="step-content">
+              <div class="step-number-label">Passo ${stepNum}</div>
+              <div class="step-text">${stepText}</div>
+              <div class="step-status-badge ${itemClass}">${statusText}</div>
+            </div>
+          </div>
+        `;
+      });
+
+      card.innerHTML = `
+        <div class="current-phase-header">
+          <div class="current-phase-info">
+            <div class="current-phase-number">Fase ${currentPhase} de 7</div>
+            <div class="current-phase-name">${phaseInfo.name}</div>
+            <div class="current-phase-desc">${phaseInfo.desc}</div>
+          </div>
+          <div class="current-phase-badge">Em andamento</div>
+        </div>
+
+        <div class="steps-vertical">
+          ${stepsHTML || '<div class="small" style="text-align:center; padding:20px;">Nenhum passo definido para esta fase</div>'}
+        </div>
+      `;
+    }
+
+    /* =========================
+       11) Documents UI
     ========================= */
     function docStatusBadge(status){
       if (status === "approved") return { cls:"approved", txt:"✅ Aprovado" };
@@ -705,7 +1013,7 @@
           </div>
 
           <div class="small" style="margin-top:8px; color:rgba(255,255,255,.55);">
-            Após enviar: status vira “Enviado”. Depois a equipe pode aprovar ou rejeitar.
+            Após enviar: status vira "Enviado". Depois a equipe pode aprovar ou rejeitar.
           </div>
         `;
 
@@ -860,107 +1168,7 @@
     }
 
     /* =========================
-       10) Process UI (7 fases + passos)
-    ========================= */
-    function getPhaseStatus(i, cur){
-      if (i < cur) return "done";
-      if (i === cur) return "current";
-      return "future";
-    }
-
-    function renderProcessPhases(cur){
-      const grid = document.getElementById("phaseGrid");
-      grid.innerHTML = "";
-
-      phases.forEach(ph => {
-        const st = getPhaseStatus(ph.id, cur);
-
-        const card = document.createElement("div");
-        card.className = `phase-card ${st === "current" ? "current" : (st === "done" ? "completed" : "")}`;
-
-        // Se houver passos no DB para essa fase, usa eles; senão fallback
-        const dbRows = stepsByPhase.get(ph.id) || null;
-        const hasDB = !!(dbRows && dbRows.length);
-
-        let totalSteps = 0;
-        let doneSteps = 0;
-        let stepsHTML = "";
-
-        if (hasDB){
-          totalSteps = dbRows.length;
-          doneSteps = dbRows.filter(r => r.status === "done").length;
-
-          dbRows.forEach(r => {
-            const checked = (r.status === "done");
-            const label = checked ? "Concluído" : (r.status === "in_progress" ? "Em andamento" : "Pendente");
-            stepsHTML += `
-              <div class="step-item ${checked ? "checked" : ""}">
-                <div class="step-check"></div>
-                <div style="flex:1;">
-                  <div class="step-text">${escapeHTML(r.step_title || ("Passo " + r.step_number))}</div>
-                  ${r.step_description ? `<div class="step-sub">${escapeHTML(r.step_description)}</div>` : ""}
-                  <div class="step-status-label">${label}</div>
-                </div>
-              </div>
-            `;
-          });
-        } else {
-          const list = fallbackSteps[ph.id] || [];
-          totalSteps = list.length;
-
-          // fallback: se fase anterior ao current -> todos done; se current -> metade "ilusória"
-          if (ph.id < cur) doneSteps = totalSteps;
-          else if (ph.id === cur) doneSteps = Math.max(0, Math.round(totalSteps * 0.5));
-          else doneSteps = 0;
-
-          list.forEach((txt, idx) => {
-            const checked = (ph.id < cur) ? true : (ph.id === cur ? (idx < doneSteps) : false);
-            stepsHTML += `
-              <div class="step-item ${checked ? "checked" : ""}">
-                <div class="step-check"></div>
-                <div style="flex:1;">
-                  <div class="step-text">${escapeHTML(txt)}</div>
-                </div>
-              </div>
-            `;
-          });
-        }
-
-        const pct = totalSteps ? Math.round((doneSteps / totalSteps) * 100) : 0;
-
-        card.innerHTML = `
-          <div class="phase-top">
-            <div>
-              <div class="phase-title">${ph.id}. ${ph.name}</div>
-              <div class="phase-desc">${ph.desc}</div>
-            </div>
-            ${
-              st === "done" ? `<span class="status-pill done">✓ Concluída</span>` :
-              st === "current" ? `<span class="status-pill current">Atual</span>` : ``
-            }
-          </div>
-
-          <div class="progress-wrap">
-            <div class="progress-bar">
-              <div class="progress-fill" style="width:${pct}%;"></div>
-            </div>
-            <div class="progress-text">
-              <span>${hasDB ? "Passos (banco)" : "Passos (padrão)"}</span>
-              <span>${totalSteps ? `${doneSteps}/${totalSteps}` : "—"}</span>
-            </div>
-          </div>
-
-          <div class="steps-list" id="steps-${ph.id}">
-            ${stepsHTML}
-          </div>
-        `;
-
-        grid.appendChild(card);
-      });
-    }
-
-    /* =========================
-       11) Inbox UI
+       12) Inbox UI
     ========================= */
     function renderInbox(){
       const list = document.getElementById("inboxList");
