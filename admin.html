@@ -528,8 +528,8 @@ header{
    CONFIG
    Use os mesmos valores do seu dashboard.html
 ============================================================ */
-const SUPABASE_URL = "COLE_AQUI_SUA_SUPABASE_URL";
-const SUPABASE_ANON_KEY = "COLE_AQUI_SUA_SUPABASE_ANON_KEY";
+const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k";
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
