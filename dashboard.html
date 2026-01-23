@@ -120,7 +120,7 @@
     .small{ font-size:13px; color:rgba(255,255,255,.72); font-weight:800; }
 
     /* ========================================
-       TIMELINE HORIZONTAL (7 FASES)
+       TIMELINE HORIZONTAL (7 FASES) - AJUSTADA
     ======================================== */
     .timeline-wrapper{
       margin:24px 0 32px;
@@ -130,18 +130,16 @@
       border-radius:18px;
     }
     .timeline-title{
-      font-size:16px; font-weight:950; margin-bottom:20px;
+      font-size:16px; font-weight:950; margin-bottom:16px;
       text-align:center;
       background:linear-gradient(135deg,#fff,#a0b0ff);
       -webkit-background-clip:text; -webkit-text-fill-color:transparent;
     }
     .timeline-container{
       position:relative;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-      padding:0 12px;
+      padding:10px 12px 6px;
+      overflow-x:auto;
+      -webkit-overflow-scrolling: touch;
     }
     .timeline-line{
       position:absolute;
@@ -163,13 +161,22 @@
       border-radius:999px;
       transition:width .6s ease-out;
     }
-    .timeline-phase{
+    /* container real dos 7 círculos */
+    #timelinePhases{
       position:relative;
       z-index:1;
       display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      width:100%;
+      min-width:520px; /* mantém horizontal e evita esmagar no mobile */
+    }
+    .timeline-phase{
+      display:flex;
       flex-direction:column;
       align-items:center;
-      gap:8px;
+      gap:0;
       flex:1;
       cursor:default;
     }
@@ -184,7 +191,7 @@
       justify-content:center;
       font-size:13px;
       font-weight:950;
-      color:rgba(255,255,255,.5);
+      color:rgba(255,255,255,.7);
       transition:.3s;
     }
     .timeline-phase.done .timeline-dot{
@@ -199,19 +206,17 @@
       box-shadow:0 0 20px rgba(0,102,255,.5);
       transform:scale(1.2);
     }
-    .timeline-label{
-      font-size:11px;
-      font-weight:950;
-      color:rgba(255,255,255,.5);
+
+    /* label da fase atual abaixo da timeline */
+    .timeline-current{
+      margin-top:14px;
       text-align:center;
-      line-height:1.2;
-      max-width:80px;
+      font-size:13px;
+      font-weight:950;
+      color:rgba(255,255,255,.85);
     }
-    .timeline-phase.current .timeline-label{
-      color:rgba(255,255,255,.95);
-    }
-    .timeline-phase.done .timeline-label{
-      color:rgba(255,255,255,.7);
+    .timeline-current b{
+      color:#fff;
     }
 
     /* ========================================
@@ -436,31 +441,9 @@
     .empty-text{ font-size:13px; color:rgba(255,255,255,.6); font-weight:800; margin-top:4px; }
 
     @media (max-width:768px){
-      .timeline-container{
-        flex-direction:column;
-        gap:20px;
-      }
-      .timeline-line{
-        left:50%;
-        top:12px;
-        bottom:12px;
-        width:4px;
-        height:auto;
-        transform:translateX(-50%);
-      }
-      .timeline-progress{
-        width:100% !important;
-      }
-      .timeline-phase{
-        flex-direction:row;
-        width:100%;
-        justify-content:flex-start;
-        gap:12px;
-      }
-      .timeline-label{
-        text-align:left;
-        max-width:none;
-      }
+      /* mantém horizontal; só dá um respiro */
+      #timelinePhases{ min-width:520px; }
+      .timeline-container{ padding-bottom:8px; }
     }
   </style>
 </head>
@@ -513,6 +496,9 @@
           </div>
           <div id="timelinePhases"></div>
         </div>
+
+        <!-- Nome da fase atual abaixo -->
+        <div class="timeline-current" id="timelineCurrentName"></div>
       </div>
 
       <!-- CARD DA FASE ATUAL COM PASSOS VERTICAIS -->
@@ -824,11 +810,11 @@
         const nowIso = new Date().toISOString();
         const { data: created } = await sb
           .from("dni_process")
-          .upsert({ 
-            user_id: currentUser.id, 
-            current_phase: 1, 
-            current_step: 1, 
-            updated_at: nowIso 
+          .upsert({
+            user_id: currentUser.id,
+            current_phase: 1,
+            current_step: 1,
+            updated_at: nowIso
           }, { onConflict:"user_id" })
           .select("current_phase, current_step")
           .maybeSingle();
@@ -872,14 +858,14 @@
     }
 
     /* =========================
-       9) TIMELINE HORIZONTAL
+       9) TIMELINE HORIZONTAL (AJUSTADA)
     ========================= */
     function renderTimeline(){
       const container = document.getElementById("timelinePhases");
       container.innerHTML = "";
 
       const progressBar = document.getElementById("timelineProgress");
-      
+
       // Calcula progresso (0-100%)
       const totalPhases = 7;
       const progressPct = ((currentPhase - 1) / (totalPhases - 1)) * 100;
@@ -892,15 +878,18 @@
         const div = document.createElement("div");
         div.className = `timeline-phase ${isDone ? "done" : (isCurrent ? "current" : "")}`;
 
-        const icon = isDone ? "✓" : (isCurrent ? "●" : ph.id);
-
-        div.innerHTML = `
-          <div class="timeline-dot">${icon}</div>
-          <div class="timeline-label">${ph.name}</div>
-        `;
+        // SEM título: só o número
+        div.innerHTML = `<div class="timeline-dot">${ph.id}</div>`;
 
         container.appendChild(div);
       });
+
+      // Texto abaixo: fase atual
+      const currentLabel = document.getElementById("timelineCurrentName");
+      const phaseInfo = phases.find(p => p.id === currentPhase);
+      if (currentLabel && phaseInfo){
+        currentLabel.innerHTML = `<b>Fase ${currentPhase}:</b> ${phaseInfo.name}`;
+      }
     }
 
     /* =========================
@@ -926,7 +915,7 @@
         let itemClass = "";
         let checkIcon = "";
         let statusText = "";
-        
+
         if (isDone){
           itemClass = "done";
           checkIcon = "✓";
