@@ -1,362 +1,469 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Admin | GoArgentina</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin | GoArgentina</title>
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --primary:#0066FF; --accent:#FFD500; --dark:#0A0E27; --light:#F8F9FF;
-  --success:#10B981; --warning:#F59E0B; --danger:#EF4444;
-}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  background:var(--dark); color:var(--light); line-height:1.6; overflow-x:hidden;
-}
-.stars{position:fixed;inset:0;pointer-events:none;z-index:0}
-.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.4;animation:twinkle 3s infinite}
-@keyframes twinkle{0%,100%{opacity:.4}50%{opacity:1}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --primary:#0066FF;
+      --accent:#FFD500;
+      --dark:#0A0E27;
+      --light:#F8F9FF;
 
-header{
-  padding:20px 0; backdrop-filter:blur(20px); background:rgba(10,14,39,.95);
-  border-bottom:1px solid rgba(255,255,255,.1); position:sticky; top:0; z-index:100;
-}
-.header-container{
-  max-width:1600px;margin:0 auto;padding:0 20px;
-  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
-}
-.logo{
-  font-size:24px;font-weight:900;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  display:flex;align-items:center;gap:10px;text-decoration:none;
-}
-.logo-icon{
-  width:40px;height:40px;border-radius:12px;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--dark);
-  animation:float 3s ease-in-out infinite;
-}
-.admin-badge{
-  padding:4px 12px;background:rgba(239,68,68,.18);
-  border:1px solid rgba(239,68,68,.45);border-radius:12px;
-  font-size:12px;font-weight:800;color:var(--danger);
-}
-.header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-.user-pill{
-  display:flex;align-items:center;gap:10px;padding:8px 14px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:999px;
-}
-.user-avatar{
-  width:34px;height:34px;border-radius:50%;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--dark);
-}
-.user-name{font-size:13px;font-weight:800;color:rgba(255,255,255,.9)}
-.logout-btn{
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-  color:rgba(255,255,255,.75);padding:8px 16px;border-radius:999px;
-  cursor:pointer;font-weight:800;transition:.2s;
-}
-.logout-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+      --success:#10B981;
+      --warning:#F59E0B;
+      --danger:#EF4444;
+      --muted:rgba(255,255,255,.6);
+      --muted2:rgba(255,255,255,.45);
+      --card:rgba(255,255,255,.05);
+      --card2:rgba(255,255,255,.03);
+      --border:rgba(255,255,255,.1);
+      --border2:rgba(255,255,255,.12);
+    }
 
-.main-container{max-width:1600px;margin:0 auto;padding:40px 20px;position:relative;z-index:1}
-.page-header{margin-bottom:24px;animation:slideDown .6s ease-out}
-.page-title{
-  font-size:clamp(28px,4vw,36px);font-weight:950;margin-bottom:6px;
-  background:linear-gradient(135deg,#fff,#a0b0ff);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.page-subtitle{font-size:15px;color:rgba(255,255,255,.6)}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--dark);
+      color:var(--light);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
 
-.notice{
-  margin-top:12px;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.05);font-size:13px;color:rgba(255,255,255,.85);display:none;
-}
-.notice.show{display:block}
-.notice.ok{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.08)}
-.notice.err{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.08)}
+    .stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+    .star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.4;animation:twinkle 3s infinite}
+    @keyframes twinkle{0%,100%{opacity:.35}50%{opacity:1}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
 
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:24px 0 28px}
-.stat-box{
-  background:rgba(255,255,255,.05);backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:22px;transition:.2s;
-}
-.stat-box:hover{transform:translateY(-3px);border-color:rgba(0,102,255,.35)}
-.stat-label{font-size:12px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;font-weight:800}
-.stat-value{
-  font-size:32px;font-weight:950;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
+    header{
+      padding:20px 0;
+      backdrop-filter: blur(18px);
+      background: rgba(10,14,39,.95);
+      border-bottom:1px solid rgba(255,255,255,.1);
+      position:sticky;top:0;z-index:50;
+    }
+    .header-container{
+      max-width:1600px;margin:0 auto;padding:0 20px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    }
+    .logo{
+      text-decoration:none;
+      display:flex;align-items:center;gap:10px;
+      font-weight:950;font-size:24px;
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .logo-icon{
+      width:40px;height:40px;border-radius:12px;
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      display:flex;align-items:center;justify-content:center;
+      color:var(--dark);font-size:20px;
+      animation: float 3s ease-in-out infinite;
+      -webkit-text-fill-color:initial;
+    }
+    .header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .admin-badge{
+      padding:5px 12px;border-radius:999px;
+      background:rgba(239,68,68,.16);
+      border:1px solid rgba(239,68,68,.35);
+      color:var(--danger);
+      font-weight:950;font-size:12px;
+      white-space:nowrap;
+    }
+    .user-pill{
+      display:flex;align-items:center;gap:10px;
+      padding:8px 14px;border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+    }
+    .user-avatar{
+      width:34px;height:34px;border-radius:50%;
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      display:flex;align-items:center;justify-content:center;
+      color:var(--dark);font-weight:950;
+    }
+    .user-name{font-size:13px;font-weight:900;color:rgba(255,255,255,.9)}
+    .logout-btn{
+      padding:8px 16px;border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.75);
+      cursor:pointer;font-weight:950;
+      transition:.15s;
+    }
+    .logout-btn:hover{background:rgba(255,255,255,.1);color:#fff}
 
-.actions-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
-.search-box{flex:1;min-width:240px;max-width:440px;position:relative}
-.search-input{
-  width:100%;padding:12px 16px 12px 44px;border-radius:12px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-  color:#fff;font-weight:700;font-size:14px;transition:.2s;
-}
-.search-input:focus{outline:none;border-color:var(--primary);background:rgba(255,255,255,.08)}
-.search-input::placeholder{color:rgba(255,255,255,.4);font-weight:700}
-.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.55}
+    .main-container{max-width:1600px;margin:0 auto;padding:40px 20px;position:relative;z-index:1}
+    .page-header{animation:slideDown .6s ease-out}
+    .page-title{
+      font-size:clamp(28px,4vw,38px);
+      font-weight:980;
+      background:linear-gradient(135deg,#fff,#a0b0ff);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      margin-bottom:6px;
+    }
+    .page-subtitle{font-size:15px;color:var(--muted)}
 
-.btn{border:none;cursor:pointer;font-weight:900;font-size:14px;padding:12px 18px;border-radius:12px;transition:.2s}
-.btn-primary{
-  background:linear-gradient(135deg,var(--primary),#0052CC);
-  color:#fff;box-shadow:0 8px 20px rgba(0,102,255,.25);
-}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,102,255,.45)}
-.btn-ghost{
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-  color:rgba(255,255,255,.85);
-}
-.btn-ghost:hover{background:rgba(255,255,255,.1)}
+    .notice{
+      margin-top:14px;padding:12px 14px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      font-size:13px;font-weight:850;color:rgba(255,255,255,.86);
+      display:none;
+    }
+    .notice.show{display:block}
+    .notice.ok{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.08)}
+    .notice.err{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.08)}
 
-.clients-table{
-  background:rgba(255,255,255,.05);backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,.1);border-radius:16px;overflow:hidden;
-}
-.table-header,.client-row{
-  display:grid;grid-template-columns:2.2fr 1.5fr 1fr 1fr 1fr 120px;
-  gap:14px;padding:18px 20px;align-items:center;
-}
-.table-header{
-  background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.1);
-  font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.6);
-}
-.client-row{border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;transition:.15s}
-.client-row:hover{background:rgba(255,255,255,.05)}
-.client-row:last-child{border-bottom:none}
-.client-name{font-weight:900;font-size:15px}
-.client-email{font-size:13px;color:rgba(255,255,255,.6);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.small{font-size:13px;color:rgba(255,255,255,.75)}
-.status-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:6px 12px;border-radius:999px;font-size:12px;font-weight:950;white-space:nowrap;
-  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);
-}
-.status-badge.fase{border-color:rgba(0,102,255,.35);background:rgba(0,102,255,.14);color:#9ec2ff}
-.status-badge.completed{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.14);color:var(--success)}
-.docs-count{font-size:13px;color:rgba(255,255,255,.8);font-weight:900}
-.docs-count.complete{color:var(--success)}
-.action-btn{
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
-  color:#fff;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:950;cursor:pointer;transition:.15s;
-}
-.action-btn:hover{background:rgba(0,102,255,.18);border-color:rgba(0,102,255,.4)}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:24px 0 28px}
+    .stat-box{
+      background:var(--card);backdrop-filter:blur(10px);
+      border:1px solid var(--border);
+      border-radius:16px;padding:22px;transition:.15s;
+    }
+    .stat-box:hover{transform:translateY(-3px);border-color:rgba(0,102,255,.35)}
+    .stat-label{
+      font-size:12px;color:var(--muted);
+      text-transform:uppercase;letter-spacing:.6px;
+      font-weight:950;margin-bottom:8px;
+    }
+    .stat-value{
+      font-size:32px;font-weight:980;
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    }
 
-.empty-state{text-align:center;padding:60px 20px}
-.empty-icon{font-size:56px;opacity:.3;margin-bottom:10px}
-.empty-text{font-size:15px;color:rgba(255,255,255,.6);font-weight:800}
+    .actions-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+    .search-box{flex:1;min-width:240px;max-width:460px;position:relative}
+    .search-input{
+      width:100%;padding:12px 16px 12px 44px;border-radius:12px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      color:#fff;font-weight:900;font-size:14px;
+      transition:.15s;
+    }
+    .search-input:focus{outline:none;border-color:rgba(0,102,255,.6);background:rgba(255,255,255,.08)}
+    .search-input::placeholder{color:rgba(255,255,255,.4);font-weight:850}
+    .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.55}
 
-.modal{
-  display:none;position:fixed;inset:0;z-index:1000;
-  background:rgba(0,0,0,.78);backdrop-filter:blur(10px);animation:fadeIn .25s ease-out;
-  padding:18px;
-}
-.modal.active{display:flex;align-items:center;justify-content:center}
-.modal-content{
-  background:var(--dark);border:1px solid rgba(255,255,255,.2);
-  border-radius:22px;width:100%;max-width:1200px;max-height:92vh;overflow:auto;
-}
-.modal-header{
-  padding:22px;border-bottom:1px solid rgba(255,255,255,.1);
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-}
-.modal-title{
-  font-size:20px;font-weight:950;
-  background:linear-gradient(135deg,#fff,#a0b0ff);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.modal-close{
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
-  color:#fff;width:38px;height:38px;border-radius:999px;cursor:pointer;font-size:18px;font-weight:950;
-}
-.modal-close:hover{background:rgba(239,68,68,.16);border-color:rgba(239,68,68,.35)}
-.modal-body{padding:22px}
+    .btn{border:none;cursor:pointer;font-weight:980;font-size:14px;padding:12px 18px;border-radius:12px;transition:.15s}
+    .btn-primary{
+      background:linear-gradient(135deg,var(--primary),#0052CC);
+      color:#fff;box-shadow:0 8px 18px rgba(0,102,255,.25);
+    }
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,102,255,.45)}
+    .btn-ghost{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.85);
+    }
+    .btn-ghost:hover{background:rgba(255,255,255,.1)}
 
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.detail-section{
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-  border-radius:16px;padding:18px;
-}
-.section-title{font-size:15px;font-weight:950;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.info-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
-.info-row:last-child{border-bottom:none}
-.info-label{font-size:12px;color:rgba(255,255,255,.55);font-weight:900}
-.info-value{font-size:13px;font-weight:950;color:rgba(255,255,255,.9);text-align:right}
+    .clients-table{
+      background:var(--card);backdrop-filter:blur(10px);
+      border:1px solid var(--border);
+      border-radius:16px;overflow:hidden;
+    }
+    .table-header,.client-row{
+      display:grid;
+      grid-template-columns:2.2fr 1.5fr 1fr 1fr 1fr 120px;
+      gap:14px;padding:18px 20px;align-items:center;
+    }
+    .table-header{
+      background:rgba(255,255,255,.03);
+      border-bottom:1px solid rgba(255,255,255,.1);
+      font-size:12px;font-weight:980;text-transform:uppercase;
+      letter-spacing:.5px;color:var(--muted);
+    }
+    .client-row{
+      border-bottom:1px solid rgba(255,255,255,.05);
+      cursor:pointer;transition:.12s;
+    }
+    .client-row:hover{background:rgba(255,255,255,.05)}
+    .client-row:last-child{border-bottom:none}
+    .client-name{font-weight:980;font-size:15px}
+    .client-email{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .small{font-size:13px;color:rgba(255,255,255,.75);font-weight:850}
+    .status-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:6px 12px;border-radius:999px;
+      font-size:12px;font-weight:980;white-space:nowrap;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+    }
+    .status-badge.fase{border-color:rgba(0,102,255,.35);background:rgba(0,102,255,.14);color:#9ec2ff}
+    .status-badge.completed{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.14);color:var(--success)}
+    .docs-count{font-size:13px;color:rgba(255,255,255,.85);font-weight:980}
+    .docs-count.complete{color:var(--success)}
+    .action-btn{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:#fff;padding:8px 12px;border-radius:10px;
+      font-size:12px;font-weight:980;cursor:pointer;transition:.12s;
+    }
+    .action-btn:hover{background:rgba(0,102,255,.18);border-color:rgba(0,102,255,.4)}
 
-.phases-list{display:flex;flex-direction:column;gap:10px}
-.phase-item{
-  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);
-  border-radius:12px;padding:14px;
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
-}
-.phase-item.active{border-color:rgba(0,102,255,.45);background:rgba(0,102,255,.12)}
-.phase-item.completed{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.06)}
-.phase-name{font-size:13px;font-weight:950;margin-bottom:2px}
-.phase-desc{font-size:12px;color:rgba(255,255,255,.55);font-weight:800}
-.phase-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.btn-small{
-  padding:8px 10px;font-size:12px;font-weight:950;border-radius:10px;
-  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;cursor:pointer;transition:.15s;
-}
-.btn-small:hover{background:rgba(0,102,255,.18);border-color:rgba(0,102,255,.4)}
-.btn-small.success:hover{background:rgba(16,185,129,.18);border-color:rgba(16,185,129,.4)}
-.btn-small.danger:hover{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.4)}
-.btn-small.ghost{opacity:.9}
-.btn-small.ghost:hover{opacity:1}
+    .empty-state{text-align:center;padding:60px 20px}
+    .empty-icon{font-size:56px;opacity:.3;margin-bottom:10px}
+    .empty-text{font-size:15px;color:var(--muted);font-weight:900}
 
-.steps-panel{
-  margin-top:12px;padding:14px;border-radius:14px;
-  border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);
-}
-.steps-header{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px;
-}
-.steps-title{font-size:13px;font-weight:950;color:rgba(255,255,255,.9);display:flex;align-items:center;gap:8px}
-.steps-sub{font-size:12px;color:rgba(255,255,255,.55);font-weight:800}
-.steps-list{display:flex;flex-direction:column;gap:10px}
+    .modal{
+      display:none;position:fixed;inset:0;z-index:1000;
+      background:rgba(0,0,0,.78);
+      backdrop-filter:blur(10px);
+      animation:fadeIn .2s ease-out;
+      padding:18px;
+    }
+    .modal.active{display:flex;align-items:center;justify-content:center}
+    .modal-content{
+      background:var(--dark);
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:22px;
+      width:100%;max-width:1250px;max-height:92vh;overflow:auto;
+    }
+    .modal-header{
+      padding:22px;border-bottom:1px solid rgba(255,255,255,.1);
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+    }
+    .modal-title{
+      font-size:20px;font-weight:980;
+      background:linear-gradient(135deg,#fff,#a0b0ff);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .modal-subtitle{margin-top:4px;font-size:13px;color:var(--muted);font-weight:850}
+    .modal-close{
+      width:38px;height:38px;border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:#fff;cursor:pointer;font-size:18px;font-weight:980;
+    }
+    .modal-close:hover{background:rgba(239,68,68,.16);border-color:rgba(239,68,68,.35)}
+    .modal-body{padding:22px}
 
-.step-item{
-  border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);
-  padding:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
-  cursor:pointer;transition:.15s;
-}
-.step-item:hover{background:rgba(0,102,255,.10);border-color:rgba(0,102,255,.28)}
-.step-left{flex:1}
-.step-title{font-size:13px;font-weight:950;margin-bottom:2px}
-.step-desc{font-size:12px;color:rgba(255,255,255,.55);font-weight:800}
-.step-badge{
-  font-size:11px;font-weight:950;padding:4px 10px;border-radius:999px;
-  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);white-space:nowrap;
-}
-.step-badge.done{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.10);color:var(--success)}
-.step-badge.current{border-color:rgba(0,102,255,.35);background:rgba(0,102,255,.14);color:#9ec2ff}
-.step-badge.pending{border-color:rgba(245,158,11,.28);background:rgba(245,158,11,.10);color:var(--warning)}
+    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+    .detail-section{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:18px;
+    }
+    .section-title{
+      font-size:15px;font-weight:980;margin-bottom:12px;
+      display:flex;align-items:center;gap:8px
+    }
+    .info-row{
+      display:flex;justify-content:space-between;gap:12px;
+      padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)
+    }
+    .info-row:last-child{border-bottom:none}
+    .info-label{font-size:12px;color:var(--muted2);font-weight:950}
+    .info-value{font-size:13px;font-weight:980;color:rgba(255,255,255,.92);text-align:right}
 
-.documents-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-.doc-card{
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-  border-radius:16px;padding:14px;transition:.15s;
-}
-.doc-card:hover{border-color:rgba(0,102,255,.35)}
-.doc-card.approved{border-color:rgba(16,185,129,.42);background:rgba(16,185,129,.05)}
-.doc-card.rejected{border-color:rgba(239,68,68,.42);background:rgba(239,68,68,.05)}
-.doc-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
-.doc-icon{font-size:28px}
-.doc-status{
-  font-size:11px;font-weight:950;padding:4px 10px;border-radius:999px;
-  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);
-}
-.doc-status.pending{color:var(--warning);border-color:rgba(245,158,11,.28);background:rgba(245,158,11,.10)}
-.doc-status.uploaded{color:var(--success);border-color:rgba(16,185,129,.28);background:rgba(16,185,129,.10)}
-.doc-status.approved{color:var(--success);border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.14)}
-.doc-status.rejected{color:var(--danger);border-color:rgba(239,68,68,.32);background:rgba(239,68,68,.12)}
-.doc-title{font-size:13px;font-weight:950;margin-bottom:6px}
-.doc-info{font-size:12px;color:rgba(255,255,255,.55);font-weight:800;margin-bottom:10px}
-.doc-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .phases-list{display:flex;flex-direction:column;gap:10px}
+    .phase-item{
+      background:var(--card2);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:12px;padding:14px;
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+    }
+    .phase-item.active{border-color:rgba(0,102,255,.45);background:rgba(0,102,255,.12)}
+    .phase-item.completed{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.06)}
+    .phase-name{font-size:13px;font-weight:980;margin-bottom:2px}
+    .phase-desc{font-size:12px;color:var(--muted2);font-weight:850}
+    .phase-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 
-.notes-area{
-  width:100%;min-height:120px;padding:12px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-  border-radius:12px;color:#fff;font-weight:800;resize:vertical;
-}
-.notes-area:focus{outline:none;border-color:rgba(0,102,255,.5);background:rgba(255,255,255,.07)}
+    .btn-small{
+      padding:8px 10px;font-size:12px;font-weight:980;border-radius:10px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:#fff;cursor:pointer;transition:.12s;
+    }
+    .btn-small:hover{background:rgba(0,102,255,.18);border-color:rgba(0,102,255,.4)}
+    .btn-small.success:hover{background:rgba(16,185,129,.18);border-color:rgba(16,185,129,.4)}
+    .btn-small.danger:hover{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.4)}
+    .btn-small:disabled{opacity:.55;cursor:not-allowed}
 
-.form-grid{display:grid;gap:10px;margin-top:10px}
-.field-label{font-size:12px;color:rgba(255,255,255,.6);font-weight:900;margin-bottom:6px}
-.text-input,.select-input,.text-area{
-  width:100%;padding:12px;border-radius:12px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
-  color:#fff;font-weight:800;font-size:13px;transition:.2s;
-}
-.text-area{min-height:110px;resize:vertical}
-.text-input:focus,.select-input:focus,.text-area:focus{outline:none;border-color:rgba(0,102,255,.55);background:rgba(255,255,255,.07)}
-.select-input{
-  appearance:none;
-  background-image:linear-gradient(45deg,transparent 50%,rgba(255,255,255,.75) 50%),
-                   linear-gradient(135deg,rgba(255,255,255,.75) 50%,transparent 50%),
-                   linear-gradient(to right,transparent,transparent);
-  background-position:calc(100% - 18px) calc(50% - 3px),calc(100% - 12px) calc(50% - 3px),0 0;
-  background-size:6px 6px,6px 6px,100% 100%;
-  background-repeat:no-repeat;
-  padding-right:34px;
-}
-.select-input option{background:#0A0E27;color:#fff}
+    /* Steps panel */
+    .steps-panel{
+      margin-top:12px;
+      padding:14px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+    }
+    .steps-header{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;flex-wrap:wrap;margin-bottom:10px;
+    }
+    .steps-title{font-size:13px;font-weight:980;color:rgba(255,255,255,.92);display:flex;align-items:center;gap:8px}
+    .steps-sub{font-size:12px;color:var(--muted2);font-weight:850}
+    .steps-list{display:flex;flex-direction:column;gap:10px}
 
-.message-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
-.msg-item{
-  padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.03);
-}
-.msg-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.msg-title{font-weight:950;font-size:13px}
-.msg-meta{font-size:12px;color:rgba(255,255,255,.55);font-weight:800;margin-top:2px}
-.msg-body{
-  margin-top:8px;font-size:13px;color:rgba(255,255,255,.85);font-weight:800;white-space:pre-wrap;
-}
-.msg-badges{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
-.msg-badge{
-  font-size:11px;font-weight:950;padding:4px 10px;border-radius:999px;
-  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);white-space:nowrap;
-}
-.msg-badge.info{border-color:rgba(0,102,255,.35);background:rgba(0,102,255,.14);color:#9ec2ff}
-.msg-badge.update{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.12);color:var(--success)}
-.msg-badge.warning{border-color:rgba(245,158,11,.30);background:rgba(245,158,11,.12);color:var(--warning)}
-.msg-badge.success{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.12);color:var(--success)}
-.msg-badge.unread{border-color:rgba(239,68,68,.30);background:rgba(239,68,68,.10);color:var(--danger)}
-.msg-actions{margin-top:10px;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+    .step-item{
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      padding:12px;
+      display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+      cursor:pointer;transition:.12s;
+    }
+    .step-item:hover{background:rgba(0,102,255,.10);border-color:rgba(0,102,255,.28)}
+    .step-left{flex:1}
+    .step-title{font-size:13px;font-weight:980;margin-bottom:2px}
+    .step-desc{font-size:12px;color:var(--muted2);font-weight:850}
+    .step-badge{
+      font-size:11px;font-weight:980;padding:4px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      white-space:nowrap;
+    }
+    .step-badge.done{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.10);color:var(--success)}
+    .step-badge.current{border-color:rgba(0,102,255,.35);background:rgba(0,102,255,.14);color:#9ec2ff}
+    .step-badge.pending{border-color:rgba(245,158,11,.28);background:rgba(245,158,11,.10);color:var(--warning)}
 
-.loading-overlay{
-  position:fixed;inset:0;z-index:9999;
-  background:rgba(10,14,39,.72);backdrop-filter:blur(10px);
-  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;
-}
-.loading-overlay.hidden{display:none}
-.spinner{
-  width:42px;height:42px;border-radius:50%;
-  border:4px solid rgba(255,255,255,.15);border-top-color:rgba(255,255,255,.85);
-  animation:spin .9s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{color:rgba(255,255,255,.85);font-weight:950;font-size:14px}
+    /* Documents */
+    .documents-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+    .doc-card{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:16px;padding:14px;transition:.12s;
+    }
+    .doc-card:hover{border-color:rgba(0,102,255,.35)}
+    .doc-card.approved{border-color:rgba(16,185,129,.42);background:rgba(16,185,129,.05)}
+    .doc-card.rejected{border-color:rgba(239,68,68,.42);background:rgba(239,68,68,.05)}
+    .doc-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
+    .doc-icon{font-size:28px}
+    .doc-status{
+      font-size:11px;font-weight:980;padding:4px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+    }
+    .doc-status.pending{color:var(--warning);border-color:rgba(245,158,11,.28);background:rgba(245,158,11,.10)}
+    .doc-status.uploaded{color:var(--success);border-color:rgba(16,185,129,.28);background:rgba(16,185,129,.10)}
+    .doc-status.approved{color:var(--success);border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.14)}
+    .doc-status.rejected{color:var(--danger);border-color:rgba(239,68,68,.32);background:rgba(239,68,68,.12)}
+    .doc-title{font-size:13px;font-weight:980;margin-bottom:6px}
+    .doc-info{font-size:12px;color:var(--muted2);font-weight:850;margin-bottom:10px}
+    .doc-actions{display:flex;gap:8px;flex-wrap:wrap}
 
-@media (max-width:1200px){
-  .table-header,.client-row{grid-template-columns:2fr 1.4fr 1fr 1fr 120px}
-  .hide-xl{display:none}
-  .detail-grid{grid-template-columns:1fr}
-}
-@media (max-width:768px){
-  .stats-grid{grid-template-columns:1fr}
-  .actions-bar{flex-direction:column;align-items:stretch}
-  .search-box{max-width:100%}
-  .table-header,.client-row{grid-template-columns:1fr 120px}
-  .hide-md{display:none}
-}
-</style>
+    /* Notes & Messages inputs */
+    .notes-area{
+      width:100%;min-height:120px;padding:12px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:12px;color:#fff;font-weight:900;
+      resize:vertical;
+    }
+    .notes-area:focus{outline:none;border-color:rgba(0,102,255,.55);background:rgba(255,255,255,.07)}
+
+    .form-grid{display:grid;gap:12px;margin-top:10px}
+    .field-label{font-size:12px;color:var(--muted);font-weight:950;margin-bottom:6px}
+    .text-input,.select-input,.text-area{
+      width:100%;padding:12px;border-radius:12px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      color:#fff;font-weight:900;font-size:13px;
+      transition:.12s;
+    }
+    .text-area{min-height:110px;resize:vertical}
+    .text-input:focus,.select-input:focus,.text-area:focus{
+      outline:none;border-color:rgba(0,102,255,.55);background:rgba(255,255,255,.07)
+    }
+    .select-input{
+      appearance:none;
+      background-image:
+        linear-gradient(45deg,transparent 50%,rgba(255,255,255,.75) 50%),
+        linear-gradient(135deg,rgba(255,255,255,.75) 50%,transparent 50%),
+        linear-gradient(to right,transparent,transparent);
+      background-position:calc(100% - 18px) calc(50% - 3px),calc(100% - 12px) calc(50% - 3px),0 0;
+      background-size:6px 6px,6px 6px,100% 100%;
+      background-repeat:no-repeat;
+      padding-right:34px;
+    }
+    .select-input option{
+      background:#0A0E27;
+      color:#ffffff;
+      font-weight:900;
+    }
+
+    .message-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+    .msg-item{
+      padding:12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+    }
+    .msg-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+    .msg-title{font-weight:980;font-size:13px}
+    .msg-meta{font-size:12px;color:var(--muted2);font-weight:850;margin-top:2px}
+    .msg-body{
+      margin-top:8px;font-size:13px;color:rgba(255,255,255,.85);
+      font-weight:850;white-space:pre-wrap;
+    }
+    .msg-badges{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
+    .msg-badge{
+      font-size:11px;font-weight:980;padding:4px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);
+      white-space:nowrap;
+    }
+    .msg-badge.info{border-color:rgba(0,102,255,.35);background:rgba(0,102,255,.14);color:#9ec2ff}
+    .msg-badge.update{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.12);color:var(--success)}
+    .msg-badge.warning{border-color:rgba(245,158,11,.30);background:rgba(245,158,11,.12);color:var(--warning)}
+    .msg-badge.success{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.12);color:var(--success)}
+    .msg-badge.unread{border-color:rgba(239,68,68,.30);background:rgba(239,68,68,.10);color:var(--danger)}
+    .msg-actions{margin-top:10px;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+
+    /* Loading */
+    .loading-overlay{
+      position:fixed;inset:0;z-index:9999;
+      background:rgba(10,14,39,.72);
+      backdrop-filter:blur(10px);
+      display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;
+    }
+    .loading-overlay.hidden{display:none}
+    .spinner{
+      width:42px;height:42px;border-radius:50%;
+      border:4px solid rgba(255,255,255,.15);
+      border-top-color:rgba(255,255,255,.85);
+      animation:spin .9s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-text{color:rgba(255,255,255,.85);font-weight:980;font-size:14px;text-align:center;max-width:420px}
+
+    @media (max-width:1200px){
+      .table-header,.client-row{grid-template-columns:2fr 1.4fr 1fr 1fr 120px}
+      .hide-xl{display:none}
+      .detail-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:768px){
+      .stats-grid{grid-template-columns:1fr}
+      .actions-bar{flex-direction:column;align-items:stretch}
+      .search-box{max-width:100%}
+      .table-header,.client-row{grid-template-columns:1fr 120px}
+      .hide-md{display:none}
+    }
+  </style>
 </head>
 
 <body>
-<div class="stars"></div>
+  <div class="stars"></div>
 
-<div class="loading-overlay" id="loading">
-  <div class="spinner"></div>
-  <div class="loading-text" id="loadingText">Carregando…</div>
-</div>
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingText">Carregando…</div>
+  </div>
 
-<header>
-  <div class="header-container">
-    <a class="logo" href="index.html"><div class="logo-icon">🇦🇷</div><span>GoArgentina</span></a>
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <span class="admin-badge">🔐 Admin</span>
-      <div class="header-actions">
+  <header>
+    <div class="header-container">
+      <a class="logo" href="index.html">
+        <div class="logo-icon">🇦🇷</div>
+        <span>GoArgentina</span>
+      </a>
+
+      <div class="header-right">
+        <span class="admin-badge">🔐 Admin</span>
         <div class="user-pill" title="Conta admin">
           <div class="user-avatar" id="adminAvatar">AD</div>
           <div class="user-name" id="adminName">Admin</div>
@@ -364,882 +471,1194 @@ header{
         <button class="logout-btn" id="logoutBtn">Sair</button>
       </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="main-container">
-  <div class="page-header">
-    <h1 class="page-title">Painel Administrativo</h1>
-    <p class="page-subtitle">Gerencie clientes, fases e o passo atual dentro de cada fase</p>
-    <div class="notice" id="noticeBox"></div>
-  </div>
-
-  <div class="stats-grid">
-    <div class="stat-box"><div class="stat-label">Total de Clientes</div><div class="stat-value" id="totalClients">0</div></div>
-    <div class="stat-box"><div class="stat-label">Em Andamento</div><div class="stat-value" id="activeClients">0</div></div>
-    <div class="stat-box"><div class="stat-label">Concluídos</div><div class="stat-value" id="completedClients">0</div></div>
-    <div class="stat-box"><div class="stat-label">Novos (7 dias)</div><div class="stat-value" id="newClients">0</div></div>
-  </div>
-
-  <div class="actions-bar">
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input id="searchInput" class="search-input" placeholder="Buscar por nome ou email…" />
+  <main class="main-container">
+    <div class="page-header">
+      <h1 class="page-title">Painel Administrativo</h1>
+      <p class="page-subtitle">Gerencie clientes, fases e o passo atual dentro de cada fase</p>
+      <div class="notice" id="noticeBox"></div>
     </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
-      <button class="btn btn-ghost" id="refreshBtn">↻ Atualizar</button>
-      <button class="btn btn-primary" id="newClientBtn" title="Criação de conta depende do Auth (não expomos Service Key no front)">➕ Novo Cliente</button>
-    </div>
-  </div>
 
-  <div class="clients-table">
-    <div class="table-header">
-      <div>Cliente</div><div>Contato</div><div class="hide-md">Status</div><div class="hide-xl">Docs</div><div class="hide-md">Fase</div><div>Ações</div>
-    </div>
-    <div id="clientsList"></div>
-  </div>
-
-  <div class="empty-state" id="emptyState" style="display:none;">
-    <div class="empty-icon">🗂️</div>
-    <div class="empty-text">Nenhum cliente encontrado.</div>
-  </div>
-</main>
-
-<!-- Modal: Detalhes do Cliente -->
-<div class="modal" id="clientDetailModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title" id="clientDetailTitle">Detalhes do Cliente</div>
-        <div class="small" id="clientDetailSubtitle" style="margin-top:4px;color:rgba(255,255,255,.6);font-weight:800;"></div>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-label">Total de Clientes</div>
+        <div class="stat-value" id="totalClients">0</div>
       </div>
-      <button class="modal-close" id="closeClientModal">✕</button>
+      <div class="stat-box">
+        <div class="stat-label">Em Andamento</div>
+        <div class="stat-value" id="activeClients">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Concluídos</div>
+        <div class="stat-value" id="completedClients">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Novos (7 dias)</div>
+        <div class="stat-value" id="newClients">0</div>
+      </div>
     </div>
 
-    <div class="modal-body">
-      <div class="detail-grid">
-        <div class="detail-section">
-          <div class="section-title">👤 Informações</div>
-          <div class="info-row"><span class="info-label">Nome</span><span class="info-value" id="detailName">-</span></div>
-          <div class="info-row"><span class="info-label">Email</span><span class="info-value" id="detailEmail">-</span></div>
-          <div class="info-row"><span class="info-label">User ID</span><span class="info-value" id="detailId" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;">-</span></div>
-          <div class="info-row"><span class="info-label">Criado em</span><span class="info-value" id="detailCreated">-</span></div>
-          <div class="info-row"><span class="info-label">Fase atual</span><span class="info-value" id="detailPhase">-</span></div>
-          <div class="info-row"><span class="info-label">Passo atual</span><span class="info-value" id="detailStep">-</span></div>
+    <div class="actions-bar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input id="searchInput" class="search-input" placeholder="Buscar por nome ou email…"/>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
+        <button class="btn btn-ghost" id="refreshBtn">↻ Atualizar</button>
+      </div>
+    </div>
+
+    <div class="clients-table">
+      <div class="table-header">
+        <div>Cliente</div>
+        <div>Contato</div>
+        <div class="hide-md">Status</div>
+        <div class="hide-xl">Docs</div>
+        <div class="hide-md">Fase</div>
+        <div>Ações</div>
+      </div>
+      <div id="clientsList"></div>
+    </div>
+
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="empty-icon">🗂️</div>
+      <div class="empty-text">Nenhum cliente encontrado.</div>
+    </div>
+  </main>
+
+  <!-- MODAL CLIENT -->
+  <div class="modal" id="clientModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="clientTitle">Detalhes do Cliente</div>
+          <div class="modal-subtitle" id="clientSubtitle"></div>
         </div>
+        <button class="modal-close" id="closeClientModal">✕</button>
+      </div>
 
-        <div class="detail-section">
-          <div class="section-title">🔄 Fases do Processo</div>
-          <div class="phases-list" id="phasesList"></div>
+      <div class="modal-body">
+        <div class="detail-grid">
+          <div class="detail-section">
+            <div class="section-title">👤 Informações</div>
+            <div class="info-row"><span class="info-label">Nome</span><span class="info-value" id="dName">-</span></div>
+            <div class="info-row"><span class="info-label">Email</span><span class="info-value" id="dEmail">-</span></div>
+            <div class="info-row"><span class="info-label">User ID</span><span class="info-value" id="dId" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;">-</span></div>
+            <div class="info-row"><span class="info-label">Criado em</span><span class="info-value" id="dCreated">-</span></div>
+            <div class="info-row"><span class="info-label">Fase atual</span><span class="info-value" id="dPhase">-</span></div>
+            <div class="info-row"><span class="info-label">Passo atual</span><span class="info-value" id="dStep">-</span></div>
+          </div>
 
-          <div class="steps-panel">
-            <div class="steps-header">
-              <div>
-                <div class="steps-title">📍 Passos fixos da fase atual</div>
-                <div class="steps-sub" id="stepsSubtitle">Clique no passo para definir como passo atual</div>
+          <div class="detail-section">
+            <div class="section-title">🔄 Fases do Processo</div>
+            <div class="phases-list" id="phasesList"></div>
+
+            <div class="steps-panel">
+              <div class="steps-header">
+                <div>
+                  <div class="steps-title">📍 Passos fixos da fase atual</div>
+                  <div class="steps-sub" id="stepsSubtitle">Clique no passo para definir como passo atual</div>
+                </div>
+                <button class="btn-small ghost" id="markPhaseDoneBtn" type="button">✓ Marcar fase como concluída</button>
               </div>
-              <button class="btn-small ghost" id="markPhaseDoneBtn" type="button">✓ Marcar fase como concluída</button>
+              <div class="steps-list" id="stepsList"></div>
             </div>
-            <div class="steps-list" id="stepsList"></div>
           </div>
         </div>
-      </div>
 
-      <div class="detail-section" style="margin-bottom:16px;">
-        <div class="section-title">📝 Notas Internas</div>
-        <textarea class="notes-area" id="clientNotes" placeholder="Notas internas sobre este cliente…"></textarea>
-        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:12px;flex-wrap:wrap;">
-          <button class="btn-small" id="reloadNotesBtn" type="button">↻ Recarregar</button>
-          <button class="btn-small success" id="saveNotesBtn" type="button">Salvar Notas</button>
+        <div class="detail-section" style="margin-bottom:16px;">
+          <div class="section-title">📄 Documentos</div>
+          <div class="documents-grid" id="docsGrid"></div>
         </div>
-      </div>
 
-      <div class="detail-section">
-        <div class="section-title">📨 Mensagens para o Cliente</div>
-
-        <div class="form-grid">
-          <div>
-            <div class="field-label">Título</div>
-            <input id="msgTitle" class="text-input" placeholder="Ex: Precisamos do comprovante de domicílio" />
+        <div class="detail-section" style="margin-bottom:16px;">
+          <div class="section-title">📝 Notas Internas</div>
+          <textarea class="notes-area" id="notesArea" placeholder="Notas internas sobre este cliente…"></textarea>
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:12px;flex-wrap:wrap;">
+            <button class="btn-small" id="reloadNotesBtn" type="button">↻ Recarregar</button>
+            <button class="btn-small success" id="saveNotesBtn" type="button">Salvar Notas</button>
           </div>
+        </div>
 
-          <div>
-            <div class="field-label">Mensagem</div>
-            <textarea id="msgBody" class="text-area" placeholder="Escreva a mensagem que o cliente verá na caixa de entrada…"></textarea>
-          </div>
+        <div class="detail-section">
+          <div class="section-title">📨 Mensagens para o Cliente</div>
 
-          <div style="display:grid;grid-template-columns:1fr 200px;gap:10px;">
+          <!-- ✅ layout corrigido para não grudar -->
+          <div class="form-grid">
             <div>
-              <div class="field-label">Tipo</div>
-              <select id="msgType" class="select-input">
-                <option value="info">Informação</option>
-                <option value="update">Atualização</option>
-                <option value="warning">Atenção</option>
-                <option value="success">Sucesso</option>
-              </select>
+              <div class="field-label">Título</div>
+              <input id="msgTitle" class="text-input" placeholder="Ex: Precisamos do comprovante de domicílio"/>
             </div>
 
-            <div style="display:flex;align-items:flex-end;justify-content:flex-end;">
-              <button class="btn btn-primary" id="sendMsgBtn" type="button">Enviar</button>
+            <div>
+              <div class="field-label">Mensagem</div>
+              <textarea id="msgBody" class="text-area" placeholder="Escreva a mensagem que o cliente verá na caixa de entrada…"></textarea>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 220px;gap:12px;align-items:end;">
+              <div>
+                <div class="field-label">Tipo</div>
+                <select id="msgType" class="select-input">
+                  <option value="info">Informação</option>
+                  <option value="update">Atualização</option>
+                  <option value="warning">Atenção</option>
+                  <option value="success">Sucesso</option>
+                </select>
+              </div>
+              <div style="display:flex;justify-content:flex-end;">
+                <button class="btn btn-primary" id="sendMsgBtn" type="button">Enviar</button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="message-list" id="messagesList"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal: Novo Cliente (orientação) -->
-<div class="modal" id="newClientModal">
-  <div class="modal-content" style="max-width:720px;">
-    <div class="modal-header">
-      <div class="modal-title">➕ Novo Cliente</div>
-      <button class="modal-close" id="closeNewClientModal">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="detail-section">
-        <div class="section-title">📌 Como criar cliente (sem Service Key no front)</div>
-        <div class="small" style="color:rgba(255,255,255,.7);font-weight:800;">
-          Por segurança, não criamos usuários pelo front-end (isso exigiria Service Role Key).
-          Use:
-          <ol style="margin:10px 0 0 18px;">
-            <li><b>Invite user</b> no Supabase (Auth → Users)</li>
-            <li>Ou o cliente se cadastra via login</li>
-          </ol>
-          <div style="margin-top:12px;">
-            Link:
-            <div style="margin-top:8px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:900;" id="signupLinkBox">—</div>
-          </div>
-        </div>
-        <div style="display:flex;justify-content:flex-end;margin-top:14px;">
-          <button class="btn btn-primary" id="copySignupLinkBtn" type="button">Copiar link</button>
+          <div class="message-list" id="messagesList"></div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-/* ============================================================
-   CONFIG
-   Use os mesmos valores do seu dashboard.html
-============================================================ */
+  <script>
+    /* ============================================================
+       CONFIG (use o mesmo do dashboard.html)
+       - Coloque aqui, OU salve no localStorage:
+         localStorage.setItem('SUPABASE_URL','...')
+         localStorage.setItem('SUPABASE_ANON_KEY','...')
+    ============================================================ */
 const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k";
 
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
-});
-
-/* ============================================================
-   PASSOS FIXOS (FONTE DE VERDADE)
-   ✅ Aqui você precisa deixar EXATAMENTE igual ao dashboard.html.
-   Copie os títulos/descrições da UI do dashboard e cole aqui.
-============================================================ */
-const STEP_DEFS_BY_PHASE = {
-  1: [
-    { title: "Envio dos documentos", desc: "..." },
-    { title: "Revisão da equipe", desc: "..." },
-    { title: "Aprovação", desc: "..." },
-  ],
-  2: [
-    { title: "Passo 1", desc: "..." },
-    { title: "Passo 2", desc: "..." },
-  ],
-  3: [
-    { title: "Agendamento do trâmite", desc: "..." },
-    { title: "Retirada presencial do documento", desc: "..." },
-    { title: "Upload do documento obtido", desc: "..." },
-  ],
-  4: [
-    { title: "Passo 1", desc: "..." }
-  ],
-  5: [
-    { title: "Passo 1", desc: "..." },
-    { title: "Passo 2", desc: "..." }
-  ],
-  6: [
-    { title: "Passo 1", desc: "..." },
-    { title: "Passo 2", desc: "..." }
-  ],
-  7: [
-    { title: "Passo 1", desc: "..." }
-  ],
-};
-
-/* ============================================================
-   UI helpers
-============================================================ */
-const loadingEl=document.getElementById("loading");
-const loadingText=document.getElementById("loadingText");
-const noticeBox=document.getElementById("noticeBox");
-
-function setLoading(show,text){ if(text) loadingText.textContent=text; loadingEl.classList.toggle("hidden",!show); }
-function showNotice(type,msg){ noticeBox.className="notice show "+(type==="ok"?"ok":"err"); noticeBox.textContent=msg; }
-function hideNotice(){ noticeBox.className="notice"; noticeBox.textContent=""; }
-function fmtDate(dt){ if(!dt) return "-"; try{return new Date(dt).toLocaleString("pt-BR")}catch{return "-"} }
-function initialsFrom(s){ s=(s||"AD").trim(); const p=s.split(" ").filter(Boolean); if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); return s.slice(0,2).toUpperCase(); }
-
-/* Stars */
-const starsContainer=document.querySelector(".stars");
-for(let i=0;i<100;i++){
-  const st=document.createElement("div");
-  st.className="star";
-  st.style.left=Math.random()*100+"%";
-  st.style.top=Math.random()*100+"%";
-  st.style.animationDelay=Math.random()*3+"s";
-  starsContainer.appendChild(st);
-}
-
-/* ============================================================
-   Phases (labels)
-============================================================ */
-const phases = [
-  { id:1, name:"Documentação inicial", desc:"RG e foto" },
-  { id:2, name:"Antecedentes criminais", desc:"Emissão de certidão" },
-  { id:3, name:"Domicílio", desc:"Comprovante de endereço" },
-  { id:4, name:"Cadastro RADEX", desc:"Sistema migratório" },
-  { id:5, name:"Pagamento de taxas", desc:"Boletos" },
-  { id:6, name:"Cita migratória", desc:"Agendamento" },
-  { id:7, name:"DNI emitido", desc:"Documento pronto" }
-];
-
-let adminUser=null, adminProfile=null;
-let clientsRaw=[], filteredClients=[];
-let processMap=new Map();
-let currentClientId=null;
-let currentPhaseInModal=1;
-
-/* ============================================================
-   AUTH guard + init
-============================================================ */
-async function init(){
-  setLoading(true,"Validando acesso…");
-
-  const { data: sessionData } = await sb.auth.getSession();
-  if(!sessionData?.session){ window.location.href="login.html"; return; }
-
-  const { data: userData, error: userErr } = await sb.auth.getUser();
-  if(userErr || !userData?.user){ window.location.href="login.html"; return; }
-  adminUser=userData.user;
-
-  const { data: profile, error: profErr } = await sb
-    .from("profiles")
-    .select("id,email,full_name,role,created_at")
-    .eq("id", adminUser.id)
-    .single();
-
-  if(profErr || !profile){ showNotice("err","Não consegui carregar seu perfil admin."); setLoading(false); return; }
-  adminProfile=profile;
-  if(adminProfile.role!=="admin"){ window.location.href="dashboard.html"; return; }
-
-  const display=(adminProfile.full_name||adminProfile.email||"Admin");
-  document.getElementById("adminName").textContent=display;
-  document.getElementById("adminAvatar").textContent=initialsFrom(display);
-
-  const signupLink = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, "/")}login.html`;
-  document.getElementById("signupLinkBox").textContent = signupLink;
-
-  wireEvents();
-  await loadAll();
-  setLoading(false);
-}
-
-function wireEvents(){
-  document.getElementById("logoutBtn").addEventListener("click", async ()=>{
-    setLoading(true,"Saindo…");
-    await sb.auth.signOut();
-    window.location.href="login.html";
-  });
-
-  document.getElementById("refreshBtn").addEventListener("click", loadAll);
-  document.getElementById("searchInput").addEventListener("input",(e)=>renderClients(e.target.value||""));
-
-  document.getElementById("closeClientModal").addEventListener("click", closeClientModal);
-  document.getElementById("clientDetailModal").addEventListener("click",(e)=>{
-    if(e.target.id==="clientDetailModal") closeClientModal();
-  });
-
-  document.getElementById("markPhaseDoneBtn").addEventListener("click", markCurrentPhaseAsDone);
-
-  document.getElementById("sendMsgBtn").addEventListener("click", sendMessageToClient);
-
-  document.getElementById("newClientBtn").addEventListener("click", ()=>document.getElementById("newClientModal").classList.add("active"));
-  document.getElementById("closeNewClientModal").addEventListener("click", ()=>document.getElementById("newClientModal").classList.remove("active"));
-  document.getElementById("newClientModal").addEventListener("click",(e)=>{
-    if(e.target.id==="newClientModal") document.getElementById("newClientModal").classList.remove("active");
-  });
-  document.getElementById("copySignupLinkBtn").addEventListener("click", async ()=>{
-    const txt=document.getElementById("signupLinkBox").textContent;
-    try{ await navigator.clipboard.writeText(txt); showNotice("ok","Link copiado!"); document.getElementById("newClientModal").classList.remove("active"); }
-    catch{ showNotice("err","Não consegui copiar automaticamente. Copie manualmente."); }
-  });
-}
-
-/* ============================================================
-   LOAD clients + process
-============================================================ */
-async function loadAll(){
-  hideNotice();
-  setLoading(true,"Carregando clientes…");
-
-  const { data: clients, error: cErr } = await sb
-    .from("profiles")
-    .select("id,email,full_name,role,created_at")
-    .eq("role","client")
-    .order("created_at",{ascending:false});
-
-  if(cErr){ showNotice("err","Erro ao carregar clientes. Confira RLS/policies."); setLoading(false); return; }
-  clientsRaw=clients||[];
-
-  const ids=clientsRaw.map(c=>c.id);
-  processMap=new Map();
-
-  if(ids.length){
-    const { data: procs } = await sb
-      .from("dni_process")
-      .select("user_id,current_phase,updated_at")
-      .in("user_id", ids);
-
-    (procs||[]).forEach(p=>processMap.set(p.user_id,p));
-  }
-
-  renderStats();
-  renderClients(document.getElementById("searchInput").value||"");
-  setLoading(false);
-}
-
-function renderStats(){
-  const total=clientsRaw.length;
-  let completed=0, active=0;
-  const now=Date.now(), sevenMs=7*24*60*60*1000;
-  let new7=0;
-
-  clientsRaw.forEach(c=>{
-    const phase=(processMap.get(c.id)?.current_phase)||1;
-    if(phase>=7) completed++; else active++;
-    const created=c.created_at?new Date(c.created_at).getTime():null;
-    if(created && (now-created)<=sevenMs) new7++;
-  });
-
-  document.getElementById("totalClients").textContent=total;
-  document.getElementById("activeClients").textContent=active;
-  document.getElementById("completedClients").textContent=completed;
-  document.getElementById("newClients").textContent=new7;
-}
-
-function phaseLabel(phase){
-  if(phase>=7) return {txt:"Concluído", cls:"completed"};
-  return {txt:`Fase ${phase}`, cls:"fase"};
-}
-
-function renderClients(filter){
-  const list=document.getElementById("clientsList");
-  list.innerHTML="";
-  const q=(filter||"").trim().toLowerCase();
-
-  filteredClients = clientsRaw.filter(c=>{
-    const name=(c.full_name||"").toLowerCase();
-    const email=(c.email||"").toLowerCase();
-    return !q || name.includes(q) || email.includes(q);
-  });
-
-  document.getElementById("emptyState").style.display = filteredClients.length ? "none" : "block";
-
-  filteredClients.forEach(c=>{
-    const phase=(processMap.get(c.id)?.current_phase)||1;
-    const info=phaseLabel(phase);
-    const statusText = phase>=7 ? "Concluído" : "Em andamento";
-
-    const row=document.createElement("div");
-    row.className="client-row";
-    row.addEventListener("click", ()=>openClientModal(c.id));
-    row.innerHTML=`
-      <div>
-        <div class="client-name">${c.full_name || "(Sem nome)"}</div>
-        <div class="client-email">${c.email || "-"}</div>
-      </div>
-      <div>
-        <div class="small">${c.email || "-"}</div>
-        <div class="client-email">${fmtDate(c.created_at)}</div>
-      </div>
-      <div class="hide-md"><span class="status-badge ${phase>=7?"completed":"fase"}">${statusText}</span></div>
-      <div class="hide-xl"><span class="docs-count">—</span></div>
-      <div class="hide-md"><span class="status-badge ${info.cls}">${info.txt}</span></div>
-      <div><button class="action-btn" type="button">Ver</button></div>
-    `;
-    row.querySelector("button").addEventListener("click",(e)=>{ e.stopPropagation(); openClientModal(c.id); });
-    list.appendChild(row);
-  });
-}
-
-/* ============================================================
-   MODAL: open/close + phases UI
-============================================================ */
-async function openClientModal(userId){
-  currentClientId=userId;
-  const client=clientsRaw.find(c=>c.id===userId);
-  if(!client) return;
-
-  const phase=(processMap.get(userId)?.current_phase)||1;
-  currentPhaseInModal=phase;
-
-  document.getElementById("clientDetailTitle").textContent = client.full_name || "Detalhes do Cliente";
-  document.getElementById("clientDetailSubtitle").textContent = client.email || "";
-  document.getElementById("detailName").textContent = client.full_name || "-";
-  document.getElementById("detailEmail").textContent = client.email || "-";
-  document.getElementById("detailId").textContent = client.id;
-  document.getElementById("detailCreated").textContent = fmtDate(client.created_at);
-  document.getElementById("detailPhase").textContent = `Fase ${phase}`;
-  document.getElementById("detailStep").textContent = "—";
-
-  renderPhases(userId, phase);
-
-  // passos fixos dessa fase (sincroniza e mostra)
-  await loadStepsForPhase(userId, phase);
-
-  // notas/mensagens (mantive simples, sem quebrar UX)
-  document.getElementById("clientNotes").value="";
-  await loadNotesForCurrentClient();
-  await loadMessagesForCurrentClient();
-
-  document.getElementById("msgTitle").value="";
-  document.getElementById("msgBody").value="";
-  document.getElementById("msgType").value="info";
-
-  document.getElementById("clientDetailModal").classList.add("active");
-}
-
-function closeClientModal(){
-  document.getElementById("clientDetailModal").classList.remove("active");
-  currentClientId=null;
-  currentPhaseInModal=1;
-}
-
-function renderPhases(userId,currentPhase){
-  const container=document.getElementById("phasesList");
-  container.innerHTML="";
-
-  phases.forEach(ph=>{
-    const isActive = (ph.id===currentPhase);
-    const isDone = (ph.id<currentPhase);
-
-    const div=document.createElement("div");
-    div.className=`phase-item ${isDone?"completed":(isActive?"active":"")}`;
-    div.innerHTML=`
-      <div style="flex:1;">
-        <div class="phase-name">${ph.id}. ${ph.name}</div>
-        <div class="phase-desc">${ph.desc}</div>
-      </div>
-      <div class="phase-actions">
-        ${isDone ? `<button class="btn-small success" type="button" disabled>✓ Concluída</button>` : ``}
-        ${isActive ? `<button class="btn-small" type="button" disabled>Atual</button>` : `<button class="btn-small" type="button">Definir como atual</button>`}
-      </div>
-    `;
-    const btn = div.querySelector(".phase-actions button:not([disabled])");
-    if(btn){
-      btn.addEventListener("click", async ()=>{
-        await setClientPhase(userId, ph.id);
-      });
+    function resolveConfig(){
+      const url = (SUPABASE_URL || localStorage.getItem("SUPABASE_URL") || "").trim();
+      const key = (SUPABASE_ANON_KEY || localStorage.getItem("SUPABASE_ANON_KEY") || "").trim();
+      return { url, key };
     }
-    container.appendChild(div);
-  });
-}
 
-async function setClientPhase(userId, phaseId){
-  hideNotice();
-  setLoading(true,"Atualizando fase…");
+    /* ============================================================
+       PASSOS FIXOS (imutáveis) por fase
+       ✅ Aqui você deve copiar exatamente do dashboard.html
+       (título e descrição). A lógica do admin NÃO cria passos novos,
+       apenas garante esses passos fixos e permite marcar o passo atual.
+    ============================================================ */
+    const STEP_DEFS_BY_PHASE = {
+      1: [
+        { title: "Envio dos documentos para nossa equipe", desc: "Fazer upload do RG e Foto" },
+        { title: "Análise dos documentos", desc: "Nossa equipe revisa e valida os envios" },
+        { title: "Aprovação e próximos passos", desc: "Documentos aprovados e fase avançada" }
+      ],
+      2: [
+        { title: "Solicitação da certidão", desc: "Orientação e início do pedido" },
+        { title: "Emissão / processamento", desc: "Aguardar o processamento do órgão" },
+        { title: "Upload do documento emitido", desc: "Enviar a certidão emitida" }
+      ],
+      3: [
+        { title: "Agendamento do trâmite", desc: "Definir data/horário do procedimento" },
+        { title: "Retirada presencial do documento", desc: "Comparecer para retirada conforme orientação" },
+        { title: "Upload do documento obtido", desc: "Enviar o documento obtido para validação" }
+      ],
+      4: [
+        { title: "Cadastro RADEX", desc: "Preenchimento e submissão do cadastro" },
+        { title: "Validação RADEX", desc: "Aguardar validação/retorno do sistema" }
+      ],
+      5: [
+        { title: "Geração das taxas", desc: "Emitir / preparar pagamentos" },
+        { title: "Pagamento", desc: "Realizar pagamento e guardar comprovantes" },
+        { title: "Upload do comprovante", desc: "Enviar comprovante para conferência" }
+      ],
+      6: [
+        { title: "Agendamento da cita", desc: "Definir data e local" },
+        { title: "Preparação de documentos", desc: "Checklist final antes de comparecer" },
+        { title: "Comparecimento", desc: "Realizar a cita conforme agendado" }
+      ],
+      7: [
+        { title: "DNI emitido", desc: "Documento final emitido" }
+      ]
+    };
 
-  const { data, error } = await sb
-    .from("dni_process")
-    .upsert({ user_id:userId, current_phase:phaseId }, { onConflict:"user_id" })
-    .select("user_id,current_phase,updated_at")
-    .single();
+    /* ============================================================
+       UI helpers
+    ============================================================ */
+    const loadingEl = document.getElementById("loading");
+    const loadingText = document.getElementById("loadingText");
+    const noticeBox = document.getElementById("noticeBox");
 
-  if(error){
-    showNotice("err","Não consegui atualizar a fase (RLS/policy em dni_process?).");
-    setLoading(false);
-    return;
-  }
+    function setLoading(show, text){
+      if(text) loadingText.textContent = text;
+      loadingEl.classList.toggle("hidden", !show);
+    }
 
-  processMap.set(userId, data);
-  currentPhaseInModal=phaseId;
+    function showNotice(type, msg){
+      noticeBox.className = "notice show " + (type === "ok" ? "ok" : "err");
+      noticeBox.textContent = msg;
+    }
+    function hideNotice(){
+      noticeBox.className = "notice";
+      noticeBox.textContent = "";
+    }
 
-  renderStats();
-  renderClients(document.getElementById("searchInput").value||"");
+    function fmtDate(dt){
+      if(!dt) return "-";
+      try{ return new Date(dt).toLocaleString("pt-BR"); }catch{ return "-"; }
+    }
 
-  document.getElementById("detailPhase").textContent=`Fase ${phaseId}`;
-  renderPhases(userId, phaseId);
+    function initialsFrom(s){
+      s = (s || "AD").trim();
+      const p = s.split(" ").filter(Boolean);
+      if(p.length >= 2) return (p[0][0] + p[1][0]).toUpperCase();
+      return s.slice(0,2).toUpperCase();
+    }
 
-  // IMPORTANTe: ao mudar a fase, mostra os passos fixos daquela fase
-  await loadStepsForPhase(userId, phaseId);
+    /* Stars */
+    const starsContainer = document.querySelector(".stars");
+    for(let i=0;i<100;i++){
+      const st=document.createElement("div");
+      st.className="star";
+      st.style.left=Math.random()*100+"%";
+      st.style.top=Math.random()*100+"%";
+      st.style.animationDelay=Math.random()*3+"s";
+      starsContainer.appendChild(st);
+    }
 
-  showNotice("ok",`Fase atualizada para Fase ${phaseId}.`);
-  setLoading(false);
-}
+    /* ============================================================
+       Supabase client
+    ============================================================ */
+    let sb = null;
 
-/* ============================================================
-   PASSOS FIXOS (core)
-   - Admin vê os passos do dashboard (imutáveis)
-   - Admin clica e define o passo atual
-============================================================ */
-function getFixedStepsForPhase(phaseId){
-  const steps = STEP_DEFS_BY_PHASE[phaseId] || [];
-  // garante no máximo 3 e mínimo 1 se você quiser obrigar
-  return steps.slice(0,3);
-}
+    /* ============================================================
+       Phases (labels)
+    ============================================================ */
+    const phases = [
+      { id:1, name:"Documentação inicial", desc:"RG e foto" },
+      { id:2, name:"Antecedentes criminais", desc:"Emissão de certidão" },
+      { id:3, name:"Domicílio", desc:"Comprovante de endereço" },
+      { id:4, name:"Cadastro RADEX", desc:"Sistema migratório" },
+      { id:5, name:"Pagamento de taxas", desc:"Boletos" },
+      { id:6, name:"Cita migratória", desc:"Agendamento" },
+      { id:7, name:"DNI emitido", desc:"Documento pronto" }
+    ];
 
-/**
- * Sincroniza o banco para ter EXATAMENTE os passos fixos daquela fase:
- * - cria/atualiza títulos/descrições
- * - remove passos extras (se algum código antigo criou a mais)
- */
-async function syncPhaseStepsToFixed(userId, phaseId){
-  const fixed = getFixedStepsForPhase(phaseId);
+    let adminUser=null, adminProfile=null;
+    let clientsRaw=[], filteredClients=[];
+    let processMap=new Map();         // user_id -> dni_process row
+    let docsMap=new Map();            // user_id -> documents[]
+    let currentClientId=null;
+    let currentPhaseInModal=1;
 
-  if(!fixed.length){
-    // sem definição => não quebra UI, só mostra aviso
-    return { fixedCount:0 };
-  }
+    /* ============================================================
+       Init
+    ============================================================ */
+    async function init(){
+      try{
+        setLoading(true,"Iniciando…");
 
-  // upsert para garantir títulos/descrições corretos (sem mexer em is_completed)
-  const payload = fixed.map((s, idx)=>({
-    user_id:userId,
-    phase_number:phaseId,
-    step_number:idx+1,
-    step_title:s.title,
-    step_description:s.desc || null
-  }));
+        const { url, key } = resolveConfig();
+        if(!url || !key || !url.startsWith("http")){
+          setLoading(false);
+          showNotice("err","Config do Supabase não encontrada. Cole SUPABASE_URL e SUPABASE_ANON_KEY no admin.html (ou salve no localStorage).");
+          return;
+        }
 
-  const { error: upErr } = await sb
-    .from("phase_steps")
-    .upsert(payload, { onConflict:"user_id,phase_number,step_number" });
+        sb = supabase.createClient(url, key, {
+          auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true}
+        });
 
-  if(upErr) throw upErr;
+        setLoading(true,"Validando sessão…");
+        const { data: sessionData, error: sErr } = await sb.auth.getSession();
+        if(sErr){ throw sErr; }
+        if(!sessionData?.session){
+          window.location.href="login.html";
+          return;
+        }
 
-  // remove extras
-  const { error: delErr } = await sb
-    .from("phase_steps")
-    .delete()
-    .eq("user_id", userId)
-    .eq("phase_number", phaseId)
-    .gt("step_number", fixed.length);
+        const { data: userData, error: uErr } = await sb.auth.getUser();
+        if(uErr){ throw uErr; }
+        if(!userData?.user){
+          window.location.href="login.html";
+          return;
+        }
+        adminUser = userData.user;
 
-  if(delErr) throw delErr;
+        setLoading(true,"Carregando perfil admin…");
+        const { data: prof, error: pErr } = await sb
+          .from("profiles")
+          .select("id,email,full_name,role,created_at")
+          .eq("id", adminUser.id)
+          .single();
 
-  return { fixedCount: fixed.length };
-}
+        if(pErr){ throw pErr; }
+        adminProfile = prof;
 
-async function fetchPhaseSteps(userId, phaseId){
-  const { data, error } = await sb
-    .from("phase_steps")
-    .select("user_id,phase_number,step_number,step_title,step_description,is_completed,completed_at")
-    .eq("user_id", userId)
-    .eq("phase_number", phaseId)
-    .order("step_number",{ascending:true});
+        if(!adminProfile || adminProfile.role !== "admin"){
+          window.location.href="dashboard.html";
+          return;
+        }
 
-  if(error) throw error;
-  return data || [];
-}
+        const display = adminProfile.full_name || adminProfile.email || "Admin";
+        document.getElementById("adminName").textContent = display;
+        document.getElementById("adminAvatar").textContent = initialsFrom(display);
 
-function computeCurrentStep(steps){
-  const pending = steps.find(s=>!s.is_completed);
-  if(pending) return pending.step_number;
-  return steps.length ? steps.length+1 : 1; // se todos concluídos
-}
+        wireEvents();
 
-function stepBadgeFor(step, currentStep){
-  if(step.is_completed) return { cls:"done", txt:"✓ Concluído" };
-  if(step.step_number===currentStep) return { cls:"current", txt:"📍 Atual" };
-  return { cls:"pending", txt:"⏳ Pendente" };
-}
+        await loadAll();
 
-async function loadStepsForPhase(userId, phaseId){
-  try{
-    hideNotice();
-    setLoading(true,"Carregando passos…");
+        setLoading(false);
+      }catch(err){
+        console.error("init error:", err);
+        setLoading(false);
+        showNotice("err","Erro ao iniciar o admin. Abra o Console (F12) e veja a mensagem. Normalmente é config do Supabase ou RLS.");
+      }
+    }
 
-    const { fixedCount } = await syncPhaseStepsToFixed(userId, phaseId);
-    const steps = await fetchPhaseSteps(userId, phaseId);
+    function wireEvents(){
+      document.getElementById("logoutBtn").addEventListener("click", async ()=>{
+        try{
+          setLoading(true,"Saindo…");
+          await sb.auth.signOut();
+        }finally{
+          window.location.href="login.html";
+        }
+      });
 
-    const currentStep = computeCurrentStep(steps);
-    document.getElementById("detailStep").textContent =
-      (currentStep>steps.length && steps.length) ? "Fase concluída" : `Passo ${Math.min(currentStep, steps.length || 1)}`;
+      document.getElementById("refreshBtn").addEventListener("click", loadAll);
 
-    const subtitle = fixedCount
-      ? `Fase ${phaseId} • ${fixedCount} passo(s) fixo(s) • clique para definir o passo atual`
-      : `Fase ${phaseId} • (defina os passos no STEP_DEFS_BY_PHASE)`;
+      document.getElementById("searchInput").addEventListener("input",(e)=>{
+        renderClients(e.target.value || "");
+      });
 
-    document.getElementById("stepsSubtitle").textContent = subtitle;
+      document.getElementById("closeClientModal").addEventListener("click", closeClientModal);
+      document.getElementById("clientModal").addEventListener("click",(e)=>{
+        if(e.target.id === "clientModal") closeClientModal();
+      });
 
-    renderStepsList(userId, phaseId, steps, currentStep);
+      document.getElementById("markPhaseDoneBtn").addEventListener("click", markCurrentPhaseAsDone);
 
-    setLoading(false);
-  }catch(err){
-    console.error(err);
-    showNotice("err","Não consegui carregar os passos (RLS/policy em phase_steps?).");
-    setLoading(false);
-  }
-}
+      document.getElementById("saveNotesBtn").addEventListener("click", saveNotes);
+      document.getElementById("reloadNotesBtn").addEventListener("click", loadNotesForCurrentClient);
 
-function renderStepsList(userId, phaseId, steps, currentStep){
-  const list=document.getElementById("stepsList");
-  list.innerHTML="";
+      document.getElementById("sendMsgBtn").addEventListener("click", sendMessageToClient);
+    }
 
-  if(!steps.length){
-    const div=document.createElement("div");
-    div.className="step-item";
-    div.style.cursor="default";
-    div.innerHTML=`
-      <div class="step-left">
-        <div class="step-title">⚠️ Sem passos configurados</div>
-        <div class="step-desc">Edite o objeto STEP_DEFS_BY_PHASE no admin.html para copiar os passos do dashboard.</div>
-      </div>
-      <div class="step-badge pending">Ajustar</div>
-    `;
-    list.appendChild(div);
-    return;
-  }
+    /* ============================================================
+       Load all clients + processes + docs
+    ============================================================ */
+    async function loadAll(){
+      hideNotice();
+      setLoading(true,"Carregando clientes…");
 
-  steps.forEach(step=>{
-    const badge=stepBadgeFor(step, currentStep);
+      const { data: clients, error: cErr } = await sb
+        .from("profiles")
+        .select("id,email,full_name,role,created_at")
+        .eq("role","client")
+        .order("created_at",{ascending:false});
 
-    const div=document.createElement("div");
-    div.className="step-item";
-    div.innerHTML=`
-      <div class="step-left">
-        <div class="step-title">${step.step_number}. ${step.step_title || ("Passo "+step.step_number)}</div>
-        <div class="step-desc">${step.step_description || ""}</div>
-      </div>
-      <div class="step-badge ${badge.cls}">${badge.txt}</div>
-    `;
+      if(cErr){
+        setLoading(false);
+        showNotice("err","Erro ao carregar clientes (profiles). Verifique RLS/policies.");
+        return;
+      }
 
-    // ✅ clique simples como a fase: define passo atual
-    div.addEventListener("click", async ()=>{
-      await setCurrentStepForPhase(userId, phaseId, step.step_number);
-    });
+      clientsRaw = clients || [];
+      const ids = clientsRaw.map(c=>c.id);
 
-    list.appendChild(div);
-  });
+      processMap = new Map();
+      docsMap = new Map();
 
-  if(currentStep>steps.length && steps.length){
-    const done=document.createElement("div");
-    done.className="step-item";
-    done.innerHTML=`
-      <div class="step-left">
-        <div class="step-title">✅ Fase concluída</div>
-        <div class="step-desc">Todos os passos estão concluídos. Clique em um passo acima para reabrir a fase.</div>
-      </div>
-      <div class="step-badge done">OK</div>
-    `;
-    list.appendChild(done);
-  }
-}
+      if(ids.length){
+        setLoading(true,"Carregando fases…");
+        const { data: procs, error: pErr } = await sb
+          .from("dni_process")
+          .select("user_id,current_phase,updated_at,created_at")
+          .in("user_id", ids);
 
-async function setCurrentStepForPhase(userId, phaseId, stepNumber){
-  hideNotice();
-  setLoading(true,"Atualizando passo…");
+        if(!pErr && procs){
+          procs.forEach(p=>processMap.set(p.user_id, p));
+        }
 
-  try{
-    await syncPhaseStepsToFixed(userId, phaseId);
+        setLoading(true,"Carregando documentos…");
+        const { data: docs, error: dErr } = await sb
+          .from("documents")
+          .select("id,user_id,doc_type,status,storage_path,uploaded_at,approved_at,updated_at,created_at")
+          .in("user_id", ids);
 
-    const nowIso=new Date().toISOString();
+        if(!dErr && docs){
+          for(const doc of docs){
+            const arr = docsMap.get(doc.user_id) || [];
+            arr.push(doc);
+            docsMap.set(doc.user_id, arr);
+          }
+        }
+      }
 
-    // anteriores concluídos
-    const { error: errA } = await sb
-      .from("phase_steps")
-      .update({ is_completed:true, completed_at: nowIso })
-      .eq("user_id", userId)
-      .eq("phase_number", phaseId)
-      .lt("step_number", stepNumber);
-    if(errA) throw errA;
+      renderStats();
+      renderClients(document.getElementById("searchInput").value || "");
 
-    // atual e seguintes pendentes
-    const { error: errB } = await sb
-      .from("phase_steps")
-      .update({ is_completed:false, completed_at: null })
-      .eq("user_id", userId)
-      .eq("phase_number", phaseId)
-      .gte("step_number", stepNumber);
-    if(errB) throw errB;
-
-    await loadStepsForPhase(userId, phaseId);
-    showNotice("ok",`Passo atual definido: Passo ${stepNumber}.`);
-    setLoading(false);
-  }catch(err){
-    console.error(err);
-    showNotice("err","Falha ao atualizar passo (RLS/policy em phase_steps?).");
-    setLoading(false);
-  }
-}
-
-async function markCurrentPhaseAsDone(){
-  if(!currentClientId) return;
-  hideNotice();
-  setLoading(true,"Concluindo fase…");
-  try{
-    const phaseId=currentPhaseInModal;
-    await syncPhaseStepsToFixed(currentClientId, phaseId);
-
-    const nowIso=new Date().toISOString();
-    const { error } = await sb
-      .from("phase_steps")
-      .update({ is_completed:true, completed_at: nowIso })
-      .eq("user_id", currentClientId)
-      .eq("phase_number", phaseId);
-
-    if(error) throw error;
-
-    await loadStepsForPhase(currentClientId, phaseId);
-    showNotice("ok","Fase marcada como concluída (todos os passos concluídos).");
-    setLoading(false);
-  }catch(err){
-    console.error(err);
-    showNotice("err","Não consegui concluir a fase (RLS/policy em phase_steps?).");
-    setLoading(false);
-  }
-}
-
-/* ============================================================
-   NOTAS (admin_notes)
-============================================================ */
-async function loadNotesForCurrentClient(){
-  if(!currentClientId) return;
-  const { data, error } = await sb
-    .from("admin_notes")
-    .select("user_id,notes,updated_at")
-    .eq("user_id", currentClientId)
-    .single();
-  if(!error && data) document.getElementById("clientNotes").value = data.notes || "";
-
-  // salvar (wire simples)
-  const saveBtn = document.getElementById("saveNotesBtn");
-  const reloadBtn = document.getElementById("reloadNotesBtn");
-  if(!saveBtn.dataset.bound){
-    saveBtn.dataset.bound="1";
-    saveBtn.addEventListener("click", async ()=>{
-      if(!currentClientId) return;
-      hideNotice(); setLoading(true,"Salvando notas…");
-      const notes=document.getElementById("clientNotes").value||"";
-      const { error: uErr } = await sb
-        .from("admin_notes")
-        .upsert({ user_id: currentClientId, notes }, { onConflict:"user_id" });
-      if(uErr){ showNotice("err","Falha ao salvar notas (RLS/policy em admin_notes?)."); setLoading(false); return; }
-      showNotice("ok","Notas salvas!");
       setLoading(false);
-    });
-  }
-  if(!reloadBtn.dataset.bound){
-    reloadBtn.dataset.bound="1";
-    reloadBtn.addEventListener("click", async ()=>{
+    }
+
+    function renderStats(){
+      const total = clientsRaw.length;
+      let completed=0, active=0;
+      const now=Date.now(), sevenMs=7*24*60*60*1000;
+      let new7=0;
+
+      for(const c of clientsRaw){
+        const phase = (processMap.get(c.id)?.current_phase) || 1;
+        if(phase >= 7) completed++; else active++;
+
+        const created = c.created_at ? new Date(c.created_at).getTime() : null;
+        if(created && (now - created) <= sevenMs) new7++;
+      }
+
+      document.getElementById("totalClients").textContent = total;
+      document.getElementById("activeClients").textContent = active;
+      document.getElementById("completedClients").textContent = completed;
+      document.getElementById("newClients").textContent = new7;
+    }
+
+    function phaseLabel(phase){
+      if(phase >= 7) return { txt:"Concluído", cls:"completed" };
+      return { txt:`Fase ${phase}`, cls:"fase" };
+    }
+
+    function docsCountFor(userId){
+      const docs = docsMap.get(userId) || [];
+      const uploadedOrApproved = docs.filter(d => d.status !== "pending").length;
+      const approved = docs.filter(d => d.status === "approved").length;
+      return { uploadedOrApproved, approved, total: docs.length || 4 };
+    }
+
+    function renderClients(filter){
+      const list = document.getElementById("clientsList");
+      list.innerHTML = "";
+      const q = (filter || "").trim().toLowerCase();
+
+      filteredClients = clientsRaw.filter(c=>{
+        const name=(c.full_name||"").toLowerCase();
+        const email=(c.email||"").toLowerCase();
+        return !q || name.includes(q) || email.includes(q);
+      });
+
+      document.getElementById("emptyState").style.display = filteredClients.length ? "none" : "block";
+
+      for(const c of filteredClients){
+        const phase = (processMap.get(c.id)?.current_phase) || 1;
+        const info = phaseLabel(phase);
+        const statusText = phase >= 7 ? "Concluído" : "Em andamento";
+        const docCount = docsCountFor(c.id);
+        const docText = `${docCount.uploadedOrApproved}/${docCount.total}`;
+        const docClass = (docCount.approved === docCount.total && docCount.total > 0) ? "complete" : "";
+
+        const row = document.createElement("div");
+        row.className = "client-row";
+        row.addEventListener("click", ()=>openClientModal(c.id));
+
+        row.innerHTML = `
+          <div>
+            <div class="client-name">${c.full_name || "(Sem nome)"}</div>
+            <div class="client-email">${c.email || "-"}</div>
+          </div>
+          <div>
+            <div class="small">${c.email || "-"}</div>
+            <div class="client-email">${fmtDate(c.created_at)}</div>
+          </div>
+          <div class="hide-md"><span class="status-badge ${phase>=7?"completed":"fase"}">${statusText}</span></div>
+          <div class="hide-xl"><span class="docs-count ${docClass}">${docText}</span></div>
+          <div class="hide-md"><span class="status-badge ${info.cls}">${info.txt}</span></div>
+          <div><button class="action-btn" type="button">Ver</button></div>
+        `;
+
+        row.querySelector("button").addEventListener("click",(e)=>{
+          e.stopPropagation();
+          openClientModal(c.id);
+        });
+
+        list.appendChild(row);
+      }
+    }
+
+    /* ============================================================
+       Modal open/close
+    ============================================================ */
+    async function openClientModal(userId){
+      try{
+        currentClientId = userId;
+        const client = clientsRaw.find(c=>c.id===userId);
+        if(!client) return;
+
+        const phase = (processMap.get(userId)?.current_phase) || 1;
+        currentPhaseInModal = phase;
+
+        document.getElementById("clientTitle").textContent = client.full_name || "Detalhes do Cliente";
+        document.getElementById("clientSubtitle").textContent = client.email || "";
+        document.getElementById("dName").textContent = client.full_name || "-";
+        document.getElementById("dEmail").textContent = client.email || "-";
+        document.getElementById("dId").textContent = client.id;
+        document.getElementById("dCreated").textContent = fmtDate(client.created_at);
+        document.getElementById("dPhase").textContent = `Fase ${phase}`;
+        document.getElementById("dStep").textContent = "—";
+
+        renderPhases(userId, phase);
+        await loadStepsForPhase(userId, phase);     // ✅ passos fixos clicáveis
+        await loadDocumentsForClient(userId);       // docs
+        await loadNotesForCurrentClient();          // notas
+        await loadMessagesForCurrentClient();       // mensagens
+
+        document.getElementById("msgTitle").value = "";
+        document.getElementById("msgBody").value = "";
+        document.getElementById("msgType").value = "info";
+
+        document.getElementById("clientModal").classList.add("active");
+      }catch(err){
+        console.error("openClientModal error:", err);
+        showNotice("err","Erro ao abrir cliente. Veja o console (F12).");
+      }
+    }
+
+    function closeClientModal(){
+      document.getElementById("clientModal").classList.remove("active");
+      currentClientId = null;
+      currentPhaseInModal = 1;
+    }
+
+    function renderPhases(userId, currentPhase){
+      const container = document.getElementById("phasesList");
+      container.innerHTML = "";
+
+      for(const ph of phases){
+        const isActive = (ph.id === currentPhase);
+        const isDone = (ph.id < currentPhase);
+
+        const div = document.createElement("div");
+        div.className = `phase-item ${isDone ? "completed" : (isActive ? "active" : "")}`;
+
+        div.innerHTML = `
+          <div style="flex:1;">
+            <div class="phase-name">${ph.id}. ${ph.name}</div>
+            <div class="phase-desc">${ph.desc}</div>
+          </div>
+          <div class="phase-actions">
+            ${isDone ? `<button class="btn-small success" type="button" disabled>✓ Concluída</button>` : ``}
+            ${isActive ? `<button class="btn-small" type="button" disabled>Atual</button>` : `<button class="btn-small" type="button">Definir como atual</button>`}
+          </div>
+        `;
+
+        const btn = div.querySelector(".phase-actions button:not([disabled])");
+        if(btn){
+          btn.addEventListener("click", async ()=>{
+            await setClientPhase(userId, ph.id);
+          });
+        }
+
+        container.appendChild(div);
+      }
+    }
+
+    async function setClientPhase(userId, phaseId){
+      hideNotice();
+      setLoading(true,"Atualizando fase…");
+
+      const { data, error } = await sb
+        .from("dni_process")
+        .upsert({ user_id:userId, current_phase:phaseId }, { onConflict:"user_id" })
+        .select("user_id,current_phase,updated_at")
+        .single();
+
+      if(error){
+        setLoading(false);
+        showNotice("err","Não consegui atualizar a fase. Verifique RLS/policy em dni_process.");
+        return;
+      }
+
+      processMap.set(userId, data);
+      currentPhaseInModal = phaseId;
+
+      document.getElementById("dPhase").textContent = `Fase ${phaseId}`;
+      renderPhases(userId, phaseId);
+
+      renderStats();
+      renderClients(document.getElementById("searchInput").value || "");
+
+      // ✅ ao trocar fase, recarrega passos fixos da fase nova
+      await loadStepsForPhase(userId, phaseId);
+
+      setLoading(false);
+      showNotice("ok",`Fase atualizada para Fase ${phaseId}.`);
+    }
+
+    /* ============================================================
+       PASSOS FIXOS (imutáveis) + clique para definir passo atual
+       - Banco usado: phase_steps
+       - Regra: passos são os do STEP_DEFS_BY_PHASE[phase]
+    ============================================================ */
+    function getFixedStepsForPhase(phaseId){
+      const defs = STEP_DEFS_BY_PHASE[phaseId] || [];
+      return defs.slice(0, 3); // 1..3 passos
+    }
+
+    async function syncFixedStepsForUserPhase(userId, phaseId){
+      const fixed = getFixedStepsForPhase(phaseId);
+
+      // Se não tiver defs, não trava a tela.
+      if(!fixed.length) return { fixedCount:0 };
+
+      // upsert garante que esses passos existam (sem "criar passo novo" manualmente)
+      const payload = fixed.map((s, idx)=>({
+        user_id: userId,
+        phase_number: phaseId,
+        step_number: idx+1,
+        step_title: s.title,
+        step_description: s.desc || null
+      }));
+
+      const { error: upErr } = await sb
+        .from("phase_steps")
+        .upsert(payload, { onConflict:"user_id,phase_number,step_number" });
+
+      if(upErr) throw upErr;
+
+      // remove passos extras (se algum código antigo criou a mais)
+      const { error: delErr } = await sb
+        .from("phase_steps")
+        .delete()
+        .eq("user_id", userId)
+        .eq("phase_number", phaseId)
+        .gt("step_number", fixed.length);
+
+      if(delErr) throw delErr;
+
+      return { fixedCount: fixed.length };
+    }
+
+    async function fetchPhaseSteps(userId, phaseId){
+      const { data, error } = await sb
+        .from("phase_steps")
+        .select("user_id,phase_number,step_number,step_title,step_description,is_completed,completed_at,updated_at")
+        .eq("user_id", userId)
+        .eq("phase_number", phaseId)
+        .order("step_number", { ascending:true });
+
+      if(error) throw error;
+      return data || [];
+    }
+
+    function computeCurrentStep(steps){
+      const pending = steps.find(s => !s.is_completed);
+      if(pending) return pending.step_number;
+      return steps.length ? steps.length + 1 : 1; // se todos completos
+    }
+
+    function stepBadgeFor(step, currentStep){
+      if(step.is_completed) return { cls:"done", txt:"✓ Concluído" };
+      if(step.step_number === currentStep) return { cls:"current", txt:"📍 Atual" };
+      return { cls:"pending", txt:"⏳ Pendente" };
+    }
+
+    async function loadStepsForPhase(userId, phaseId){
+      try{
+        setLoading(true,"Carregando passos…");
+
+        const { fixedCount } = await syncFixedStepsForUserPhase(userId, phaseId);
+        const steps = await fetchPhaseSteps(userId, phaseId);
+
+        const currentStep = computeCurrentStep(steps);
+
+        document.getElementById("dStep").textContent =
+          (currentStep > steps.length && steps.length)
+            ? "Fase concluída"
+            : `Passo ${Math.min(currentStep, steps.length || 1)}`;
+
+        document.getElementById("stepsSubtitle").textContent =
+          fixedCount
+            ? `Fase ${phaseId} • ${fixedCount} passo(s) • clique para definir o passo atual`
+            : `Fase ${phaseId} • (defina os passos no STEP_DEFS_BY_PHASE)`;
+
+        renderStepsList(userId, phaseId, steps, currentStep);
+
+        setLoading(false);
+      }catch(err){
+        console.error("loadStepsForPhase error:", err);
+        setLoading(false);
+        showNotice("err","Não consegui carregar passos. Verifique RLS/policy em phase_steps.");
+      }
+    }
+
+    function renderStepsList(userId, phaseId, steps, currentStep){
+      const list = document.getElementById("stepsList");
+      list.innerHTML = "";
+
+      if(!steps.length){
+        const div = document.createElement("div");
+        div.className = "step-item";
+        div.style.cursor = "default";
+        div.innerHTML = `
+          <div class="step-left">
+            <div class="step-title">⚠️ Sem passos configurados</div>
+            <div class="step-desc">Preencha STEP_DEFS_BY_PHASE para esta fase.</div>
+          </div>
+          <div class="step-badge pending">Ajustar</div>
+        `;
+        list.appendChild(div);
+        return;
+      }
+
+      for(const step of steps){
+        const badge = stepBadgeFor(step, currentStep);
+
+        const div = document.createElement("div");
+        div.className = "step-item";
+        div.innerHTML = `
+          <div class="step-left">
+            <div class="step-title">${step.step_number}. ${step.step_title || ("Passo "+step.step_number)}</div>
+            <div class="step-desc">${step.step_description || ""}</div>
+          </div>
+          <div class="step-badge ${badge.cls}">${badge.txt}</div>
+        `;
+
+        // ✅ clique simples (igual fase): define passo atual
+        div.addEventListener("click", async ()=>{
+          await setCurrentStepForPhase(userId, phaseId, step.step_number);
+        });
+
+        list.appendChild(div);
+      }
+    }
+
+    async function setCurrentStepForPhase(userId, phaseId, stepNumber){
+      hideNotice();
+      setLoading(true,"Atualizando passo…");
+
+      try{
+        await syncFixedStepsForUserPhase(userId, phaseId);
+
+        const nowIso = new Date().toISOString();
+
+        // anteriores concluídos
+        const { error: errA } = await sb
+          .from("phase_steps")
+          .update({ is_completed:true, completed_at: nowIso })
+          .eq("user_id", userId)
+          .eq("phase_number", phaseId)
+          .lt("step_number", stepNumber);
+        if(errA) throw errA;
+
+        // atual e seguintes pendentes
+        const { error: errB } = await sb
+          .from("phase_steps")
+          .update({ is_completed:false, completed_at: null })
+          .eq("user_id", userId)
+          .eq("phase_number", phaseId)
+          .gte("step_number", stepNumber);
+        if(errB) throw errB;
+
+        await loadStepsForPhase(userId, phaseId);
+
+        setLoading(false);
+        showNotice("ok",`Passo atual definido: Passo ${stepNumber}.`);
+      }catch(err){
+        console.error("setCurrentStepForPhase error:", err);
+        setLoading(false);
+        showNotice("err","Falha ao atualizar passo. Verifique RLS/policy em phase_steps.");
+      }
+    }
+
+    async function markCurrentPhaseAsDone(){
       if(!currentClientId) return;
-      document.getElementById("clientNotes").value="";
-      await loadNotesForCurrentClient();
-      showNotice("ok","Notas recarregadas.");
-    });
-  }
-}
+      hideNotice();
+      setLoading(true,"Concluindo fase…");
 
-/* ============================================================
-   MENSAGENS (client_messages)
-============================================================ */
-function typeLabelPt(type){
-  if(type==="update") return "Atualização";
-  if(type==="warning") return "Atenção";
-  if(type==="success") return "Sucesso";
-  return "Informação";
-}
-function typeBadgeClass(type){
-  if(type==="update") return "update";
-  if(type==="warning") return "warning";
-  if(type==="success") return "success";
-  return "info";
-}
+      try{
+        const phaseId = currentPhaseInModal;
+        await syncFixedStepsForUserPhase(currentClientId, phaseId);
 
-async function loadMessagesForCurrentClient(){
-  if(!currentClientId) return;
-  const box=document.getElementById("messagesList");
-  box.innerHTML="";
+        const nowIso = new Date().toISOString();
+        const { error } = await sb
+          .from("phase_steps")
+          .update({ is_completed:true, completed_at: nowIso })
+          .eq("user_id", currentClientId)
+          .eq("phase_number", phaseId);
+        if(error) throw error;
 
-  const { data, error } = await sb
-    .from("client_messages")
-    .select("id,user_id,title,message,message_type,is_read,created_at")
-    .eq("user_id", currentClientId)
-    .order("created_at", { ascending:false })
-    .limit(10);
+        await loadStepsForPhase(currentClientId, phaseId);
 
-  if(error){
-    box.innerHTML = `<div class="small" style="color:rgba(255,255,255,.65);font-weight:800;">Não consegui carregar mensagens (verifique client_messages e RLS).</div>`;
-    return;
-  }
-  if(!data || !data.length){
-    box.innerHTML = `<div class="small" style="color:rgba(255,255,255,.65);font-weight:800;">Nenhuma mensagem enviada ainda.</div>`;
-    return;
-  }
+        setLoading(false);
+        showNotice("ok","Fase marcada como concluída (todos os passos concluídos).");
+      }catch(err){
+        console.error("markCurrentPhaseAsDone error:", err);
+        setLoading(false);
+        showNotice("err","Não consegui concluir a fase. Verifique RLS/policy em phase_steps.");
+      }
+    }
 
-  data.forEach(m=>{
-    const div=document.createElement("div");
-    div.className="msg-item";
-    div.innerHTML=`
-      <div class="msg-top">
-        <div>
-          <div class="msg-title">${m.title || "(Sem título)"}</div>
-          <div class="msg-meta">${fmtDate(m.created_at)} • ${typeLabelPt(m.message_type||"info")}</div>
-        </div>
-        <div class="msg-badges">
-          <span class="msg-badge ${typeBadgeClass(m.message_type||"info")}">${typeLabelPt(m.message_type||"info")}</span>
-          ${m.is_read ? "" : `<span class="msg-badge unread">Não lida</span>`}
-        </div>
-      </div>
-      <div class="msg-body">${(m.message||"").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
-      <div class="msg-actions">
-        <button class="btn-small danger" type="button">Apagar</button>
-      </div>
-    `;
-    div.querySelector("button").addEventListener("click", async ()=>{
-      const ok=confirm("Apagar esta mensagem? (o cliente não verá mais)");
+    /* ============================================================
+       DOCUMENTOS (documents + storage)
+    ============================================================ */
+    function docMeta(docType){
+      const map = {
+        rg: { title:"RG", icon:"🪪" },
+        antecedentes: { title:"Antecedentes", icon:"🧾" },
+        foto: { title:"Foto 3x4", icon:"📸" },
+        outros: { title:"Outros", icon:"📎" }
+      };
+      return map[docType] || { title:docType, icon:"📄" };
+    }
+
+    function docStatusLabel(status){
+      const labels = {
+        pending: "Pendente",
+        uploaded: "Enviado",
+        approved: "Aprovado",
+        rejected: "Rejeitado"
+      };
+      return labels[status] || status;
+    }
+
+    async function loadDocumentsForClient(userId){
+      const grid = document.getElementById("docsGrid");
+      grid.innerHTML = "";
+
+      const docs = (docsMap.get(userId) || []).slice().sort((a,b)=>(a.doc_type||"").localeCompare(b.doc_type||""));
+
+      if(!docs.length){
+        grid.innerHTML = `<div class="small" style="color:rgba(255,255,255,.7);font-weight:850;">Nenhum registro de documento encontrado.</div>`;
+        return;
+      }
+
+      for(const doc of docs){
+        const meta = docMeta(doc.doc_type);
+        const card = document.createElement("div");
+        card.className = `doc-card ${doc.status || "pending"}`;
+
+        const uploadedAt = doc.uploaded_at ? fmtDate(doc.uploaded_at) : "-";
+        const updatedAt = doc.updated_at ? fmtDate(doc.updated_at) : "-";
+
+        card.innerHTML = `
+          <div class="doc-header">
+            <div class="doc-icon">${meta.icon}</div>
+            <span class="doc-status ${doc.status}">${docStatusLabel(doc.status)}</span>
+          </div>
+          <div class="doc-title">${meta.title}</div>
+          <div class="doc-info">
+            Upload: <b>${uploadedAt}</b><br/>
+            Atualizado: <b>${updatedAt}</b>
+          </div>
+          <div class="doc-actions" id="actions-${doc.id}"></div>
+        `;
+
+        const actions = card.querySelector(`#actions-${doc.id}`);
+
+        const btnView = document.createElement("button");
+        btnView.className = "btn-small";
+        btnView.type = "button";
+        btnView.textContent = "Visualizar";
+        btnView.disabled = !doc.storage_path;
+        btnView.addEventListener("click", async (e)=>{
+          e.stopPropagation();
+          if(!doc.storage_path) return;
+          setLoading(true,"Gerando link…");
+          try{
+            const { data, error } = await sb.storage.from("documents").createSignedUrl(doc.storage_path, 60);
+            if(error) throw error;
+            window.open(data.signedUrl, "_blank");
+          }catch(err){
+            console.error(err);
+            showNotice("err","Não consegui gerar link. Verifique Storage policies.");
+          }finally{
+            setLoading(false);
+          }
+        });
+
+        const btnApprove = document.createElement("button");
+        btnApprove.className = "btn-small success";
+        btnApprove.type = "button";
+        btnApprove.textContent = "Aprovar";
+        btnApprove.disabled = !doc.storage_path;
+        btnApprove.addEventListener("click", async (e)=>{
+          e.stopPropagation();
+          await setDocStatus(doc, "approved");
+        });
+
+        const btnReject = document.createElement("button");
+        btnReject.className = "btn-small danger";
+        btnReject.type = "button";
+        btnReject.textContent = "Rejeitar";
+        btnReject.disabled = !doc.storage_path;
+        btnReject.addEventListener("click", async (e)=>{
+          e.stopPropagation();
+          await setDocStatus(doc, "rejected");
+        });
+
+        const btnRemove = document.createElement("button");
+        btnRemove.className = "btn-small";
+        btnRemove.type = "button";
+        btnRemove.textContent = "Remover";
+        btnRemove.disabled = !doc.storage_path;
+        btnRemove.addEventListener("click", async (e)=>{
+          e.stopPropagation();
+          await removeDocumentFile(doc);
+        });
+
+        actions.appendChild(btnView);
+        actions.appendChild(btnApprove);
+        actions.appendChild(btnReject);
+        actions.appendChild(btnRemove);
+
+        grid.appendChild(card);
+      }
+    }
+
+    async function setDocStatus(doc, status){
+      if(!currentClientId) return;
+      hideNotice();
+      setLoading(true,"Atualizando documento…");
+
+      try{
+        const payload = {
+          status,
+          approved_at: (status === "approved") ? new Date().toISOString() : null
+        };
+
+        const { data, error } = await sb
+          .from("documents")
+          .update(payload)
+          .eq("id", doc.id)
+          .select("id,user_id,doc_type,status,storage_path,uploaded_at,approved_at,updated_at,created_at")
+          .single();
+
+        if(error) throw error;
+
+        // atualiza cache
+        const arr = docsMap.get(doc.user_id) || [];
+        const idx = arr.findIndex(d=>d.id===doc.id);
+        if(idx >= 0) arr[idx] = data;
+        docsMap.set(doc.user_id, arr);
+
+        await loadDocumentsForClient(currentClientId);
+        renderClients(document.getElementById("searchInput").value || "");
+        showNotice("ok",`Documento marcado como ${docStatusLabel(status)}.`);
+      }catch(err){
+        console.error(err);
+        showNotice("err","Falha ao atualizar status do documento. Verifique RLS/policy em documents.");
+      }finally{
+        setLoading(false);
+      }
+    }
+
+    async function removeDocumentFile(doc){
+      if(!doc.storage_path) return;
+      const ok = confirm("Remover o arquivo do Storage e resetar o documento para pendente?");
       if(!ok) return;
-      hideNotice(); setLoading(true,"Apagando mensagem…");
-      const { error: dErr } = await sb.from("client_messages").delete().eq("id", m.id);
-      if(dErr){ showNotice("err","Não consegui apagar (RLS/policy em client_messages?)."); setLoading(false); return; }
-      await loadMessagesForCurrentClient();
-      showNotice("ok","Mensagem apagada.");
-      setLoading(false);
-    });
-    box.appendChild(div);
-  });
-}
 
-async function sendMessageToClient(){
-  if(!currentClientId) return;
+      hideNotice();
+      setLoading(true,"Removendo arquivo…");
+      try{
+        // remove do storage
+        const { error: rErr } = await sb.storage.from("documents").remove([doc.storage_path]);
+        if(rErr) throw rErr;
 
-  const title=(document.getElementById("msgTitle").value||"").trim();
-  const message=(document.getElementById("msgBody").value||"").trim();
-  const type=document.getElementById("msgType").value||"info";
+        // reseta no banco
+        const { data, error: uErr } = await sb
+          .from("documents")
+          .update({ storage_path:null, status:"pending", uploaded_at:null, approved_at:null })
+          .eq("id", doc.id)
+          .select("id,user_id,doc_type,status,storage_path,uploaded_at,approved_at,updated_at,created_at")
+          .single();
+        if(uErr) throw uErr;
 
-  if(!title || !message){ showNotice("err","Preencha Título e Mensagem."); return; }
+        const arr = docsMap.get(doc.user_id) || [];
+        const idx = arr.findIndex(d=>d.id===doc.id);
+        if(idx >= 0) arr[idx] = data;
+        docsMap.set(doc.user_id, arr);
 
-  hideNotice(); setLoading(true,"Enviando mensagem…");
-  const { error } = await sb
-    .from("client_messages")
-    .insert({ user_id: currentClientId, title, message, message_type: type, is_read:false });
+        await loadDocumentsForClient(currentClientId);
+        renderClients(document.getElementById("searchInput").value || "");
+        showNotice("ok","Arquivo removido e documento resetado.");
+      }catch(err){
+        console.error(err);
+        showNotice("err","Não consegui remover. Verifique Storage policies e RLS.");
+      }finally{
+        setLoading(false);
+      }
+    }
 
-  if(error){ console.error(error); showNotice("err","Não consegui enviar (RLS/policy em client_messages?)."); setLoading(false); return; }
+    /* ============================================================
+       NOTAS (admin_notes)
+    ============================================================ */
+    async function loadNotesForCurrentClient(){
+      if(!currentClientId) return;
 
-  document.getElementById("msgTitle").value="";
-  document.getElementById("msgBody").value="";
-  document.getElementById("msgType").value="info";
+      try{
+        const { data, error } = await sb
+          .from("admin_notes")
+          .select("user_id,notes,updated_at")
+          .eq("user_id", currentClientId)
+          .single();
 
-  await loadMessagesForCurrentClient();
-  showNotice("ok","Mensagem enviada para o cliente.");
-  setLoading(false);
-}
+        if(!error && data){
+          document.getElementById("notesArea").value = data.notes || "";
+        }else{
+          document.getElementById("notesArea").value = "";
+        }
+      }catch(err){
+        console.error(err);
+      }
+    }
 
-init();
-</script>
+    async function saveNotes(){
+      if(!currentClientId) return;
+
+      hideNotice();
+      setLoading(true,"Salvando notas…");
+
+      try{
+        const notes = document.getElementById("notesArea").value || "";
+        const { error } = await sb
+          .from("admin_notes")
+          .upsert({ user_id: currentClientId, notes }, { onConflict:"user_id" });
+
+        if(error) throw error;
+
+        showNotice("ok","Notas salvas!");
+      }catch(err){
+        console.error(err);
+        showNotice("err","Falha ao salvar notas. Verifique RLS/policy em admin_notes.");
+      }finally{
+        setLoading(false);
+      }
+    }
+
+    /* ============================================================
+       MENSAGENS (client_messages)
+    ============================================================ */
+    function typeLabelPt(type){
+      if(type==="update") return "Atualização";
+      if(type==="warning") return "Atenção";
+      if(type==="success") return "Sucesso";
+      return "Informação";
+    }
+    function typeBadgeClass(type){
+      if(type==="update") return "update";
+      if(type==="warning") return "warning";
+      if(type==="success") return "success";
+      return "info";
+    }
+
+    async function loadMessagesForCurrentClient(){
+      if(!currentClientId) return;
+      const box = document.getElementById("messagesList");
+      box.innerHTML = "";
+
+      try{
+        const { data, error } = await sb
+          .from("client_messages")
+          .select("id,user_id,title,message,message_type,is_read,created_at")
+          .eq("user_id", currentClientId)
+          .order("created_at", { ascending:false })
+          .limit(10);
+
+        if(error) throw error;
+
+        if(!data || !data.length){
+          box.innerHTML = `<div class="small" style="color:rgba(255,255,255,.7);font-weight:850;">Nenhuma mensagem enviada ainda.</div>`;
+          return;
+        }
+
+        for(const m of data){
+          const div = document.createElement("div");
+          div.className = "msg-item";
+          div.innerHTML = `
+            <div class="msg-top">
+              <div>
+                <div class="msg-title">${m.title || "(Sem título)"}</div>
+                <div class="msg-meta">${fmtDate(m.created_at)} • ${typeLabelPt(m.message_type||"info")}</div>
+              </div>
+              <div class="msg-badges">
+                <span class="msg-badge ${typeBadgeClass(m.message_type||"info")}">${typeLabelPt(m.message_type||"info")}</span>
+                ${m.is_read ? "" : `<span class="msg-badge unread">Não lida</span>`}
+              </div>
+            </div>
+            <div class="msg-body">${escapeHtml(m.message||"")}</div>
+            <div class="msg-actions">
+              <button class="btn-small danger" type="button">Apagar</button>
+            </div>
+          `;
+
+          div.querySelector("button").addEventListener("click", async ()=>{
+            const ok = confirm("Apagar esta mensagem? (o cliente não verá mais)");
+            if(!ok) return;
+
+            hideNotice();
+            setLoading(true,"Apagando mensagem…");
+            try{
+              const { error: dErr } = await sb.from("client_messages").delete().eq("id", m.id);
+              if(dErr) throw dErr;
+              await loadMessagesForCurrentClient();
+              showNotice("ok","Mensagem apagada.");
+            }catch(err){
+              console.error(err);
+              showNotice("err","Não consegui apagar. Verifique RLS/policy em client_messages.");
+            }finally{
+              setLoading(false);
+            }
+          });
+
+          box.appendChild(div);
+        }
+      }catch(err){
+        console.error(err);
+        box.innerHTML = `<div class="small" style="color:rgba(255,255,255,.7);font-weight:850;">Não consegui carregar mensagens. Verifique RLS/policy.</div>`;
+      }
+    }
+
+    async function sendMessageToClient(){
+      if(!currentClientId) return;
+
+      const title = (document.getElementById("msgTitle").value || "").trim();
+      const message = (document.getElementById("msgBody").value || "").trim();
+      const type = document.getElementById("msgType").value || "info";
+
+      if(!title || !message){
+        showNotice("err","Preencha Título e Mensagem.");
+        return;
+      }
+
+      hideNotice();
+      setLoading(true,"Enviando mensagem…");
+
+      try{
+        const { error } = await sb
+          .from("client_messages")
+          .insert({ user_id: currentClientId, title, message, message_type: type, is_read:false });
+
+        if(error) throw error;
+
+        document.getElementById("msgTitle").value = "";
+        document.getElementById("msgBody").value = "";
+        document.getElementById("msgType").value = "info";
+
+        await loadMessagesForCurrentClient();
+        showNotice("ok","Mensagem enviada para o cliente.");
+      }catch(err){
+        console.error(err);
+        showNotice("err","Não consegui enviar. Verifique RLS/policy em client_messages.");
+      }finally{
+        setLoading(false);
+      }
+    }
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;");
+    }
+
+    /* ============================================================
+       Start
+    ============================================================ */
+    init();
+  </script>
 </body>
 </html>
