@@ -253,23 +253,18 @@ header {
 }
 .loading-text { color:rgba(255,255,255,.85); font-weight:950; font-size:14px; }
 
-/* Steps editor */
+/* Steps tracker */
 .steps-toolbar{
   display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
   margin-bottom:10px;
 }
-.steps-meta{
-  display:flex; flex-direction:column; gap:2px;
+.steps-meta{ display:flex; flex-direction:column; gap:2px; }
+.steps-title{ font-size:13px; font-weight:950; }
+.steps-sub{ font-size:12px; color:rgba(255,255,255,.55); font-weight:800; }
+.steps-controls{
+  display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:center;
 }
-.steps-title{
-  font-size:13px; font-weight:950;
-}
-.steps-sub{
-  font-size:12px; color:rgba(255,255,255,.55); font-weight:800;
-}
-.steps-list{
-  display:flex; flex-direction:column; gap:10px;
-}
+.steps-list{ display:flex; flex-direction:column; gap:10px; }
 .step-row{
   background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.1);
@@ -279,6 +274,9 @@ header {
 .step-top{
   display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap;
 }
+.step-title{ font-weight:950; font-size:13px; color:rgba(255,255,255,.92); margin-top:2px; }
+.step-desc{ font-size:12px; color:rgba(255,255,255,.55); font-weight:800; margin-top:6px; white-space:pre-wrap; }
+.step-badges{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:center; }
 .step-badge{
   display:inline-flex; align-items:center; gap:6px;
   padding:6px 10px; border-radius:999px; font-size:12px; font-weight:950;
@@ -295,9 +293,13 @@ header {
   background:rgba(245,158,11,.10);
   color:var(--warning);
 }
-.step-fields{
-  display:grid; grid-template-columns:1fr; gap:8px; margin-top:10px;
+.step-badge.current{
+  border-color:rgba(0,102,255,.45);
+  background:rgba(0,102,255,.16);
+  color:#9ec2ff;
 }
+
+/* Inputs */
 .input{
   width:100%;
   padding:10px 12px;
@@ -308,23 +310,13 @@ header {
 }
 .input:focus{ outline:none; border-color:rgba(0,102,255,.55); background:rgba(255,255,255,.08); }
 .input::placeholder{ color:rgba(255,255,255,.4); font-weight:800; }
-.step-actions{
-  display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; margin-top:10px;
-}
-.checkbox-row{
-  display:flex; align-items:center; gap:10px;
-  font-size:12px; color:rgba(255,255,255,.8); font-weight:900;
-}
-.checkbox-row input{ width:16px; height:16px; accent-color: var(--primary); }
 
 /* Messages */
 .msg-toolbar{
   display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
   margin-bottom:10px;
 }
-.msg-list{
-  display:flex; flex-direction:column; gap:10px; margin-top:10px;
-}
+.msg-list{ display:flex; flex-direction:column; gap:10px; margin-top:10px; }
 .msg-item{
   background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.1);
@@ -395,7 +387,7 @@ header {
 <main class="main-container">
   <div class="page-header">
     <h1 class="page-title">Painel Administrativo</h1>
-    <p class="page-subtitle">Gerencie clientes, fases, passos, documentos e mensagens</p>
+    <p class="page-subtitle">Gerencie clientes, fases, passos (passo atual), documentos e mensagens</p>
     <div class="notice" id="noticeBox"></div>
   </div>
 
@@ -458,7 +450,7 @@ header {
           <div class="info-row"><span class="info-label">Criado em</span><span class="info-value" id="detailCreated">-</span></div>
           <div class="info-row"><span class="info-label">Fase atual</span><span class="info-value" id="detailPhase">-</span></div>
           <div class="small" style="margin-top:10px; color:rgba(255,255,255,.55); font-weight:800;">
-            Clique em uma fase para editar os passos dela.
+            Clique em uma fase para ajustar o <b>passo atual</b> daquela fase.
           </div>
         </div>
 
@@ -468,26 +460,31 @@ header {
         </div>
       </div>
 
-      <!-- Steps editor -->
+      <!-- Steps tracker -->
       <div class="detail-section" style="margin-bottom:16px;">
-        <div class="section-title">🧩 Passos da fase</div>
+        <div class="section-title">🧩 Passo atual da fase</div>
 
         <div class="steps-toolbar">
           <div class="steps-meta">
             <div class="steps-title" id="stepsPhaseTitle">Selecione uma fase</div>
-            <div class="steps-sub" id="stepsPhaseSub">Você pode criar passos padrão, adicionar novos e marcar como concluído.</div>
+            <div class="steps-sub" id="stepsPhaseSub">Escolha qual passo o cliente está dentro desta fase (passos são fixos/padrão).</div>
           </div>
-          <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+
+          <div class="steps-controls">
             <button class="btn-small" id="reloadStepsBtn">↻ Recarregar</button>
-            <button class="btn-small" id="seedStepsBtn">✨ Gerar passos padrão</button>
-            <button class="btn-small success" id="addStepBtn">➕ Adicionar passo</button>
+
+            <select class="input" id="currentStepSelect" style="width:320px; appearance:auto;" disabled>
+              <option value="">Selecione uma fase</option>
+            </select>
+
+            <button class="btn-small success" id="saveCurrentStepBtn" disabled>Salvar passo atual</button>
           </div>
         </div>
 
         <div class="steps-list" id="stepsList"></div>
 
         <div class="small" style="margin-top:10px; color:rgba(255,255,255,.55); font-weight:800;">
-          Observação: os passos ficam na tabela <b>phase_steps</b>. “Concluído” usa <b>is_completed</b> (e salva <b>completed_at</b>).
+          Como funciona: o passo atual é o <b>primeiro passo pendente</b>. Ao salvar, marcamos como concluídos os passos anteriores e deixamos os seguintes como pendentes.
         </div>
       </div>
 
@@ -502,9 +499,6 @@ header {
         <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:12px; flex-wrap:wrap;">
           <button class="btn-small" id="reloadNotesBtn">↻ Recarregar</button>
           <button class="btn-small success" id="saveNotesBtn">Salvar Notas</button>
-        </div>
-        <div class="small" style="margin-top:10px; color:rgba(255,255,255,.55); font-weight:800;">
-          Se aparecer erro ao salvar, provavelmente a tabela <b>admin_notes</b> não existe ou RLS bloqueou.
         </div>
       </div>
 
@@ -535,10 +529,6 @@ header {
         </div>
 
         <div class="msg-list" id="msgList"></div>
-
-        <div class="small" style="margin-top:10px; color:rgba(255,255,255,.55); font-weight:800;">
-          Tabela: <b>client_messages</b> (o cliente só vê as próprias mensagens via RLS).
-        </div>
       </div>
 
     </div>
@@ -660,7 +650,7 @@ const phases = [
   { id:7, name:"DNI emitido", desc:"Documento pronto" }
 ];
 
-// passos padrão (para botão "Gerar passos padrão")
+// Passos padrão FIXOS por fase
 const defaultSteps = {
   1: [
     { title:"Envio dos documentos para nossa equipe", desc:"Fazer upload do RG e foto 3x4" },
@@ -713,7 +703,7 @@ let docsMap = new Map();        // user_id -> Map(doc_type -> docRow)
 let filteredClients = [];
 let currentClientId = null;
 
-let selectedPhaseId = null;     // fase selecionada para editar passos
+let selectedPhaseId = null;     // fase selecionada para ajustar passo
 let stepsByPhase = new Map();   // phase_number -> rows[]
 let clientMessages = [];        // mensagens do cliente atual
 
@@ -764,7 +754,6 @@ async function init(){
   document.getElementById("signupLinkBox").textContent = signupLink;
 
   wireEvents();
-
   await loadAll();
   setLoading(false);
 }
@@ -785,19 +774,17 @@ function wireEvents(){
   document.getElementById("saveNotesBtn").addEventListener("click", saveNotes);
   document.getElementById("reloadNotesBtn").addEventListener("click", loadNotesForCurrentClient);
 
-  // steps buttons
+  // steps controls
   document.getElementById("reloadStepsBtn").addEventListener("click", async ()=>{
-    if (!currentClientId) return;
-    await loadStepsForClient(currentClientId);
-    renderStepsEditor(selectedPhaseId);
-  });
-  document.getElementById("seedStepsBtn").addEventListener("click", async ()=>{
     if (!currentClientId || !selectedPhaseId) return;
-    await seedDefaultSteps(currentClientId, selectedPhaseId);
+    await showPhaseSteps(selectedPhaseId);
   });
-  document.getElementById("addStepBtn").addEventListener("click", async ()=>{
+
+  document.getElementById("saveCurrentStepBtn").addEventListener("click", async ()=>{
     if (!currentClientId || !selectedPhaseId) return;
-    await addNewStep(currentClientId, selectedPhaseId);
+    const v = document.getElementById("currentStepSelect").value;
+    if (!v) return;
+    await setCurrentStep(currentClientId, selectedPhaseId, v);
   });
 
   // messages
@@ -878,7 +865,6 @@ async function loadAll(){
 
   renderStats();
   renderClients(document.getElementById("searchInput").value || "");
-
   setLoading(false);
 }
 
@@ -1020,8 +1006,7 @@ async function openClientModal(userId){
 
   // seleciona por padrão a fase atual do processo
   selectedPhaseId = phase;
-  updateStepsHeader(selectedPhaseId);
-  renderStepsEditor(selectedPhaseId);
+  await showPhaseSteps(selectedPhaseId);
   renderMessages();
 
   document.getElementById("clientDetailModal").classList.add("active");
@@ -1060,13 +1045,11 @@ function renderPhases(userId, currentPhase){
       </div>
     `;
 
-    // clique no card seleciona para editar passos
-    div.addEventListener("click", (e)=>{
-      // se clicar no botão, evita duplicar
+    // clique no card seleciona fase para ajustar passo atual
+    div.addEventListener("click", async (e)=>{
       if (e.target && e.target.tagName === "BUTTON") return;
       selectedPhaseId = ph.id;
-      updateStepsHeader(selectedPhaseId);
-      renderStepsEditor(selectedPhaseId);
+      await showPhaseSteps(selectedPhaseId);
     });
 
     const btn = div.querySelector(".phase-actions button:not([disabled])");
@@ -1108,10 +1091,8 @@ async function setClientPhase(userId, phaseId){
     document.getElementById("detailPhase").textContent = `Fase ${phaseId}`;
     renderPhases(userId, phaseId);
 
-    // ao mudar fase, também seleciona ela pra editar passos
     selectedPhaseId = phaseId;
-    updateStepsHeader(selectedPhaseId);
-    renderStepsEditor(selectedPhaseId);
+    await showPhaseSteps(selectedPhaseId);
   }
 
   showNotice("ok", `Fase atualizada para Fase ${phaseId}.`);
@@ -1296,9 +1277,7 @@ async function loadNotesForCurrentClient(){
     .eq("user_id", currentClientId)
     .maybeSingle();
 
-  // se não existir linha, OK
   if (error) return;
-
   document.getElementById("clientNotes").value = data?.notes || "";
 }
 
@@ -1315,7 +1294,7 @@ async function saveNotes(){
     .upsert({ user_id: currentClientId, notes, updated_at: nowIso }, { onConflict:"user_id" });
 
   if (error){
-    showNotice("err", "Falha ao salvar notas. Provável: tabela admin_notes não existe ou RLS bloqueando.");
+    showNotice("err", "Falha ao salvar notas. Verifique tabela admin_notes e RLS.");
     setLoading(false);
     return;
   }
@@ -1325,7 +1304,7 @@ async function saveNotes(){
 }
 
 /* =========================
-   14) Steps (phase_steps)
+   14) Steps (phase_steps) - FIXOS + definir passo atual
 ========================= */
 function updateStepsHeader(phaseId){
   const t = document.getElementById("stepsPhaseTitle");
@@ -1333,13 +1312,29 @@ function updateStepsHeader(phaseId){
 
   if (!phaseId){
     t.textContent = "Selecione uma fase";
-    sub.textContent = "Clique em uma fase ao lado para editar os passos dela.";
+    sub.textContent = "Clique em uma fase ao lado para ajustar o passo atual.";
     return;
   }
 
   const ph = phases.find(p => p.id === phaseId);
   t.textContent = `Fase ${phaseId}: ${ph ? ph.name : ""}`;
-  sub.textContent = "Edite título/descrição, marque como concluído e envie novos passos.";
+  sub.textContent = "Selecione qual passo o cliente está. Os passos são padrão e não são editáveis.";
+}
+
+async function ensurePhaseStepsExist(userId, phaseId){
+  const items = defaultSteps[phaseId] || [];
+  if (!items.length) return;
+
+  const payload = items.map((it, idx) => ({
+    user_id: userId,
+    phase_number: phaseId,
+    step_number: idx + 1,
+    step_title: it.title,
+    step_description: it.desc || ""
+  }));
+
+  // Upsert dos passos padrão (não mexe no is_completed porque não passamos esse campo aqui)
+  await sb.from("phase_steps").upsert(payload, { onConflict: "user_id,phase_number,step_number" });
 }
 
 async function loadStepsForClient(userId){
@@ -1347,15 +1342,12 @@ async function loadStepsForClient(userId){
 
   const { data, error } = await sb
     .from("phase_steps")
-    .select("id, user_id, phase_number, step_number, step_title, step_description, is_completed, completed_at, created_at, updated_at")
+    .select("id, user_id, phase_number, step_number, step_title, step_description, is_completed, completed_at, updated_at")
     .eq("user_id", userId)
     .order("phase_number", { ascending:true })
     .order("step_number", { ascending:true });
 
-  if (error){
-    // se RLS ou tabela não existir, editor fica vazio
-    return;
-  }
+  if (error) return;
 
   (data || []).forEach(r => {
     if (!stepsByPhase.has(r.phase_number)) stepsByPhase.set(r.phase_number, []);
@@ -1363,247 +1355,216 @@ async function loadStepsForClient(userId){
   });
 }
 
-function renderStepsEditor(phaseId){
+function getStandardStepCount(phaseId){
+  return (defaultSteps[phaseId] || []).length || 0;
+}
+
+function getDbStepRow(phaseId, stepNumber){
+  const rows = stepsByPhase.get(phaseId) || [];
+  return rows.find(r => Number(r.step_number) === Number(stepNumber)) || null;
+}
+
+function computeCurrentStepValue(phaseId){
+  const n = getStandardStepCount(phaseId);
+  if (!n) return "";
+
+  // passo atual = primeiro pendente. Se todos concluídos => "done"
+  for (let i=1;i<=n;i++){
+    const r = getDbStepRow(phaseId, i);
+    const done = r ? !!r.is_completed : false;
+    if (!done) return String(i);
+  }
+  return "done";
+}
+
+function populateStepSelect(phaseId){
+  const sel = document.getElementById("currentStepSelect");
+  sel.innerHTML = "";
+
+  const n = getStandardStepCount(phaseId);
+  if (!phaseId || !n){
+    sel.disabled = true;
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "Selecione uma fase";
+    sel.appendChild(opt);
+    return;
+  }
+
+  sel.disabled = false;
+
+  for (let i=1;i<=n;i++){
+    const it = defaultSteps[phaseId][i-1];
+    const opt = document.createElement("option");
+    opt.value = String(i);
+    opt.textContent = `${i} • ${it.title}`;
+    sel.appendChild(opt);
+  }
+
+  const optDone = document.createElement("option");
+  optDone.value = "done";
+  optDone.textContent = "✓ Fase concluída (todos os passos concluídos)";
+  sel.appendChild(optDone);
+
+  sel.value = computeCurrentStepValue(phaseId);
+}
+
+function renderStepsList(phaseId){
   const list = document.getElementById("stepsList");
   list.innerHTML = "";
 
-  // desabilita botões se não houver fase selecionada
-  document.getElementById("seedStepsBtn").disabled = !phaseId;
-  document.getElementById("addStepBtn").disabled = !phaseId;
-  document.getElementById("reloadStepsBtn").disabled = !currentClientId;
-
-  if (!phaseId){
+  const n = getStandardStepCount(phaseId);
+  if (!phaseId || !n){
     list.innerHTML = `
       <div class="step-row" style="text-align:center;">
         <div class="small" style="color:rgba(255,255,255,.7); font-weight:900;">
-          Selecione uma fase para ver/editar os passos.
+          Selecione uma fase para ver os passos.
         </div>
       </div>
     `;
     return;
   }
 
-  const rows = stepsByPhase.get(phaseId) || [];
+  const currentValue = computeCurrentStepValue(phaseId);
+  const currentStep = currentValue === "done" ? null : Number(currentValue);
 
-  if (!rows.length){
-    list.innerHTML = `
-      <div class="step-row" style="text-align:center;">
-        <div class="small" style="color:rgba(255,255,255,.7); font-weight:900;">
-          Nenhum passo criado no banco para esta fase.
-        </div>
-        <div class="small" style="margin-top:6px; color:rgba(255,255,255,.55); font-weight:800;">
-          Clique em <b>✨ Gerar passos padrão</b> ou <b>➕ Adicionar passo</b>.
-        </div>
-      </div>
-    `;
-    return;
-  }
+  for (let i=1;i<=n;i++){
+    const it = defaultSteps[phaseId][i-1];
 
-  rows.forEach(step => {
-    const isDone = !!step.is_completed;
+    // status real vem do DB (quando existir), senão assume pendente
+    const dbRow = getDbStepRow(phaseId, i);
+    const isDone = dbRow ? !!dbRow.is_completed : false;
+
+    const isCurrent = currentStep !== null && i === currentStep && !isDone;
+    const isPending = !isDone && !isCurrent;
+
+    const badges = [];
+    if (isDone) badges.push(`<span class="step-badge done">✓ Concluído</span>`);
+    if (isCurrent) badges.push(`<span class="step-badge current">📍 Atual</span>`);
+    if (isPending) badges.push(`<span class="step-badge pending">⏳ Pendente</span>`);
 
     const card = document.createElement("div");
     card.className = "step-row";
     card.innerHTML = `
       <div class="step-top">
         <div style="flex:1;">
-          <div class="small" style="font-weight:950; color:rgba(255,255,255,.9);">
-            Passo ${step.step_number}
-          </div>
-          <div class="small" style="margin-top:2px; color:rgba(255,255,255,.55);">
-            ${step.updated_at ? "Atualizado: " + fmtDate(step.updated_at) : ""}
-          </div>
+          <div class="small" style="font-weight:950; color:rgba(255,255,255,.85);">Passo ${i} de ${n}</div>
+          <div class="step-title">${escapeHTML(it.title)}</div>
+          <div class="step-desc">${escapeHTML(it.desc || "")}</div>
         </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:center;">
-          <span class="step-badge ${isDone ? "done" : "pending"}">${isDone ? "✓ Concluído" : "⏳ Pendente"}</span>
+        <div class="step-badges">
+          ${badges.join("")}
         </div>
-      </div>
-
-      <div class="step-fields">
-        <input class="input" data-k="title" value="${escapeHTML(step.step_title || "")}" placeholder="Título do passo" />
-        <textarea class="notes-area" data-k="desc" style="min-height:90px;" placeholder="Descrição (opcional)">${escapeHTML(step.step_description || "")}</textarea>
-
-        <label class="checkbox-row">
-          <input type="checkbox" data-k="done" ${isDone ? "checked" : ""} />
-          Marcar como concluído
-        </label>
-      </div>
-
-      <div class="step-actions">
-        <button class="btn-small" type="button" data-action="save">Salvar</button>
-        <button class="btn-small danger" type="button" data-action="delete">Excluir</button>
       </div>
     `;
 
-    const titleEl = card.querySelector('[data-k="title"]');
-    const descEl = card.querySelector('[data-k="desc"]');
-    const doneEl = card.querySelector('[data-k="done"]');
-
-    card.querySelector('[data-action="save"]').addEventListener("click", async ()=>{
-      await saveStep(step.id, {
-        step_title: titleEl.value || "",
-        step_description: descEl.value || "",
-        is_completed: !!doneEl.checked
-      });
-    });
-
-    card.querySelector('[data-action="delete"]').addEventListener("click", async ()=>{
-      const ok = confirm("Excluir este passo? (isso remove do banco)");
-      if (!ok) return;
-      await deleteStep(step.id);
-    });
-
-    // salvar status rapidamente ao marcar/desmarcar
-    doneEl.addEventListener("change", async ()=>{
-      await saveStep(step.id, {
-        step_title: titleEl.value || "",
-        step_description: descEl.value || "",
-        is_completed: !!doneEl.checked
-      }, true);
-    });
-
     list.appendChild(card);
-  });
+  }
 }
 
-async function seedDefaultSteps(userId, phaseId){
-  hideNotice();
-  setLoading(true, "Gerando passos padrão…");
+async function showPhaseSteps(phaseId){
+  updateStepsHeader(phaseId);
 
-  const existing = stepsByPhase.get(phaseId) || [];
-  if (existing.length){
-    setLoading(false);
-    showNotice("err", "Já existem passos nesta fase. Exclua ou edite os existentes.");
+  const sel = document.getElementById("currentStepSelect");
+  const saveBtn = document.getElementById("saveCurrentStepBtn");
+  const reloadBtn = document.getElementById("reloadStepsBtn");
+
+  if (!currentClientId || !phaseId){
+    sel.disabled = true;
+    saveBtn.disabled = true;
+    reloadBtn.disabled = true;
+    populateStepSelect(null);
+    renderStepsList(null);
     return;
   }
 
-  const items = defaultSteps[phaseId] || [];
-  if (!items.length){
-    setLoading(false);
-    showNotice("err", "Não há passos padrão configurados para esta fase.");
-    return;
-  }
+  reloadBtn.disabled = false;
+  saveBtn.disabled = false;
 
-  const payload = items.map((it, idx) => ({
-    user_id: userId,
-    phase_number: phaseId,
-    step_number: idx + 1,
-    step_title: it.title,
-    step_description: it.desc || "",
-    is_completed: false,
-    completed_at: null
-  }));
+  setLoading(true, "Carregando passos…");
+  await ensurePhaseStepsExist(currentClientId, phaseId);
+  await loadStepsForClient(currentClientId);
 
-  const { error } = await sb
-    .from("phase_steps")
-    .upsert(payload, { onConflict: "user_id,phase_number,step_number" });
+  populateStepSelect(phaseId);
+  renderStepsList(phaseId);
 
-  if (error){
-    showNotice("err", "Falha ao criar passos. Verifique RLS/policies da tabela phase_steps.");
-    setLoading(false);
-    return;
-  }
-
-  await loadStepsForClient(userId);
-  renderStepsEditor(phaseId);
-  showNotice("ok", "Passos padrão criados!");
   setLoading(false);
 }
 
-async function addNewStep(userId, phaseId){
-  const title = prompt("Título do novo passo:");
-  if (!title) return;
-
-  const desc = prompt("Descrição (opcional):") || "";
-
+async function setCurrentStep(userId, phaseId, value){
   hideNotice();
-  setLoading(true, "Criando passo…");
+  setLoading(true, "Salvando passo atual…");
 
-  const rows = stepsByPhase.get(phaseId) || [];
-  const maxNum = rows.reduce((acc, r) => Math.max(acc, r.step_number || 0), 0);
-  const nextNum = maxNum + 1;
-
-  const { error } = await sb
-    .from("phase_steps")
-    .insert({
-      user_id: userId,
-      phase_number: phaseId,
-      step_number: nextNum,
-      step_title: title,
-      step_description: desc,
-      is_completed: false,
-      completed_at: null
-    });
-
-  if (error){
-    showNotice("err", "Falha ao criar passo. Verifique RLS/policies ou conflito de step_number.");
-    setLoading(false);
-    return;
-  }
-
-  await loadStepsForClient(userId);
-  renderStepsEditor(phaseId);
-  showNotice("ok", "Passo criado!");
-  setLoading(false);
-}
-
-async function saveStep(stepId, patch, silent=false){
-  if (!currentClientId || !selectedPhaseId) return;
+  await ensurePhaseStepsExist(userId, phaseId);
 
   const nowIso = new Date().toISOString();
-  const finalPatch = {
-    step_title: patch.step_title,
-    step_description: patch.step_description,
-    is_completed: !!patch.is_completed,
-    completed_at: patch.is_completed ? nowIso : null
-  };
+  const n = getStandardStepCount(phaseId);
 
-  if (!silent){
-    hideNotice();
-    setLoading(true, "Salvando passo…");
-  }
-
-  const { error } = await sb
-    .from("phase_steps")
-    .update(finalPatch)
-    .eq("id", stepId);
-
-  if (error){
-    if (!silent) setLoading(false);
-    showNotice("err", "Falha ao salvar passo. Verifique RLS/policies.");
-    return;
-  }
-
-  await loadStepsForClient(currentClientId);
-  renderStepsEditor(selectedPhaseId);
-
-  if (!silent){
-    showNotice("ok", "Passo salvo!");
-    setLoading(false);
-  }
-}
-
-async function deleteStep(stepId){
-  if (!currentClientId || !selectedPhaseId) return;
-
-  hideNotice();
-  setLoading(true, "Excluindo passo…");
-
-  const { error } = await sb
-    .from("phase_steps")
-    .delete()
-    .eq("id", stepId);
-
-  if (error){
-    showNotice("err", "Falha ao excluir passo. Verifique RLS/policies.");
+  if (!n){
+    showNotice("err", "Esta fase não tem passos padrão configurados.");
     setLoading(false);
     return;
   }
 
-  await loadStepsForClient(currentClientId);
-  renderStepsEditor(selectedPhaseId);
+  if (value === "done"){
+    // marca todos concluídos
+    const { error } = await sb
+      .from("phase_steps")
+      .update({ is_completed:true, completed_at: nowIso })
+      .eq("user_id", userId)
+      .eq("phase_number", phaseId)
+      .lte("step_number", n);
 
-  showNotice("ok", "Passo excluído!");
+    if (error){
+      showNotice("err", "Falha ao salvar. Verifique RLS/policies da tabela phase_steps.");
+      setLoading(false);
+      return;
+    }
+
+  } else {
+    const stepNum = Number(value);
+    if (!stepNum || stepNum < 1 || stepNum > n){
+      showNotice("err", "Passo inválido.");
+      setLoading(false);
+      return;
+    }
+
+    // 1) passos anteriores = concluídos
+    const { error: e1 } = await sb
+      .from("phase_steps")
+      .update({ is_completed:true, completed_at: nowIso })
+      .eq("user_id", userId)
+      .eq("phase_number", phaseId)
+      .lt("step_number", stepNum)
+      .lte("step_number", n);
+
+    if (e1){
+      showNotice("err", "Falha ao salvar (concluir passos anteriores). Verifique RLS.");
+      setLoading(false);
+      return;
+    }
+
+    // 2) passo atual e seguintes = pendentes
+    const { error: e2 } = await sb
+      .from("phase_steps")
+      .update({ is_completed:false, completed_at: null })
+      .eq("user_id", userId)
+      .eq("phase_number", phaseId)
+      .gte("step_number", stepNum)
+      .lte("step_number", n);
+
+    if (e2){
+      showNotice("err", "Falha ao salvar (definir passos pendentes). Verifique RLS.");
+      setLoading(false);
+      return;
+    }
+  }
+
+  await loadStepsForClient(userId);
+  populateStepSelect(phaseId);
+  renderStepsList(phaseId);
+
+  showNotice("ok", "Passo atual atualizado!");
   setLoading(false);
 }
 
