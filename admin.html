@@ -216,22 +216,23 @@ header{
 .btn-small.ghost:hover{ opacity:1; }
 
 .steps-panel{
-  margin-top:12px;
-  padding:14px;
+  margin-top:14px;
+  padding:16px;
   border-radius:14px;
   border:1px solid rgba(255,255,255,.10);
   background:rgba(255,255,255,.03);
 }
 .steps-header{
   display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 .steps-title{
-  font-size:13px; font-weight:950; color:rgba(255,255,255,.9);
+  font-size:14px; font-weight:950; color:rgba(255,255,255,.9);
   display:flex; align-items:center; gap:8px;
 }
 .steps-sub{
   font-size:12px; color:rgba(255,255,255,.55); font-weight:800;
+  margin-top:2px;
 }
 .steps-list{ display:flex; flex-direction:column; gap:10px; }
 
@@ -239,8 +240,8 @@ header{
   border-radius:12px;
   border:1px solid rgba(255,255,255,.10);
   background:rgba(255,255,255,.03);
-  padding:12px 12px;
-  display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+  padding:12px 14px;
+  display:flex; align-items:center; gap:12px;
   cursor:pointer;
   transition:.15s;
 }
@@ -248,9 +249,21 @@ header{
   background:rgba(0,102,255,.10);
   border-color:rgba(0,102,255,.28);
 }
-.step-left{ flex:1; }
-.step-title{ font-size:13px; font-weight:950; margin-bottom:2px; }
-.step-desc{ font-size:12px; color:rgba(255,255,255,.55); font-weight:800; }
+.step-check{
+  width:20px; height:20px; border-radius:999px;
+  border:2px solid rgba(255,255,255,.25);
+  flex:0 0 auto;
+  transition:.15s;
+}
+.step-item.done .step-check{
+  border-color:rgba(16,185,129,.65);
+  background:rgba(16,185,129,.25);
+}
+.step-item.current .step-check{
+  border-color:rgba(0,102,255,.65);
+  background:rgba(0,102,255,.25);
+}
+.step-text{ flex:1; font-size:13px; font-weight:900; color:rgba(255,255,255,.9); }
 .step-badge{
   font-size:11px; font-weight:950;
   padding:4px 10px; border-radius:999px;
@@ -486,9 +499,8 @@ header{
             <div class="steps-header">
               <div>
                 <div class="steps-title">📍 Passos da fase atual</div>
-                <div class="steps-sub" id="stepsSubtitle">Clique no passo desejado para definir como atual</div>
+                <div class="steps-sub">Clique no passo para definir como atual (anteriores ficam concluídos)</div>
               </div>
-              <button class="btn-small ghost" id="markPhaseDoneBtn" type="button">✓ Marcar fase como concluída</button>
             </div>
             <div class="steps-list" id="stepsList"></div>
           </div>
@@ -546,7 +558,7 @@ header{
         <div class="message-list" id="messagesList"></div>
 
         <div class="small" style="margin-top:10px; color:rgba(255,255,255,.55); font-weight:800;">
-          O cliente verá essas mensagens no dashboard dele (caixa de entrada). “Não lida” some assim que ele abrir/ler.
+          O cliente verá essas mensagens no dashboard dele (caixa de entrada). "Não lida" some assim que ele abrir/ler.
         </div>
       </div>
     </div>
@@ -564,7 +576,7 @@ header{
       <div class="detail-section">
         <div class="section-title">📌 Como criar cliente (sem Service Key no front)</div>
         <div class="small" style="color:rgba(255,255,255,.7); font-weight:800;">
-          Por segurança, não dá pra criar contas de usuário “forçando” pelo front-end (isso exigiria a Service Role Key).
+          Por segurança, não dá pra criar contas de usuário "forçando" pelo front-end (isso exigiria a Service Role Key).
           O jeito simples é:
           <ol style="margin:10px 0 0 18px;">
             <li>Deixar <b>Signups</b> habilitado no Supabase Auth (o cliente se cadastra sozinho)</li>
@@ -663,6 +675,42 @@ const phases = [
   { id:7, name:"DNI emitido", desc:"Documento pronto" }
 ];
 
+/**
+ * PASSOS FIXOS - MESMOS DO DASHBOARD.HTML
+ * Esses passos são IMUTÁVEIS e vêm direto do dashboard
+ */
+const phaseSteps = {
+  1: [
+    "Envio dos documentos para nossa equipe",
+    "Upload dos documentos na plataforma correspondente",
+    "Análise dos documentos realizada por nós"
+  ],
+  2: [
+    "Emissão do documento",
+    "Upload do documento após a emissão"
+  ],
+  3: [
+    "Agendamento do trâmite",
+    "Retirada presencial do documento",
+    "Upload do documento obtido"
+  ],
+  4: [
+    "Realização do cadastro",
+    "Criação dos boletos das taxas migratórias"
+  ],
+  5: [
+    "Pagamento dos boletos",
+    "Upload dos comprovantes"
+  ],
+  6: [
+    "Agendamento da cita",
+    "Comparecimento presencial"
+  ],
+  7: [
+    "Aguardar a emissão e chegada do DNI argentino"
+  ],
+};
+
 const docsCatalog = [
   { doc_type:"rg", name:"RG (Identidade)", icon:"🪪" },
   { doc_type:"antecedentes", name:"Antecedentes Criminais", icon:"📋" },
@@ -670,59 +718,17 @@ const docsCatalog = [
   { doc_type:"outros", name:"Outros Documentos", icon:"📁" },
 ];
 
-/**
- * Passos fixos por fase.
- * IMPORTANTE: se o texto no seu dashboard do cliente tiver nomes diferentes, edite aqui pra ficar idêntico.
- */
-const defaultSteps = {
-  1: [
-    { title:"Envio dos documentos", desc:"Cliente envia RG e foto 3x4" },
-    { title:"Revisão da equipe", desc:"Análise e validação dos arquivos" },
-    { title:"Aprovação", desc:"Documentação inicial aprovada" },
-  ],
-  2: [
-    { title:"Solicitação / emissão", desc:"Início do processo de antecedentes" },
-    { title:"Recebimento do documento", desc:"Documento emitido/obtido" },
-    { title:"Upload / validação", desc:"Enviar e validar no sistema" },
-  ],
-  3: [
-    { title:"Agendamento do trâmite", desc:"Agendar o processo de domicílio" },
-    { title:"Retirada presencial", desc:"Retirar o documento presencialmente" },
-    { title:"Upload do documento obtido", desc:"Enviar comprovante para validação" },
-  ],
-  4: [
-    { title:"Preparar dados", desc:"Dados revisados para o cadastro" },
-    { title:"Cadastrar no RADEX", desc:"Cadastro/lançamento no sistema" },
-    { title:"Confirmação", desc:"Cadastro confirmado" },
-  ],
-  5: [
-    { title:"Gerar taxa", desc:"Gerar boleto/guia" },
-    { title:"Pagamento", desc:"Efetuar pagamento" },
-    { title:"Comprovante", desc:"Enviar e validar comprovante" },
-  ],
-  6: [
-    { title:"Agendar cita", desc:"Escolher data/horário" },
-    { title:"Comparecimento", desc:"Realizar a etapa presencial" },
-    { title:"Protocolo", desc:"Confirmar finalização da cita" },
-  ],
-  7: [
-    { title:"Produção do DNI", desc:"Documento em produção" },
-    { title:"Disponível", desc:"Pronto para retirada/entrega" },
-    { title:"Entregue", desc:"DNI entregue ao cliente" },
-  ]
-};
-
 let adminUser = null;
 let adminProfile = null;
 
 let clientsRaw = [];        // profiles (role=client)
-let processMap = new Map(); // user_id -> { current_phase, updated_at }
+let processMap = new Map(); // user_id -> { current_phase, current_step, updated_at }
 let docsMap = new Map();    // user_id -> Map(doc_type -> docRow)
 
 let filteredClients = [];
 let currentClientId = null;
 let currentPhaseInModal = 1;
-let currentStepNumberInModal = null;
+let currentStepInModal = 1;
 
 /* =========================
    6) Auth guard + init
@@ -791,9 +797,6 @@ function wireEvents(){
   document.getElementById("saveNotesBtn").addEventListener("click", saveNotes);
   document.getElementById("reloadNotesBtn").addEventListener("click", loadNotesForCurrentClient);
 
-  // marcar fase como concluída (marca todos passos como concluídos)
-  document.getElementById("markPhaseDoneBtn").addEventListener("click", markCurrentPhaseAsDone);
-
   // mensagens
   document.getElementById("sendMsgBtn").addEventListener("click", sendMessageToClient);
 
@@ -850,7 +853,7 @@ async function loadAll(){
   if (ids.length){
     const { data: procs } = await sb
       .from("dni_process")
-      .select("user_id, current_phase, updated_at")
+      .select("user_id, current_phase, current_step, updated_at")
       .in("user_id", ids);
 
     (procs || []).forEach(p => processMap.set(p.user_id, p));
@@ -989,7 +992,10 @@ async function openClientModal(userId){
 
   const proc = processMap.get(userId);
   const phase = proc?.current_phase || 1;
+  const step = proc?.current_step || 1;
+  
   currentPhaseInModal = phase;
+  currentStepInModal = step;
 
   document.getElementById("clientDetailTitle").textContent = client.full_name || "Detalhes do Cliente";
   document.getElementById("clientDetailSubtitle").textContent = client.email || "";
@@ -998,12 +1004,14 @@ async function openClientModal(userId){
   document.getElementById("detailId").textContent = client.id;
   document.getElementById("detailCreated").textContent = fmtDate(client.created_at);
   document.getElementById("detailPhase").textContent = `Fase ${phase}`;
-  document.getElementById("detailStep").textContent = "—";
+  
+  const steps = phaseSteps[phase] || [];
+  document.getElementById("detailStep").textContent = step > steps.length ? "Fase concluída" : `Passo ${step}`;
 
   renderPhases(userId, phase);
+  renderSteps(userId, phase, step);
   renderDocs(userId);
 
-  await loadStepsForPhase(userId, phase);
   await loadNotesForCurrentClient();
   await loadMessagesForCurrentClient();
 
@@ -1019,7 +1027,7 @@ function closeClientModal(){
   document.getElementById("clientDetailModal").classList.remove("active");
   currentClientId = null;
   currentPhaseInModal = 1;
-  currentStepNumberInModal = null;
+  currentStepInModal = 1;
 }
 
 function renderPhases(userId, currentPhase){
@@ -1063,8 +1071,13 @@ async function setClientPhase(userId, phaseId){
 
   const { data, error } = await sb
     .from("dni_process")
-    .upsert({ user_id: userId, current_phase: phaseId, updated_at: nowIso }, { onConflict:"user_id" })
-    .select("user_id, current_phase, updated_at")
+    .upsert({ 
+      user_id: userId, 
+      current_phase: phaseId, 
+      current_step: 1, // reset step quando muda fase
+      updated_at: nowIso 
+    }, { onConflict:"user_id" })
+    .select("user_id, current_phase, current_step, updated_at")
     .single();
 
   if (error){
@@ -1075,242 +1088,106 @@ async function setClientPhase(userId, phaseId){
 
   processMap.set(userId, data);
   currentPhaseInModal = phaseId;
+  currentStepInModal = 1;
 
   renderStats();
   renderClients(document.getElementById("searchInput").value || "");
 
   document.getElementById("detailPhase").textContent = `Fase ${phaseId}`;
+  document.getElementById("detailStep").textContent = "Passo 1";
+  
   renderPhases(userId, phaseId);
+  renderSteps(userId, phaseId, 1);
 
-  await loadStepsForPhase(userId, phaseId);
-
-  showNotice("ok", `Fase atualizada para Fase ${phaseId}.`);
+  showNotice("ok", `Fase atualizada para Fase ${phaseId}, Passo 1.`);
   setLoading(false);
 }
 
 /* =========================
-   9.1) Steps (fixed steps per phase)
-   regra:
-   - passo atual = primeiro passo NÃO concluído
-   - ao clicar no passo X: passos < X = concluídos, passos >= X = pendentes
+   9.1) Steps (fixed steps - mesmos do dashboard)
 ========================= */
-function phaseStepsTemplate(phaseId){
-  return defaultSteps[phaseId] || [];
-}
-
-async function ensurePhaseStepsExist(userId, phaseId){
-  const tmpl = phaseStepsTemplate(phaseId);
-  if (!tmpl.length) return;
-
-  const rows = tmpl.map((s, idx) => ({
-    user_id: userId,
-    phase_number: phaseId,
-    step_number: idx + 1,
-    step_title: s.title,
-    step_description: s.desc
-    // NÃO envia is_completed aqui, pra não sobrescrever.
-  }));
-
-  // ignoreDuplicates evita atualizar o que já existe
-  const { error } = await sb
-    .from("phase_steps")
-    .upsert(rows, { onConflict:"user_id,phase_number,step_number", ignoreDuplicates:true });
-
-  if (error){
-    // se RLS bloquear, vai aparecer aqui
-    throw error;
-  }
-}
-
-async function fetchPhaseSteps(userId, phaseId){
-  const { data, error } = await sb
-    .from("phase_steps")
-    .select("user_id, phase_number, step_number, step_title, step_description, is_completed, completed_at")
-    .eq("user_id", userId)
-    .eq("phase_number", phaseId)
-    .order("step_number", { ascending:true });
-
-  if (error) throw error;
-
-  // fallback: se por algum motivo não trouxe linhas (tabela vazia), monta de template só pra UI
-  if (!data || !data.length){
-    const tmpl = phaseStepsTemplate(phaseId);
-    return tmpl.map((s, idx) => ({
-      user_id:userId,
-      phase_number:phaseId,
-      step_number:idx+1,
-      step_title:s.title,
-      step_description:s.desc,
-      is_completed:false,
-      completed_at:null
-    }));
-  }
-  return data;
-}
-
-function computeCurrentStep(steps){
-  // primeiro pending
-  const pending = steps.find(s => !s.is_completed);
-  if (pending) return pending.step_number;
-  // se todos concluídos
-  return (steps.length ? steps.length + 1 : 1);
-}
-
-function stepBadgeFor(step, currentStep){
-  if (step.is_completed) return { cls:"done", txt:"✓ Concluído" };
-  if (step.step_number === currentStep) return { cls:"current", txt:"📍 Atual" };
-  return { cls:"pending", txt:"⏳ Pendente" };
-}
-
-async function loadStepsForPhase(userId, phaseId){
-  try{
-    hideNotice();
-    setLoading(true, "Carregando passos…");
-
-    await ensurePhaseStepsExist(userId, phaseId);
-    const steps = await fetchPhaseSteps(userId, phaseId);
-
-    const currentStep = computeCurrentStep(steps);
-    currentStepNumberInModal = currentStep;
-
-    const label = (currentStep > steps.length)
-      ? "Fase concluída"
-      : `Passo ${currentStep}`;
-
-    document.getElementById("detailStep").textContent = label;
-
-    renderStepsList(userId, phaseId, steps, currentStep);
-
-    setLoading(false);
-  }catch(err){
-    console.error(err);
-    showNotice("err", "Não consegui carregar os passos. Confira RLS da tabela phase_steps.");
-    setLoading(false);
-  }
-}
-
-function renderStepsList(userId, phaseId, steps, currentStep){
+function renderSteps(userId, phase, currentStep){
   const list = document.getElementById("stepsList");
   list.innerHTML = "";
 
-  const tmpl = phaseStepsTemplate(phaseId);
-  const stepsCount = tmpl.length || steps.length || 0;
+  const steps = phaseSteps[phase] || [];
+  
+  if (!steps.length){
+    list.innerHTML = '<div class="small" style="padding:12px; text-align:center; color:rgba(255,255,255,.6);">Nenhum passo definido para esta fase</div>';
+    return;
+  }
 
-  const subtitle = stepsCount
-    ? `Fase ${phaseId} • clique no passo para definir como atual`
-    : `Fase ${phaseId} • (sem passos configurados)`;
+  steps.forEach((stepText, idx) => {
+    const stepNum = idx + 1;
+    const isDone = stepNum < currentStep;
+    const isCurrent = stepNum === currentStep;
+    const isPending = stepNum > currentStep;
 
-  document.getElementById("stepsSubtitle").textContent = subtitle;
-
-  steps.forEach(step => {
-    const badge = stepBadgeFor(step, currentStep);
+    let badge = "";
+    let itemClass = "";
+    
+    if (isDone){
+      badge = '<span class="step-badge done">✓ Concluído</span>';
+      itemClass = "done";
+    } else if (isCurrent){
+      badge = '<span class="step-badge current">📍 Atual</span>';
+      itemClass = "current";
+    } else {
+      badge = '<span class="step-badge pending">⏳ Pendente</span>';
+      itemClass = "";
+    }
 
     const div = document.createElement("div");
-    div.className = "step-item";
+    div.className = `step-item ${itemClass}`;
+    
     div.innerHTML = `
-      <div class="step-left">
-        <div class="step-title">${step.step_number}. ${step.step_title || ("Passo " + step.step_number)}</div>
-        <div class="step-desc">${step.step_description || ""}</div>
-      </div>
-      <div class="step-badge ${badge.cls}">${badge.txt}</div>
+      <div class="step-check"></div>
+      <div class="step-text">${stepNum}. ${stepText}</div>
+      ${badge}
     `;
 
-    // clique define o passo atual (sem menu)
+    // Clique define este passo como atual
     div.addEventListener("click", async ()=>{
-      await setCurrentStepForPhase(userId, phaseId, step.step_number);
+      await setClientStep(userId, phase, stepNum);
     });
 
     list.appendChild(div);
   });
-
-  // se fase concluída (todos steps concluídos), avisa
-  if (currentStep > steps.length && steps.length){
-    const div = document.createElement("div");
-    div.className = "step-item";
-    div.style.opacity = ".95";
-    div.innerHTML = `
-      <div class="step-left">
-        <div class="step-title">✅ Fase concluída</div>
-        <div class="step-desc">Todos os passos desta fase estão marcados como concluídos.</div>
-      </div>
-      <div class="step-badge done">✓ OK</div>
-    `;
-    div.addEventListener("click", async ()=>{
-      // reabrir para passo 1
-      await setCurrentStepForPhase(userId, phaseId, 1);
-    });
-    list.appendChild(div);
-  }
 }
 
-async function setCurrentStepForPhase(userId, phaseId, stepNumber){
+async function setClientStep(userId, phase, stepNum){
   hideNotice();
   setLoading(true, "Atualizando passo…");
 
   const nowIso = new Date().toISOString();
 
-  try{
-    await ensurePhaseStepsExist(userId, phaseId);
+  const { data, error } = await sb
+    .from("dni_process")
+    .upsert({ 
+      user_id: userId, 
+      current_phase: phase,
+      current_step: stepNum,
+      updated_at: nowIso 
+    }, { onConflict:"user_id" })
+    .select("user_id, current_phase, current_step, updated_at")
+    .single();
 
-    // passos antes do atual -> concluídos
-    const { error: errA } = await sb
-      .from("phase_steps")
-      .update({ is_completed:true, completed_at: nowIso })
-      .eq("user_id", userId)
-      .eq("phase_number", phaseId)
-      .lt("step_number", stepNumber);
-
-    if (errA) throw errA;
-
-    // passo atual e após -> pendentes
-    const { error: errB } = await sb
-      .from("phase_steps")
-      .update({ is_completed:false, completed_at: null })
-      .eq("user_id", userId)
-      .eq("phase_number", phaseId)
-      .gte("step_number", stepNumber);
-
-    if (errB) throw errB;
-
-    await loadStepsForPhase(userId, phaseId);
-
-    showNotice("ok", `Passo atual definido: Passo ${stepNumber}.`);
+  if (error){
+    showNotice("err", "Não consegui atualizar o passo. Confira políticas RLS da tabela dni_process.");
     setLoading(false);
-  }catch(err){
-    console.error(err);
-    showNotice("err", "Falha ao atualizar passo. Confira RLS da tabela phase_steps.");
-    setLoading(false);
+    return;
   }
-}
 
-async function markCurrentPhaseAsDone(){
-  if (!currentClientId) return;
+  processMap.set(userId, data);
+  currentStepInModal = stepNum;
 
-  hideNotice();
-  setLoading(true, "Concluindo fase…");
+  const steps = phaseSteps[phase] || [];
+  document.getElementById("detailStep").textContent = stepNum > steps.length ? "Fase concluída" : `Passo ${stepNum}`;
+  
+  renderSteps(userId, phase, stepNum);
 
-  try{
-    const phaseId = currentPhaseInModal;
-    await ensurePhaseStepsExist(currentClientId, phaseId);
-
-    const nowIso = new Date().toISOString();
-    const { error } = await sb
-      .from("phase_steps")
-      .update({ is_completed:true, completed_at: nowIso })
-      .eq("user_id", currentClientId)
-      .eq("phase_number", phaseId);
-
-    if (error) throw error;
-
-    await loadStepsForPhase(currentClientId, phaseId);
-
-    showNotice("ok", "Fase marcada como concluída (todos os passos concluídos).");
-    setLoading(false);
-  }catch(err){
-    console.error(err);
-    showNotice("err", "Não consegui marcar como concluída. Confira RLS da tabela phase_steps.");
-    setLoading(false);
-  }
+  showNotice("ok", `Passo atualizado para Passo ${stepNum}.`);
+  setLoading(false);
 }
 
 /* =========================
