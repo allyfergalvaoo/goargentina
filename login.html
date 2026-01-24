@@ -19,13 +19,19 @@
       border:1px solid rgba(255,255,255,0.12);
       border-radius:18px; padding:26px;
     }
-    .logo{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-    .logo-icon{width:40px;height:40px;border-radius:12px;
-      display:flex;align-items:center;justify-content:center;
+    .logo{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+    .logo-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .logo-title{
+      font-weight:900;
+      font-size:32px;
+      line-height:1.1;
+      margin:0;
       background:linear-gradient(135deg,var(--primary),var(--accent));
-      font-size:20px;
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
     }
-    h1{font-size:22px;margin:6px 0 6px}
+    h1{font-size:20px;margin:0 0 10px 0;}
     p{color:rgba(255,255,255,0.7);font-size:14px;margin-bottom:18px;line-height:1.5}
     label{display:block;font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:8px}
     input{
@@ -62,11 +68,16 @@
 <body>
   <div class="card">
     <div class="logo">
-      <div class="logo-icon">🇦🇷</div>
-      <div>
-        <div style="font-weight:900;font-size:18px;line-height:1">GoArgentina</div>
-        <div style="color:rgba(255,255,255,0.6);font-size:12px">Acesso por Magic Link</div>
-      </div>
+      <svg class="logo-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#FFD500;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <polygon points="20,0 40,20 20,40 0,20" fill="url(#logoGradient)"/>
+      </svg>
+      <div class="logo-title">GoArgentina</div>
     </div>
 
     <h1>Entrar</h1>
