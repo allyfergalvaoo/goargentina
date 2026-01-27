@@ -4,563 +4,856 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard | GoArgentina</title>
+  <meta name="description" content="Área do cliente GoArgentina — acompanhe seu processo de DNI por fases e passos, envie documentos e receba mensagens." />
 
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
+    *{ margin:0; padding:0; box-sizing:border-box; }
+
     :root{
-      --primary:#0066FF; --accent:#FFD500; --dark:#0A0E27; --light:#F8F9FF;
-      --success:#10B981; --warning:#F59E0B; --danger:#EF4444;
+      /* Mesma linguagem da landing (mais sóbria/discreta) */
+      --blue-900:#0A0E27;
+      --blue-800:#0F1B3D;
+      --blue-700:#17306A;
+
+      --text:#0D1220;
+      --muted:#5B6475;
+
+      --bg:#FFFFFF;
+      --bg-soft:#F6F7FB;
+      --surface:#FFFFFF;
+
+      --sand:#F3E7C6;
+      --sand-2:#F7F1DD;
+
+      --line:rgba(13,18,32,.10);
+      --line-strong:rgba(13,18,32,.16);
+
+      --radius:16px;
+      --shadow: 0 18px 50px rgba(13,18,32,.10);
+
+      --success:#10B981;
+      --warning:#F59E0B;
+      --danger:#EF4444;
+
+      --ring: rgba(23,48,106,.18);
+      --ring-2: rgba(23,48,106,.28);
     }
+
     body{
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-      background:var(--dark); color:var(--light); line-height:1.6; overflow-x:hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Arial, sans-serif;
+      background: var(--bg-soft);
+      color: var(--text);
+      line-height: 1.6;
     }
-    .stars{ position:fixed; inset:0; pointer-events:none; z-index:0; }
-    .star{ position:absolute; width:2px; height:2px; background:#fff; border-radius:50%; opacity:.4; animation:twinkle 3s infinite; }
-    @keyframes twinkle{ 0%,100%{opacity:.4} 50%{opacity:1} }
-    @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-    @keyframes slideDown{ from{opacity:0; transform:translateY(-16px)} to{opacity:1; transform:translateY(0)} }
-    @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
-    @keyframes spin{ to{ transform:rotate(360deg) } }
 
+    a{ color: inherit; text-decoration:none; }
+    button{ font-family: inherit; }
+
+    .container{
+      width:min(1120px, calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    /* Header */
     header{
-      padding:18px 0;
-      backdrop-filter:blur(20px);
-      background:rgba(10,14,39,.95);
-      border-bottom:1px solid rgba(255,255,255,.1);
-      position:sticky; top:0; z-index:100;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
     }
-    .header-container{
-      max-width:1200px; margin:0 auto; padding:0 20px;
-      display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      padding: 14px 0;
+      flex-wrap: wrap;
     }
-    .logo{
-      font-size:22px; font-weight:900;
-      background:linear-gradient(135deg,var(--primary),var(--accent));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      display:flex; align-items:center; gap:10px; text-decoration:none;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: .2px;
     }
-    .logo-icon{
-      width:40px; height:40px;
-      display:flex; align-items:center; justify-content:center;
-      animation:float 3s ease-in-out infinite;
+    .mark{
+      width: 38px; height: 38px;
+      border-radius: 12px;
+      background: var(--blue-700);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-weight: 950;
+    }
+    .brand small{
+      display:block;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: -2px;
+      font-size: 12px;
+      letter-spacing: 0;
     }
 
-    .header-actions{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
-    .user-pill{
-      display:flex; align-items:center; gap:10px; padding:8px 14px;
-      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:999px;
+    .header-right{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
     }
-    .user-avatar{
-      width:34px; height:34px; border-radius:50%;
-      background:linear-gradient(135deg,var(--primary),var(--accent));
-      display:flex; align-items:center; justify-content:center; font-weight:900; color:var(--dark);
-    }
-    .user-name{ font-size:13px; font-weight:800; color:rgba(255,255,255,.9); }
-    .logout-btn{
-      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
-      color:rgba(255,255,255,.75); padding:8px 16px; border-radius:999px;
-      cursor:pointer; font-weight:800; transition:.2s;
-    }
-    .logout-btn:hover{ background:rgba(255,255,255,.1); color:#fff; }
 
-    .main-container{ max-width:1200px; margin:0 auto; padding:34px 20px; position:relative; z-index:1; }
-    .page-header{ margin-bottom:20px; animation:slideDown .6s ease-out; }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 10px 28px rgba(13,18,32,.04);
+    }
+    .avatar{
+      width: 34px; height: 34px;
+      border-radius: 999px;
+      background: var(--sand);
+      border: 1px solid rgba(0,0,0,.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 950;
+      color: var(--text);
+    }
+    .pill .name{
+      display:flex;
+      flex-direction:column;
+      line-height: 1.1;
+    }
+    .pill .name b{
+      font-size: 13px;
+      letter-spacing: -0.1px;
+    }
+    .pill .name span{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 850;
+      font-size: 14px;
+      border: 1px solid var(--line);
+      background: white;
+      cursor: pointer;
+      transition: all .15s ease;
+      white-space: nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(13,18,32,.08);
+    }
+    .btn-primary{
+      background: var(--blue-700);
+      color: #fff;
+      border-color: rgba(255,255,255,.18);
+    }
+    .btn-primary:hover{ background: var(--blue-800); }
+    .btn-ghost{ background: var(--bg-soft); }
+
+    /* Page */
+    .main{
+      padding: 26px 0 56px;
+    }
+
+    .page-header{
+      background: linear-gradient(180deg, #fff, rgba(246,247,251,.55));
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 18px;
+      box-shadow: 0 12px 34px rgba(13,18,32,.06);
+    }
     .page-title{
-      font-size:clamp(26px,4vw,34px); font-weight:950; margin-bottom:6px;
-      background:linear-gradient(135deg,#fff,#a0b0ff);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      font-size: clamp(24px, 3.6vw, 34px);
+      line-height: 1.15;
+      font-weight: 950;
+      letter-spacing: -0.4px;
+      margin-bottom: 6px;
     }
-    .page-subtitle{ font-size:14px; color:rgba(255,255,255,.6); }
+    .page-subtitle{
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 14px;
+    }
 
     .notice{
-      margin-top:12px; padding:12px 14px; border-radius:14px; border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.05); font-size:13px; color:rgba(255,255,255,.85); display:none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(13,18,32,.86);
+      display:none;
     }
     .notice.show{ display:block; }
-    .notice.ok{ border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.08); }
-    .notice.err{ border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.08); }
+    .notice.ok{
+      border-color: rgba(16,185,129,.30);
+      background: rgba(16,185,129,.08);
+      color: rgba(13,18,32,.92);
+    }
+    .notice.err{
+      border-color: rgba(239,68,68,.28);
+      background: rgba(239,68,68,.08);
+      color: rgba(13,18,32,.92);
+    }
 
+    /* Tabs */
     .tabs{
-      display:flex; gap:10px; flex-wrap:wrap; margin:18px 0 18px;
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 16px 0 18px;
     }
     .tab-btn{
-      border:none; cursor:pointer; font-weight:950; font-size:13px;
-      padding:10px 14px; border-radius:999px; transition:.2s;
-      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
-      color:rgba(255,255,255,.85);
-      display:inline-flex; align-items:center; gap:10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      cursor:pointer;
+      font-weight: 900;
+      font-size: 13px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: all .15s ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      color: rgba(13,18,32,.86);
     }
-    .tab-btn:hover{ background:rgba(255,255,255,.1); }
+    .tab-btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(13,18,32,.06);
+    }
     .tab-btn.active{
-      background:linear-gradient(135deg,var(--primary),#0052CC);
-      border-color:rgba(0,102,255,.4);
-      color:#fff;
-      box-shadow:0 10px 26px rgba(0,102,255,.28);
+      background: var(--blue-700);
+      border-color: rgba(23,48,106,.35);
+      color: #fff;
+      box-shadow: 0 16px 40px rgba(23,48,106,.18);
     }
     .tab-badge{
       display:none;
-      font-size:11px; font-weight:950;
-      padding:2px 8px; border-radius:999px;
-      background:rgba(245,158,11,.16);
-      border:1px solid rgba(245,158,11,.35);
-      color:var(--warning);
+      font-size: 11px;
+      font-weight: 950;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(245,158,11,.14);
+      border: 1px solid rgba(245,158,11,.28);
+      color: rgba(145, 92, 18, .95);
+    }
+    .tab-btn.active .tab-badge{
+      background: rgba(255,255,255,.16);
+      border-color: rgba(255,255,255,.22);
+      color:#fff;
     }
 
-    .section{ display:none; animation:fadeIn .25s ease-out; }
+    .section{ display:none; }
     .section.active{ display:block; }
 
+    /* Cards */
     .card{
-      background:rgba(255,255,255,.05); backdrop-filter:blur(10px);
-      border:1px solid rgba(255,255,255,.1); border-radius:18px;
-      padding:18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 18px;
+      box-shadow: 0 12px 34px rgba(13,18,32,.06);
     }
-    .card-title{ font-size:15px; font-weight:950; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
-    .small{ font-size:13px; color:rgba(255,255,255,.72); font-weight:800; }
+    .card-title{
+      font-size: 15px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      margin-bottom: 8px;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .small{
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--muted);
+    }
 
-    /* ========================================
-       TIMELINE HORIZONTAL (7 FASES) - AJUSTADA
-    ======================================== */
+    /* Process area (Timeline + Current phase) */
     .timeline-wrapper{
-      margin:24px 0 32px;
-      padding:20px;
-      background:rgba(255,255,255,.03);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 18px;
+      box-shadow: 0 12px 34px rgba(13,18,32,.06);
+      margin-bottom: 14px;
     }
     .timeline-title{
-      font-size:16px; font-weight:950; margin-bottom:16px;
-      text-align:center;
-      background:linear-gradient(135deg,#fff,#a0b0ff);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      font-size: 15px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      margin-bottom: 12px;
     }
     .timeline-container{
       position:relative;
-      padding:10px 12px 6px;
+      padding: 12px 10px 8px;
       overflow-x:auto;
       -webkit-overflow-scrolling: touch;
     }
     .timeline-line{
       position:absolute;
       top:50%;
-      left:12px;
-      right:12px;
-      height:4px;
-      background:rgba(255,255,255,.1);
-      border-radius:999px;
-      transform:translateY(-50%);
+      left:10px;
+      right:10px;
+      height: 4px;
+      background: rgba(13,18,32,.08);
+      border-radius: 999px;
+      transform: translateY(-50%);
       z-index:0;
     }
     .timeline-progress{
       position:absolute;
-      top:0;
-      left:0;
+      top:0; left:0;
       height:100%;
-      background:linear-gradient(90deg, var(--primary), var(--accent));
-      border-radius:999px;
-      transition:width .6s ease-out;
+      width:0%;
+      background: rgba(23,48,106,.85);
+      border-radius: 999px;
+      transition: width .6s ease-out;
     }
-    /* container real dos 7 círculos */
     #timelinePhases{
       position:relative;
       z-index:1;
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:10px;
+      gap: 10px;
       width:100%;
-      min-width:520px; /* mantém horizontal e evita esmagar no mobile */
+      min-width: 520px;
     }
     .timeline-phase{
       display:flex;
       flex-direction:column;
       align-items:center;
-      gap:0;
       flex:1;
       cursor:default;
     }
     .timeline-dot{
-      width:32px;
-      height:32px;
-      border-radius:50%;
-      background:rgba(255,255,255,.08);
-      border:3px solid rgba(255,255,255,.2);
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: #fff;
+      border: 2px solid rgba(13,18,32,.14);
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:13px;
-      font-weight:950;
-      color:rgba(255,255,255,.7);
-      transition:.3s;
+      font-size: 13px;
+      font-weight: 950;
+      color: rgba(13,18,32,.70);
+      transition: all .2s ease;
+      box-shadow: 0 10px 22px rgba(13,18,32,.05);
     }
     .timeline-phase.done .timeline-dot{
-      background:rgba(16,185,129,.2);
-      border-color:rgba(16,185,129,.6);
-      color:var(--success);
+      border-color: rgba(16,185,129,.35);
+      background: rgba(16,185,129,.08);
+      color: rgba(10, 93, 64, .95);
+      box-shadow: none;
     }
     .timeline-phase.current .timeline-dot{
-      background:linear-gradient(135deg, var(--primary), var(--accent));
-      border-color:rgba(0,102,255,.8);
-      color:var(--dark);
-      box-shadow:0 0 20px rgba(0,102,255,.5);
-      transform:scale(1.2);
+      border-color: rgba(23,48,106,.35);
+      background: rgba(23,48,106,.10);
+      color: var(--blue-700);
+      transform: scale(1.08);
+      box-shadow: 0 18px 36px rgba(23,48,106,.16);
     }
 
-    /* label da fase atual abaixo da timeline */
     .timeline-current{
-      margin-top:14px;
-      text-align:center;
-      font-size:13px;
-      font-weight:950;
-      color:rgba(255,255,255,.85);
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 750;
+      color: rgba(13,18,32,.78);
     }
-    .timeline-current b{
-      color:#fff;
-    }
+    .timeline-current b{ color: var(--text); }
 
-    /* ========================================
-       CARD DA FASE ATUAL (VERTICAL)
-    ======================================== */
+    /* Current phase card */
     .current-phase-card{
-      background:rgba(255,255,255,.05);
-      border:2px solid rgba(0,102,255,.3);
-      border-radius:20px;
-      padding:24px;
-      margin-bottom:24px;
-      box-shadow:0 10px 40px rgba(0,102,255,.15);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 18px;
+      box-shadow: 0 12px 34px rgba(13,18,32,.06);
     }
     .current-phase-header{
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
-      gap:12px;
-      margin-bottom:20px;
-      padding-bottom:16px;
-      border-bottom:1px solid rgba(255,255,255,.1);
-    }
-    .current-phase-info{
-      flex:1;
+      gap: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 14px;
+      flex-wrap: wrap;
     }
     .current-phase-number{
-      font-size:13px;
-      font-weight:950;
-      color:rgba(0,102,255,.9);
-      margin-bottom:4px;
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(23,48,106,.90);
+      letter-spacing: .2px;
+      margin-bottom: 4px;
     }
     .current-phase-name{
-      font-size:22px;
-      font-weight:950;
-      background:linear-gradient(135deg,#fff,#a0b0ff);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      margin-bottom:4px;
+      font-size: 20px;
+      line-height: 1.25;
+      font-weight: 950;
+      letter-spacing: -0.25px;
+      margin-bottom: 3px;
     }
     .current-phase-desc{
-      font-size:13px;
-      color:rgba(255,255,255,.6);
-      font-weight:800;
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--muted);
     }
     .current-phase-badge{
-      padding:8px 16px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:950;
-      background:rgba(0,102,255,.15);
-      border:1px solid rgba(0,102,255,.4);
-      color:#9ec2ff;
-      white-space:nowrap;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      background: rgba(23,48,106,.08);
+      border: 1px solid rgba(23,48,106,.18);
+      color: rgba(23,48,106,.92);
+      white-space: nowrap;
     }
 
     .steps-vertical{
       display:flex;
       flex-direction:column;
-      gap:12px;
+      gap: 10px;
     }
     .step-item{
       display:flex;
-      align-items:flex-start;
-      gap:14px;
-      padding:16px;
-      background:rgba(255,255,255,.03);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
-      transition:.2s;
-      cursor:default;
+      gap: 12px;
+      padding: 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(246,247,251,.55);
+      transition: all .15s ease;
     }
     .step-item:hover{
-      background:rgba(255,255,255,.06);
-      border-color:rgba(255,255,255,.15);
-    }
-    .step-item.done{
-      border-color:rgba(16,185,129,.3);
-      background:rgba(16,185,129,.04);
-    }
-    .step-item.current{
-      border-color:rgba(0,102,255,.4);
-      background:rgba(0,102,255,.08);
-      box-shadow:0 4px 16px rgba(0,102,255,.15);
+      background: rgba(246,247,251,.85);
+      border-color: var(--line-strong);
     }
     .step-check{
-      width:28px;
-      height:28px;
-      border-radius:50%;
-      border:3px solid rgba(255,255,255,.2);
-      background:rgba(255,255,255,.04);
-      flex:0 0 auto;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: 2px solid rgba(13,18,32,.16);
+      background: #fff;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:14px;
-      transition:.2s;
+      font-weight: 950;
+      font-size: 13px;
+      flex: 0 0 auto;
+      color: rgba(13,18,32,.72);
+      box-shadow: 0 10px 22px rgba(13,18,32,.05);
     }
-    .step-item.done .step-check{
-      border-color:rgba(16,185,129,.6);
-      background:rgba(16,185,129,.2);
-      color:var(--success);
-    }
-    .step-item.current .step-check{
-      border-color:rgba(0,102,255,.7);
-      background:linear-gradient(135deg, var(--primary), var(--accent));
-      color:var(--dark);
-      box-shadow:0 0 12px rgba(0,102,255,.4);
-    }
-    .step-content{
-      flex:1;
-    }
+    .step-content{ flex:1; }
     .step-number-label{
-      font-size:12px;
-      font-weight:950;
-      color:rgba(255,255,255,.5);
-      margin-bottom:4px;
-    }
-    .step-item.current .step-number-label{
-      color:rgba(0,102,255,.9);
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(13,18,32,.55);
+      margin-bottom: 4px;
     }
     .step-text{
-      font-size:15px;
-      font-weight:900;
-      color:rgba(255,255,255,.9);
-      line-height:1.4;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: -0.1px;
+      color: rgba(13,18,32,.90);
+      line-height: 1.35;
     }
     .step-status-badge{
-      margin-top:8px;
+      margin-top: 8px;
       display:inline-flex;
-      padding:4px 12px;
-      border-radius:999px;
-      font-size:11px;
-      font-weight:950;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.05);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 950;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: rgba(13,18,32,.72);
+    }
+
+    .step-item.done{
+      background: rgba(16,185,129,.06);
+      border-color: rgba(16,185,129,.20);
+    }
+    .step-item.done .step-check{
+      border-color: rgba(16,185,129,.30);
+      background: rgba(16,185,129,.10);
+      color: rgba(10, 93, 64, .95);
+      box-shadow: none;
     }
     .step-item.done .step-status-badge{
-      border-color:rgba(16,185,129,.3);
-      background:rgba(16,185,129,.1);
-      color:var(--success);
+      border-color: rgba(16,185,129,.22);
+      background: rgba(16,185,129,.10);
+      color: rgba(10, 93, 64, .95);
+    }
+
+    .step-item.current{
+      background: rgba(23,48,106,.06);
+      border-color: rgba(23,48,106,.18);
+    }
+    .step-item.current .step-check{
+      border-color: rgba(23,48,106,.28);
+      background: rgba(23,48,106,.10);
+      color: rgba(23,48,106,.95);
+      box-shadow: 0 16px 34px rgba(23,48,106,.14);
+    }
+    .step-item.current .step-number-label{
+      color: rgba(23,48,106,.92);
     }
     .step-item.current .step-status-badge{
-      border-color:rgba(0,102,255,.35);
-      background:rgba(0,102,255,.12);
-      color:#9ec2ff;
+      border-color: rgba(23,48,106,.22);
+      background: rgba(23,48,106,.10);
+      color: rgba(23,48,106,.92);
+    }
+
+    .step-item.pending{
+      background: rgba(246,247,251,.55);
     }
     .step-item.pending .step-status-badge{
-      border-color:rgba(245,158,11,.25);
-      background:rgba(245,158,11,.08);
-      color:var(--warning);
+      border-color: rgba(245,158,11,.18);
+      background: rgba(245,158,11,.10);
+      color: rgba(145, 92, 18, .95);
     }
 
+    /* Documents */
     .documents-grid{
-      display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:12px;
-      margin-top:10px;
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
     }
     .doc-card{
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.1);
-      border-radius:16px; padding:14px; transition:.15s;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 12px 28px rgba(13,18,32,.05);
+      transition: all .15s ease;
     }
-    .doc-card:hover{ border-color:rgba(0,102,255,.35); }
-    .doc-card.approved{ border-color:rgba(16,185,129,.42); background:rgba(16,185,129,.05); }
-    .doc-card.rejected{ border-color:rgba(239,68,68,.42); background:rgba(239,68,68,.05); }
-    .doc-header{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px; }
-    .doc-icon{ font-size:28px; }
+    .doc-card:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(13,18,32,.08);
+      border-color: rgba(23,48,106,.22);
+    }
+    .doc-card.approved{
+      border-color: rgba(16,185,129,.22);
+      background: linear-gradient(180deg, rgba(16,185,129,.07), #fff);
+    }
+    .doc-card.rejected{
+      border-color: rgba(239,68,68,.22);
+      background: linear-gradient(180deg, rgba(239,68,68,.06), #fff);
+    }
+    .doc-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .doc-icon{ font-size: 26px; }
+    .doc-title{
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: -0.15px;
+      margin-bottom: 6px;
+    }
+    .doc-info{
+      font-size: 12px;
+      font-weight: 650;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
     .doc-status{
-      font-size:11px; font-weight:950; padding:4px 10px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06);
-      white-space:nowrap;
+      font-size: 11px;
+      font-weight: 950;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(246,247,251,.65);
+      white-space: nowrap;
+      color: rgba(13,18,32,.76);
     }
-    .doc-status.pending{ color:var(--warning); border-color:rgba(245,158,11,.28); background:rgba(245,158,11,.10); }
-    .doc-status.uploaded{ color:var(--success); border-color:rgba(16,185,129,.28); background:rgba(16,185,129,.10); }
-    .doc-status.approved{ color:var(--success); border-color:rgba(16,185,129,.4); background:rgba(16,185,129,.14); }
-    .doc-status.rejected{ color:var(--danger); border-color:rgba(239,68,68,.32); background:rgba(239,68,68,.12); }
-    .doc-title{ font-size:13px; font-weight:950; margin-bottom:6px; }
-    .doc-info{ font-size:12px; color:rgba(255,255,255,.55); font-weight:800; margin-bottom:10px; }
-    .doc-actions{ display:flex; gap:8px; flex-wrap:wrap; }
-    .btn-small{
-      padding:8px 10px; font-size:12px; font-weight:950;
-      border-radius:10px; border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.06); color:#fff; cursor:pointer; transition:.15s;
+    .doc-status.pending{
+      border-color: rgba(245,158,11,.20);
+      background: rgba(245,158,11,.10);
+      color: rgba(145, 92, 18, .95);
     }
-    .btn-small:hover{ background:rgba(0,102,255,.18); border-color:rgba(0,102,255,.4); }
-    .btn-small.danger:hover{ background:rgba(239,68,68,.18); border-color:rgba(239,68,68,.4); }
-    .btn-small:disabled{ opacity:.45; cursor:not-allowed; }
-
-    .loading-overlay{
-      position:fixed; inset:0; z-index:9999;
-      background:rgba(10,14,39,.72); backdrop-filter:blur(10px);
-      display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;
+    .doc-status.uploaded{
+      border-color: rgba(16,185,129,.18);
+      background: rgba(16,185,129,.08);
+      color: rgba(10, 93, 64, .95);
     }
-    .loading-overlay.hidden{ display:none; }
-    .spinner{
-      width:42px; height:42px; border-radius:50%;
-      border:4px solid rgba(255,255,255,.15);
-      border-top-color: rgba(255,255,255,.85);
-      animation: spin .9s linear infinite;
+    .doc-status.approved{
+      border-color: rgba(16,185,129,.22);
+      background: rgba(16,185,129,.10);
+      color: rgba(10, 93, 64, .95);
     }
-    .loading-text{ color:rgba(255,255,255,.85); font-weight:950; font-size:14px; }
+    .doc-status.rejected{
+      border-color: rgba(239,68,68,.20);
+      background: rgba(239,68,68,.08);
+      color: rgba(128, 24, 24, .95);
+    }
 
     .input{
       width:100%;
-      padding:12px 14px;
-      border-radius:12px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.1);
-      color:#fff; font-weight:800; font-size:14px;
-      transition:.2s;
+      padding: 11px 12px;
+      border-radius: 12px;
+      background: rgba(246,247,251,.75);
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-weight: 650;
+      font-size: 14px;
+      transition: .15s ease;
     }
-    .input:focus{ outline:none; border-color:var(--primary); background:rgba(255,255,255,.08); }
-    .input::placeholder{ color:rgba(255,255,255,.4); font-weight:800; }
+    .input:focus{
+      outline:none;
+      border-color: rgba(23,48,106,.32);
+      box-shadow: 0 0 0 4px var(--ring);
+      background: #fff;
+    }
 
+    .doc-actions{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .btn-small{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 9px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      cursor:pointer;
+      transition: all .15s ease;
+    }
+    .btn-small:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(13,18,32,.08);
+      border-color: rgba(23,48,106,.22);
+    }
+    .btn-small.danger:hover{
+      border-color: rgba(239,68,68,.22);
+      background: rgba(239,68,68,.06);
+    }
+    .btn-small:disabled{
+      opacity: .45;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+    }
+
+    /* Inbox */
+    .inbox-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    #inboxBadge{
+      display:none;
+    }
     .empty-state{
-      text-align:center; padding:38px 10px;
-      border:1px dashed rgba(255,255,255,.14);
-      border-radius:18px;
-      background:rgba(255,255,255,.03);
+      text-align:center;
+      padding: 34px 12px;
+      border: 1px dashed rgba(13,18,32,.18);
+      border-radius: calc(var(--radius) + 4px);
+      background: rgba(246,247,251,.65);
+      margin-top: 14px;
     }
-    .empty-icon{ font-size:44px; opacity:.35; margin-bottom:8px; }
-    .empty-title{ font-size:15px; font-weight:950; }
-    .empty-text{ font-size:13px; color:rgba(255,255,255,.6); font-weight:800; margin-top:4px; }
+    .empty-icon{ font-size: 40px; opacity: .55; margin-bottom: 6px; }
+    .empty-title{ font-size: 15px; font-weight: 950; letter-spacing: -0.15px; }
+    .empty-text{ font-size: 13px; font-weight: 650; color: var(--muted); margin-top: 4px; }
 
-    @media (max-width:768px){
-      /* mantém horizontal; só dá um respiro */
-      #timelinePhases{ min-width:520px; }
-      .timeline-container{ padding-bottom:8px; }
+    /* Loading overlay */
+    .loading-overlay{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      background: rgba(246,247,251,.82);
+      backdrop-filter: blur(10px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .loading-overlay.hidden{ display:none; }
+    .spinner{
+      width: 42px; height: 42px;
+      border-radius: 999px;
+      border: 4px solid rgba(13,18,32,.12);
+      border-top-color: rgba(23,48,106,.75);
+      animation: spin .9s linear infinite;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg);} }
+    .loading-text{
+      color: rgba(13,18,32,.78);
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    /* Footer spacing in dashboard */
+    .footer-note{
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 650;
+      color: rgba(13,18,32,.60);
+    }
+
+    @media (max-width: 900px){
+      .btn{ width:auto; }
+    }
+    @media (max-width: 520px){
+      .btn{ width: 100%; }
+      .header-right{ width:100%; }
+      .pill{ width:100%; justify-content:flex-start; }
+      .tabs{ gap: 8px; }
+      .tab-btn{ width: 100%; justify-content:space-between; }
+      #timelinePhases{ min-width: 520px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="stars"></div>
-
   <div class="loading-overlay" id="loading">
     <div class="spinner"></div>
     <div class="loading-text" id="loadingText">Carregando…</div>
   </div>
 
   <header>
-    <div class="header-container">
-      <a class="logo" href="index.html">
-        <svg class="logo-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#0066FF;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#FFD500;stop-opacity:1" />
-            </linearGradient>
-          </defs>
-          <polygon points="20,0 40,20 20,40 0,20" fill="url(#logoGradient)"/>
-        </svg>
-        <span>GoArgentina</span>
-      </a>
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="index.html" aria-label="GoArgentina">
+          <div class="mark">GO</div>
+          <div>
+            GoArgentina
+            <small>Área do cliente</small>
+          </div>
+        </a>
 
-      <div class="header-actions">
-        <div class="user-pill" title="Sua conta">
-          <div class="user-avatar" id="userAvatar">CL</div>
-          <div class="user-name" id="userName">Cliente</div>
+        <div class="header-right">
+          <div class="pill" title="Sua conta">
+            <div class="avatar" id="userAvatar">CL</div>
+            <div class="name">
+              <b id="userName">Cliente</b>
+              <span>Acompanhamento do DNI</span>
+            </div>
+          </div>
+
+          <button class="btn btn-ghost" id="logoutBtn">Sair</button>
         </div>
-        <button class="logout-btn" id="logoutBtn">Sair</button>
       </div>
     </div>
   </header>
 
-  <main class="main-container">
-    <div class="page-header">
-      <h1 class="page-title">Seu painel</h1>
-      <p class="page-subtitle">Acompanhe o progresso do seu DNI argentino em tempo real</p>
-      <div class="notice" id="noticeBox"></div>
+  <main class="main">
+    <div class="container">
+      <div class="page-header">
+        <h1 class="page-title">Seu painel</h1>
+        <p class="page-subtitle">Acompanhe o progresso do seu DNI argentino por fases e passos.</p>
+        <div class="notice" id="noticeBox"></div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Navegação do painel">
+        <button class="tab-btn active" data-tab="process" role="tab" aria-selected="true">🧭 Processo</button>
+        <button class="tab-btn" data-tab="docs" role="tab" aria-selected="false">📄 Documentos</button>
+        <button class="tab-btn" data-tab="support" role="tab" aria-selected="false">
+          💬 Suporte <span class="tab-badge" id="supportBadge">0</span>
+        </button>
+      </div>
+
+      <!-- PROCESSO -->
+      <section class="section active" id="tab-process">
+        <div class="timeline-wrapper">
+          <div class="timeline-title">Progresso do processo (7 fases)</div>
+
+          <div class="timeline-container">
+            <div class="timeline-line">
+              <div class="timeline-progress" id="timelineProgress"></div>
+            </div>
+            <div id="timelinePhases"></div>
+          </div>
+
+          <div class="timeline-current" id="timelineCurrentName"></div>
+        </div>
+
+        <div class="current-phase-card" id="currentPhaseCard"></div>
+      </section>
+
+      <!-- DOCUMENTOS -->
+      <section class="section" id="tab-docs">
+        <div class="card">
+          <div class="card-title">📄 Seus documentos</div>
+          <div class="small">Envie os arquivos abaixo. Após envio, nossa equipe revisa e aprova.</div>
+
+          <div class="documents-grid" id="documentsGrid"></div>
+
+          <div class="footer-note">
+            Dica: prefira imagens nítidas ou PDF. Se um documento for rejeitado, reenvie uma versão melhor.
+          </div>
+        </div>
+      </section>
+
+      <!-- SUPORTE -->
+      <section class="section" id="tab-support">
+        <div class="card">
+          <div class="inbox-top">
+            <div>
+              <div class="card-title" style="margin-bottom:4px;">📨 Caixa de entrada</div>
+              <div class="small">Atualizações, dicas e solicitações da nossa equipe.</div>
+            </div>
+            <div class="doc-status pending" id="inboxBadge"></div>
+          </div>
+
+          <div id="inboxList" style="margin-top:14px; display:flex; flex-direction:column; gap:10px;"></div>
+
+          <div class="empty-state" id="inboxEmpty" style="display:none;">
+            <div class="empty-icon">📭</div>
+            <div class="empty-title">Sem mensagens</div>
+            <div class="empty-text">Quando tivermos atualizações ou pedidos, elas aparecem aqui.</div>
+          </div>
+
+          <div class="empty-state" style="margin-top:16px;">
+            <div class="empty-icon">💬</div>
+            <div class="empty-title">Precisa falar com a gente?</div>
+            <div class="empty-text">Chame no WhatsApp para atendimento humano.</div>
+            <div style="margin-top:12px;">
+              <a class="btn btn-primary" href="https://wa.me/5491159023706" target="_blank" rel="noopener noreferrer">
+                💬 Abrir WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="process">🧭 Processo</button>
-      <button class="tab-btn" data-tab="docs">📄 Documentos</button>
-      <button class="tab-btn" data-tab="support">💬 Suporte <span class="tab-badge" id="supportBadge">0</span></button>
-    </div>
-
-    <!-- PROCESSO (TIMELINE + FASE ATUAL) -->
-    <section class="section active" id="tab-process">
-      <!-- TIMELINE HORIZONTAL DAS 7 FASES -->
-      <div class="timeline-wrapper">
-        <div class="timeline-title">Progresso do Processo (7 Fases)</div>
-        <div class="timeline-container">
-          <div class="timeline-line">
-            <div class="timeline-progress" id="timelineProgress"></div>
-          </div>
-          <div id="timelinePhases"></div>
-        </div>
-
-        <!-- Nome da fase atual abaixo -->
-        <div class="timeline-current" id="timelineCurrentName"></div>
-      </div>
-
-      <!-- CARD DA FASE ATUAL COM PASSOS VERTICAIS -->
-      <div class="current-phase-card" id="currentPhaseCard"></div>
-    </section>
-
-    <!-- DOCUMENTOS -->
-    <section class="section" id="tab-docs">
-      <div class="card">
-        <div class="card-title">📄 Seus documentos</div>
-        <div class="small">Faça upload dos arquivos. Após envio, nossa equipe revisa e aprova.</div>
-
-        <div class="documents-grid" id="documentsGrid"></div>
-
-        <div class="small" style="margin-top:12px; color:rgba(255,255,255,.55);">
-          Dica: prefira imagens nítidas ou PDF. Se um documento for rejeitado, reenvie uma versão melhor.
-        </div>
-      </div>
-    </section>
-
-    <!-- SUPORTE -->
-    <section class="section" id="tab-support">
-      <div class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
-          <div>
-            <div class="card-title" style="margin-bottom:4px;">📨 Caixa de entrada</div>
-            <div class="small">Atualizações, dicas e solicitações da nossa equipe.</div>
-          </div>
-          <div class="doc-status pending" id="inboxBadge" style="display:none;"></div>
-        </div>
-
-        <div id="inboxList" style="margin-top:14px; display:flex; flex-direction:column; gap:10px;"></div>
-
-        <div class="empty-state" id="inboxEmpty" style="display:none; margin-top:14px;">
-          <div class="empty-icon">📭</div>
-          <div class="empty-title">Sem mensagens</div>
-          <div class="empty-text">Quando tivermos atualizações ou pedidos, elas aparecem aqui.</div>
-        </div>
-
-        <div class="empty-state" style="margin-top:16px;">
-          <div class="empty-icon">💬</div>
-          <div class="empty-title">Precisa falar com a gente?</div>
-          <div class="empty-text">Chame no WhatsApp (o chat interno pode vir depois).</div>
-          <div style="margin-top:12px;">
-            <a href="https://wa.me/" target="_blank" rel="noopener noreferrer"
-               style="display:inline-flex; gap:8px; align-items:center; text-decoration:none;
-                      padding:10px 14px; border-radius:999px; font-weight:950;
-                      background:rgba(16,185,129,.16); border:1px solid rgba(16,185,129,.35); color:var(--success);">
-              💚 Abrir WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -617,19 +910,6 @@
       return s.replace(/[&<>"']/g, m => ({
         "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
       }[m]));
-    }
-
-    /* =========================
-       4) Stars
-    ========================= */
-    const starsContainer = document.querySelector(".stars");
-    for (let i=0;i<100;i++){
-      const star = document.createElement("div");
-      star.className="star";
-      star.style.left = Math.random()*100 + "%";
-      star.style.top = Math.random()*100 + "%";
-      star.style.animationDelay = Math.random()*3 + "s";
-      starsContainer.appendChild(star);
     }
 
     /* =========================
@@ -698,7 +978,9 @@
     ========================= */
     function setActiveTab(key){
       document.querySelectorAll(".tab-btn").forEach(b=>{
-        b.classList.toggle("active", b.dataset.tab === key);
+        const active = (b.dataset.tab === key);
+        b.classList.toggle("active", active);
+        b.setAttribute("aria-selected", active ? "true" : "false");
       });
       document.querySelectorAll(".section").forEach(s=>{
         s.classList.toggle("active", s.id === `tab-${key}`);
@@ -764,7 +1046,6 @@
     function wireEvents(){
       document.getElementById("logoutBtn").addEventListener("click", logout);
 
-      // mantém sessão em dia
       sb.auth.onAuthStateChange((event) => {
         if (event === "SIGNED_OUT"){
           window.location.href = "login.html";
@@ -800,7 +1081,6 @@
     }
 
     async function loadProcess(){
-      // busca/garante processo - AGORA COM CURRENT_STEP
       const { data, error } = await sb
         .from("dni_process")
         .select("user_id, current_phase, current_step, updated_at")
@@ -814,7 +1094,6 @@
       }
 
       if (!data){
-        // tenta criar linha
         const nowIso = new Date().toISOString();
         const { data: created } = await sb
           .from("dni_process")
@@ -828,11 +1107,15 @@
           .maybeSingle();
         currentPhase = created?.current_phase || 1;
         currentStep = created?.current_step || 1;
-        return;
+      } else {
+        currentPhase = data.current_phase || 1;
+        currentStep = data.current_step || 1;
       }
 
-      currentPhase = data.current_phase || 1;
-      currentStep = data.current_step || 1;
+      // segurança: clamp de fase/passo para não quebrar UI
+      currentPhase = Math.min(7, Math.max(1, Number(currentPhase) || 1));
+      const maxSteps = (phaseSteps[currentPhase] || []).length || 1;
+      currentStep = Math.min(maxSteps, Math.max(1, Number(currentStep) || 1));
     }
 
     async function loadDocuments(){
@@ -866,7 +1149,7 @@
     }
 
     /* =========================
-       9) TIMELINE HORIZONTAL (AJUSTADA)
+       9) Timeline (7 fases)
     ========================= */
     function renderTimeline(){
       const container = document.getElementById("timelinePhases");
@@ -874,7 +1157,6 @@
 
       const progressBar = document.getElementById("timelineProgress");
 
-      // Calcula progresso (0-100%)
       const totalPhases = 7;
       const progressPct = ((currentPhase - 1) / (totalPhases - 1)) * 100;
       progressBar.style.width = Math.min(100, Math.max(0, progressPct)) + "%";
@@ -885,14 +1167,10 @@
 
         const div = document.createElement("div");
         div.className = `timeline-phase ${isDone ? "done" : (isCurrent ? "current" : "")}`;
-
-        // SEM título: só o número
-        div.innerHTML = `<div class="timeline-dot">${ph.id}</div>`;
-
+        div.innerHTML = `<div class="timeline-dot" aria-label="Fase ${ph.id}">${ph.id}</div>`;
         container.appendChild(div);
       });
 
-      // Texto abaixo: fase atual
       const currentLabel = document.getElementById("timelineCurrentName");
       const phaseInfo = phases.find(p => p.id === currentPhase);
       if (currentLabel && phaseInfo){
@@ -901,14 +1179,14 @@
     }
 
     /* =========================
-       10) CARD DA FASE ATUAL (VERTICAL)
+       10) Current phase card (passos)
     ========================= */
     function renderCurrentPhaseCard(){
       const card = document.getElementById("currentPhaseCard");
 
       const phaseInfo = phases.find(p => p.id === currentPhase);
       if (!phaseInfo){
-        card.innerHTML = '<div class="small" style="text-align:center; padding:20px;">Fase não encontrada</div>';
+        card.innerHTML = '<div class="small" style="text-align:center; padding:18px;">Fase não encontrada</div>';
         return;
       }
 
@@ -927,15 +1205,15 @@
         if (isDone){
           itemClass = "done";
           checkIcon = "✓";
-          statusText = "✓ Concluído";
+          statusText = "Concluído";
         } else if (isCurrent){
           itemClass = "current";
           checkIcon = "●";
-          statusText = "📍 Passo atual";
+          statusText = "Passo atual";
         } else {
           itemClass = "pending";
           checkIcon = stepNum;
-          statusText = "⏳ Pendente";
+          statusText = "Pendente";
         }
 
         stepsHTML += `
@@ -952,7 +1230,7 @@
 
       card.innerHTML = `
         <div class="current-phase-header">
-          <div class="current-phase-info">
+          <div>
             <div class="current-phase-number">Fase ${currentPhase} de 7</div>
             <div class="current-phase-name">${phaseInfo.name}</div>
             <div class="current-phase-desc">${phaseInfo.desc}</div>
@@ -961,7 +1239,7 @@
         </div>
 
         <div class="steps-vertical">
-          ${stepsHTML || '<div class="small" style="text-align:center; padding:20px;">Nenhum passo definido para esta fase</div>'}
+          ${stepsHTML || '<div class="small" style="text-align:center; padding:18px;">Nenhum passo definido para esta fase</div>'}
         </div>
       `;
     }
@@ -999,18 +1277,19 @@
             <div class="doc-icon">${dc.icon}</div>
             <div class="doc-status ${badge.cls}">${badge.txt}</div>
           </div>
+
           <div class="doc-title">${dc.name}</div>
           <div class="doc-info">${fileInfo}${timeInfo ? "<br>"+timeInfo : ""}</div>
 
           <input type="file" class="input" style="padding:10px 12px;" accept="image/*,application/pdf" />
 
-          <div class="doc-actions" style="margin-top:10px;">
+          <div class="doc-actions">
             <button class="btn-small" type="button" ${row?.storage_path ? "" : "disabled"}>👁️ Visualizar</button>
             <button class="btn-small danger" type="button" ${row?.storage_path ? "" : "disabled"}>✕ Remover</button>
           </div>
 
-          <div class="small" style="margin-top:8px; color:rgba(255,255,255,.55);">
-            Após enviar: status vira "Enviado". Depois a equipe pode aprovar ou rejeitar.
+          <div class="footer-note" style="margin-top:10px;">
+            Após enviar: status vira “Enviado”. Depois a equipe pode aprovar ou rejeitar.
           </div>
         `;
 
@@ -1065,7 +1344,7 @@
 
         const nowIso = new Date().toISOString();
 
-        // tenta update primeiro (caso já exista linha)
+        // tenta update primeiro
         let updated = null;
         {
           const { data, error } = await sb
@@ -1079,7 +1358,7 @@
           if (!error && data) updated = data;
         }
 
-        // fallback: upsert (se update não encontrou linha)
+        // fallback: upsert
         if (!updated){
           const { data, error } = await sb
             .from("documents")
@@ -1104,7 +1383,6 @@
 
         docsMap.set(docType, updated);
         renderDocuments();
-
         showNotice("ok", "Arquivo enviado com sucesso!");
       } catch {
         showNotice("err", "Falha inesperada ao enviar.");
@@ -1198,16 +1476,17 @@
 
       inboxMsgs.forEach(m => {
         const box = document.createElement("div");
+        // mantém sua lógica de destacar as não lidas usando a classe "approved"
         box.className = "doc-card " + (m.is_read ? "" : "approved");
         box.style.cursor = "pointer";
 
         box.innerHTML = `
           <div class="doc-header">
-            <div style="font-weight:950;">${escapeHTML(m.title)}</div>
+            <div style="font-weight:950; letter-spacing:-0.15px;">${escapeHTML(m.title)}</div>
             <div class="doc-status ${m.is_read ? "uploaded" : "pending"}">${m.is_read ? "Lida" : "Nova"}</div>
           </div>
           <div class="doc-info">${fmtDate(m.created_at)}</div>
-          <div class="small" style="margin-top:8px; color:rgba(255,255,255,.85); white-space:pre-wrap;">${escapeHTML(m.message)}</div>
+          <div class="small" style="margin-top:8px; color: rgba(13,18,32,.86); white-space:pre-wrap;">${escapeHTML(m.message)}</div>
         `;
 
         box.addEventListener("click", async ()=>{
