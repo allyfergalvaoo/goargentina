@@ -290,7 +290,11 @@
       color: var(--muted);
     }
 
-    /* Process area (Timeline + Current phase) */
+    /* =========================
+       TIMELINE (FIX DEFINITIVO)
+       - A barra de progresso agora é um "fill" ABSOLUTO com altura fixa (4px)
+       - Ela fica DENTRO do mesmo wrapper (que rola junto) e SEMPRE atrás dos dots
+    ========================= */
     .timeline-wrapper{
       background: #fff;
       border: 1px solid var(--line);
@@ -306,50 +310,52 @@
       margin-bottom: 12px;
     }
     .timeline-container{
-      position:relative;
-      padding: 12px 10px 8px;
       overflow-x:auto;
       -webkit-overflow-scrolling: touch;
+      padding: 10px 4px 6px;
     }
-
-    /* ✅ CORREÇÃO: garantir que a linha/progresso fiquem SEMPRE atrás dos círculos */
-    .timeline-line{
+    .timeline-strip{
+      position:relative;
+      min-width: 520px;
+      padding: 10px 6px; /* espaço pra não colar nos cantos */
+    }
+    .timeline-track{
       position:absolute;
-      top:50%;
-      left:10px;
-      right:10px;
+      left: 6px;
+      right: 6px;
+      top: 50%;
       height: 4px;
+      transform: translateY(-50%);
       background: rgba(13,18,32,.08);
       border-radius: 999px;
-      transform: translateY(-50%);
       z-index: 0;
       pointer-events:none;
     }
-    .timeline-progress{
+    .timeline-fill{
       position:absolute;
-      top:0; left:0;
-      height:100%;
-      width:0%;
+      left: 6px;
+      top: 50%;
+      height: 4px;
+      transform: translateY(-50%);
+      width: 0%;
       background: rgba(23,48,106,.85);
       border-radius: 999px;
-      transition: width .6s ease-out;
-      z-index: 0;
+      z-index: 0;            /* sempre atrás */
       pointer-events:none;
     }
 
     #timelinePhases{
       position:relative;
-      z-index: 2;              /* acima da linha */
+      z-index: 2;             /* círculos acima do track/fill */
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap: 10px;
-      width:100%;
-      min-width: 520px;
+      width: 100%;
     }
     .timeline-phase{
       position:relative;
-      z-index: 2;              /* redundância pra garantir */
+      z-index: 2;
       display:flex;
       flex-direction:column;
       align-items:center;
@@ -358,7 +364,7 @@
     }
     .timeline-dot{
       position:relative;
-      z-index: 3;              /* acima de tudo */
+      z-index: 3;             /* redundância máxima */
       width: 34px;
       height: 34px;
       border-radius: 999px;
@@ -743,7 +749,7 @@
       .pill{ width:100%; justify-content:flex-start; }
       .tabs{ gap: 8px; }
       .tab-btn{ width: 100%; justify-content:space-between; }
-      #timelinePhases{ min-width: 520px; }
+      .timeline-strip{ min-width: 520px; }
     }
   </style>
 </head>
@@ -802,10 +808,11 @@
           <div class="timeline-title">Progresso do processo (7 fases)</div>
 
           <div class="timeline-container">
-            <div class="timeline-line">
-              <div class="timeline-progress" id="timelineProgress"></div>
+            <div class="timeline-strip">
+              <div class="timeline-track"></div>
+              <div class="timeline-fill" id="timelineProgress"></div>
+              <div id="timelinePhases"></div>
             </div>
-            <div id="timelinePhases"></div>
           </div>
 
           <div class="timeline-current" id="timelineCurrentName"></div>
@@ -931,7 +938,6 @@
       { id:7, name:"DNI emitido", desc:"Documento pronto" }
     ];
 
-    // PASSOS FIXOS POR FASE
     const phaseSteps = {
       1: [
         "Envio dos documentos para nossa equipe",
@@ -1031,13 +1037,11 @@
       }
       currentProfile = profile;
 
-      // se for admin, manda pro admin
       if (currentProfile.role === "admin"){
         window.location.href = "admin.html";
         return;
       }
 
-      // header
       const display = (currentProfile.full_name || currentProfile.email || "Cliente");
       document.getElementById("userName").textContent = display;
       document.getElementById("userAvatar").textContent = initialsFrom(display);
@@ -1184,7 +1188,7 @@
     }
 
     /* =========================
-       10) Current phase card (passos)
+       10) Current phase card
     ========================= */
     function renderCurrentPhaseCard(){
       const card = document.getElementById("currentPhaseCard");
