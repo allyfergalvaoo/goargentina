@@ -291,9 +291,9 @@
     }
 
     /* =========================
-       TIMELINE (CORRIGIDO)
-       - z-index ajustado: track/fill ficam em z-index: 1
-       - Os círculos (dots) ficam em z-index: 10
+       TIMELINE (CORREÇÃO DEFINITIVA)
+       - track e fill com z-index: 0
+       - dots com z-index: 100 e position: relative
     ========================= */
     .timeline-wrapper{
       background: #fff;
@@ -319,6 +319,8 @@
       min-width: 520px;
       padding: 10px 6px;
     }
+    
+    /* Track e Fill - SEMPRE NO FUNDO */
     .timeline-track{
       position:absolute;
       left: 6px;
@@ -328,7 +330,7 @@
       transform: translateY(-50%);
       background: rgba(13,18,32,.08);
       border-radius: 999px;
-      z-index: 1;  /* SEMPRE ATRÁS */
+      z-index: 0;
       pointer-events:none;
     }
     .timeline-fill{
@@ -340,31 +342,35 @@
       width: 0%;
       background: rgba(23,48,106,.85);
       border-radius: 999px;
-      z-index: 1;  /* SEMPRE ATRÁS */
+      z-index: 0;
       pointer-events:none;
     }
 
+    /* Container dos círculos - NA FRENTE */
     #timelinePhases{
       position:relative;
-      z-index: 10;  /* SEMPRE NA FRENTE */
+      z-index: 100;
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap: 10px;
       width: 100%;
     }
+    
     .timeline-phase{
       position:relative;
-      z-index: 10;  /* SEMPRE NA FRENTE */
+      z-index: 100;
       display:flex;
       flex-direction:column;
       align-items:center;
       flex:1;
       cursor:default;
     }
+    
+    /* Círculos - MÁXIMA PRIORIDADE */
     .timeline-dot{
       position:relative;
-      z-index: 10;  /* SEMPRE NA FRENTE */
+      z-index: 100;
       width: 34px;
       height: 34px;
       border-radius: 999px;
