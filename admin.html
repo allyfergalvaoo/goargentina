@@ -1,1539 +1,2032 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Admin | GoArgentina</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | GoArgentina</title>
 
-<style>
-* { margin:0; padding:0; box-sizing:border-box; }
-:root{
-  --primary:#0066FF; --accent:#FFD500; --dark:#0A0E27; --light:#F8F9FF;
-  --success:#10B981; --warning:#F59E0B; --danger:#EF4444;
-}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  background:var(--dark); color:var(--light); line-height:1.6; overflow-x:hidden;
-}
-.stars{ position:fixed; inset:0; pointer-events:none; z-index:0; }
-.star{ position:absolute; width:2px; height:2px; background:#fff; border-radius:50%; opacity:.4; animation:twinkle 3s infinite; }
-@keyframes twinkle{ 0%,100%{opacity:.4} 50%{opacity:1} }
-@keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-@keyframes slideDown{ from{opacity:0; transform:translateY(-20px)} to{opacity:1; transform:translateY(0)} }
-@keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
 
-header{
-  padding:20px 0; backdrop-filter:blur(20px); background:rgba(10,14,39,.95);
-  border-bottom:1px solid rgba(255,255,255,.1); position:sticky; top:0; z-index:100;
-}
-.header-container{
-  max-width:1600px; margin:0 auto; padding:0 20px;
-  display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;
-}
-.logo{
-  font-size:24px; font-weight:900;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  display:flex; align-items:center; gap:10px; text-decoration:none;
-}
-.logo-icon{
-  width:40px; height:40px; border-radius:12px;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--dark);
-  animation:float 3s ease-in-out infinite;
-}
-.admin-badge{
-  padding:4px 12px; background:rgba(239,68,68,.18);
-  border:1px solid rgba(239,68,68,.45); border-radius:12px;
-  font-size:12px; font-weight:800; color:var(--danger);
-}
-.header-actions{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
-.user-pill{
-  display:flex; align-items:center; gap:10px; padding:8px 14px;
-  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:999px;
-}
-.user-avatar{
-  width:34px; height:34px; border-radius:50%;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  display:flex; align-items:center; justify-content:center; font-weight:900; color:var(--dark);
-}
-.user-name{ font-size:13px; font-weight:800; color:rgba(255,255,255,.9); }
-.logout-btn{
-  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
-  color:rgba(255,255,255,.75); padding:8px 16px; border-radius:999px;
-  cursor:pointer; font-weight:800; transition:.2s;
-}
-.logout-btn:hover{ background:rgba(255,255,255,.1); color:#fff; }
+    :root{
+      --blue-900:#0A0E27;
+      --blue-800:#0F1B3D;
+      --blue-700:#17306A;
+      --text:#0D1220;
+      --muted:#5B6475;
+      --bg:#FFFFFF;
+      --bg-soft:#F6F7FB;
+      --sand:#F3E7C6;
+      --sand-2:#F7F1DD;
+      --line:rgba(13,18,32,.10);
+      --radius:16px;
+      --shadow: 0 18px 50px rgba(13,18,32,.10);
 
-.main-container{ max-width:1600px; margin:0 auto; padding:40px 20px; position:relative; z-index:1; }
-.page-header{ margin-bottom:24px; animation:slideDown .6s ease-out; }
-.page-title{
-  font-size:clamp(28px,4vw,36px); font-weight:950; margin-bottom:6px;
-  background:linear-gradient(135deg,#fff,#a0b0ff);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
-.page-subtitle{ font-size:15px; color:rgba(255,255,255,.6); }
+      --success:#16A34A;
+      --warning:#F59E0B;
+      --danger:#DC2626;
 
-.notice{
-  margin-top:12px; padding:12px 14px; border-radius:14px; border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.05); font-size:13px; color:rgba(255,255,255,.85); display:none;
-}
-.notice.show{ display:block; }
-.notice.ok{ border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.08); }
-.notice.err{ border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.08); }
+      --ring: 0 0 0 4px rgba(23,48,106,.12);
+    }
 
-.stats-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin:24px 0 28px; }
-.stat-box{
-  background:rgba(255,255,255,.05); backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,.1); border-radius:16px; padding:22px; transition:.2s;
-}
-.stat-box:hover{ transform:translateY(-3px); border-color:rgba(0,102,255,.35); }
-.stat-label{ font-size:12px; color:rgba(255,255,255,.6); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; font-weight:800; }
-.stat-value{
-  font-size:32px; font-weight:950;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
+    body{
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Arial, sans-serif;
+      background: var(--bg-soft);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
 
-.actions-bar{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
-.search-box{ flex:1; min-width:240px; max-width:440px; position:relative; }
-.search-input{
-  width:100%; padding:12px 16px 12px 44px; border-radius:12px;
-  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
-  color:#fff; font-weight:700; font-size:14px; transition:.2s;
-}
-.search-input:focus{ outline:none; border-color:var(--primary); background:rgba(255,255,255,.08); }
-.search-input::placeholder{ color:rgba(255,255,255,.4); font-weight:700; }
-.search-icon{ position:absolute; left:14px; top:50%; transform:translateY(-50%); opacity:.55; }
+    a{ color: inherit; text-decoration: none; }
+    button{ font-family: inherit; }
 
-.btn{ border:none; cursor:pointer; font-weight:900; font-size:14px; padding:12px 18px; border-radius:12px; transition:.2s; }
-.btn-primary{
-  background:linear-gradient(135deg,var(--primary),#0052CC);
-  color:#fff; box-shadow:0 8px 20px rgba(0,102,255,.25);
-}
-.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 12px 30px rgba(0,102,255,.45); }
-.btn-ghost{
-  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
-  color:rgba(255,255,255,.85);
-}
-.btn-ghost:hover{ background:rgba(255,255,255,.1); }
+    .container{
+      width: min(1400px, calc(100% - 40px));
+      margin: 0 auto;
+    }
 
-.clients-table{
-  background:rgba(255,255,255,.05); backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,.1); border-radius:16px; overflow:hidden;
-}
-.table-header, .client-row{
-  display:grid; grid-template-columns: 2.2fr 1.5fr 1fr 1fr 1fr 120px;
-  gap:14px; padding:18px 20px; align-items:center;
-}
-.table-header{
-  background:rgba(255,255,255,.03); border-bottom:1px solid rgba(255,255,255,.1);
-  font-size:12px; font-weight:950; text-transform:uppercase; letter-spacing:.5px; color:rgba(255,255,255,.6);
-}
-.client-row{ border-bottom:1px solid rgba(255,255,255,.05); cursor:pointer; transition:.15s; }
-.client-row:hover{ background:rgba(255,255,255,.05); }
-.client-row:last-child{ border-bottom:none; }
-.client-name{ font-weight:900; font-size:15px; }
-.client-email{ font-size:13px; color:rgba(255,255,255,.6); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.small{ font-size:13px; color:rgba(255,255,255,.75); }
-.status-badge{
-  display:inline-flex; align-items:center; gap:6px;
-  padding:6px 12px; border-radius:999px; font-size:12px; font-weight:950; white-space:nowrap;
-  border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06);
-}
-.status-badge.fase{ border-color:rgba(0,102,255,.35); background:rgba(0,102,255,.14); color:#9ec2ff; }
-.status-badge.completed{ border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.14); color:var(--success); }
-.docs-count{ font-size:13px; color:rgba(255,255,255,.8); font-weight:900; }
-.docs-count.complete{ color:var(--success); }
-.action-btn{
-  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
-  color:#fff; padding:8px 12px; border-radius:10px; font-size:12px; font-weight:950; cursor:pointer; transition:.15s;
-}
-.action-btn:hover{ background:rgba(0,102,255,.18); border-color:rgba(0,102,255,.4); }
+    /* Header (mesmo padrão da landing/login) */
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 120;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      padding: 14px 0;
+      flex-wrap: wrap;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: .2px;
+    }
+    .mark{
+      width: 38px; height: 38px;
+      border-radius: 12px;
+      background: var(--blue-700);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color: white;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .brand small{
+      display:block;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: -2px;
+      font-size: 12px;
+      letter-spacing: 0;
+    }
 
-.empty-state{ text-align:center; padding:60px 20px; }
-.empty-icon{ font-size:56px; opacity:.3; margin-bottom:10px; }
-.empty-text{ font-size:15px; color:rgba(255,255,255,.6); font-weight:800; }
+    .header-right{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
 
-.modal{
-  display:none; position:fixed; inset:0; z-index:1000;
-  background:rgba(0,0,0,.78); backdrop-filter:blur(10px); animation:fadeIn .25s ease-out;
-  padding:18px;
-}
-.modal.active{ display:flex; align-items:center; justify-content:center; }
-.modal-content{
-  background:var(--dark); border:1px solid rgba(255,255,255,.2);
-  border-radius:22px; width:100%; max-width:1200px; max-height:92vh; overflow:auto;
-}
-.modal-header{
-  padding:22px 22px; border-bottom:1px solid rgba(255,255,255,.1);
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-}
-.modal-title{
-  font-size:20px; font-weight:950;
-  background:linear-gradient(135deg,#fff,#a0b0ff);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
-.modal-close{
-  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
-  color:#fff; width:38px; height:38px; border-radius:999px; cursor:pointer; font-size:18px; font-weight:950;
-}
-.modal-close:hover{ background:rgba(239,68,68,.16); border-color:rgba(239,68,68,.35); }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--sand-2);
+      border: 1px solid rgba(0,0,0,.08);
+      font-weight: 900;
+      font-size: 13px;
+      color: rgba(43,47,55,.92);
+      white-space: nowrap;
+    }
+    .user-pill{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .user-avatar{
+      width: 34px; height: 34px;
+      border-radius: 999px;
+      background: var(--blue-700);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color: #fff;
+      font-weight: 950;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    .user-name{
+      font-size: 13px;
+      font-weight: 950;
+      color: rgba(13,18,32,.88);
+      max-width: 260px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-.modal-body{ padding:22px; }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 14px;
+      border: 1px solid var(--line);
+      background: white;
+      cursor: pointer;
+      transition: all .15s ease;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(13,18,32,.08);
+    }
+    .btn-primary{
+      background: var(--blue-700);
+      color: white;
+      border-color: rgba(255,255,255,.18);
+    }
+    .btn-primary:hover{ background: var(--blue-800); }
+    .btn-ghost{ background: var(--bg-soft); }
+    .btn:disabled{
+      opacity: .65;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
 
-.detail-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
-.detail-section{
-  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
-  border-radius:16px; padding:18px;
-}
-.section-title{ font-size:15px; font-weight:950; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
-.info-row{ display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,.06); }
-.info-row:last-child{ border-bottom:none; }
-.info-label{ font-size:12px; color:rgba(255,255,255,.55); font-weight:900; }
-.info-value{ font-size:13px; font-weight:950; color:rgba(255,255,255,.9); text-align:right; }
+    /* Page */
+    main{ padding: 28px 0 64px; }
 
-.phases-list{ display:flex; flex-direction:column; gap:10px; }
-.phase-item{
-  background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1);
-  border-radius:12px; padding:14px;
-  display:flex; justify-content:space-between; align-items:center; gap:12px;
-}
-.phase-item.active{ border-color:rgba(0,102,255,.45); background:rgba(0,102,255,.12); }
-.phase-item.completed{ border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.06); }
-.phase-name{ font-size:13px; font-weight:950; margin-bottom:2px; }
-.phase-desc{ font-size:12px; color:rgba(255,255,255,.55); font-weight:800; }
-.phase-actions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
-.btn-small{
-  padding:8px 10px; font-size:12px; font-weight:950;
-  border-radius:10px; border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.06); color:#fff; cursor:pointer; transition:.15s;
-}
-.btn-small:hover{ background:rgba(0,102,255,.18); border-color:rgba(0,102,255,.4); }
-.btn-small.success:hover{ background:rgba(16,185,129,.18); border-color:rgba(16,185,129,.4); }
-.btn-small.danger:hover{ background:rgba(239,68,68,.18); border-color:rgba(239,68,68,.4); }
-.btn-small.ghost{ opacity:.9; }
-.btn-small.ghost:hover{ opacity:1; }
+    .page-header{
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .page-title{
+      font-size: clamp(26px, 3.2vw, 34px);
+      font-weight: 950;
+      letter-spacing: -0.3px;
+      margin: 0;
+    }
+    .page-subtitle{
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 14px;
+      margin: 0;
+      max-width: 90ch;
+    }
 
-.steps-panel{
-  margin-top:14px;
-  padding:16px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.03);
-}
-.steps-header{
-  display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
-  margin-bottom:12px;
-}
-.steps-title{
-  font-size:14px; font-weight:950; color:rgba(255,255,255,.9);
-  display:flex; align-items:center; gap:8px;
-}
-.steps-sub{
-  font-size:12px; color:rgba(255,255,255,.55); font-weight:800;
-  margin-top:2px;
-}
-.steps-list{ display:flex; flex-direction:column; gap:10px; }
+    .notice{
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: white;
+      font-size: 13px;
+      color: rgba(13,18,32,.90);
+      display:none;
+      font-weight: 650;
+      white-space: pre-line;
+      box-shadow: 0 10px 28px rgba(13,18,32,.05);
+    }
+    .notice.show{ display:block; }
+    .notice.ok{
+      background: rgba(22,163,74,.08);
+      border-color: rgba(22,163,74,.20);
+    }
+    .notice.err{
+      background: rgba(220,38,38,.08);
+      border-color: rgba(220,38,38,.18);
+    }
 
-.step-item{
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.03);
-  padding:12px 14px;
-  display:flex; align-items:center; gap:12px;
-  cursor:pointer;
-  transition:.15s;
-}
-.step-item:hover{
-  background:rgba(0,102,255,.10);
-  border-color:rgba(0,102,255,.28);
-}
-.step-check{
-  width:20px; height:20px; border-radius:999px;
-  border:2px solid rgba(255,255,255,.25);
-  flex:0 0 auto;
-  transition:.15s;
-}
-.step-item.done .step-check{
-  border-color:rgba(16,185,129,.65);
-  background:rgba(16,185,129,.25);
-}
-.step-item.current .step-check{
-  border-color:rgba(0,102,255,.65);
-  background:rgba(0,102,255,.25);
-}
-.step-text{ flex:1; font-size:13px; font-weight:900; color:rgba(255,255,255,.9); }
-.step-badge{
-  font-size:11px; font-weight:950;
-  padding:4px 10px; border-radius:999px;
-  border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06);
-  white-space:nowrap;
-}
-.step-badge.done{ border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.10); color:var(--success); }
-.step-badge.current{ border-color:rgba(0,102,255,.35); background:rgba(0,102,255,.14); color:#9ec2ff; }
-.step-badge.pending{ border-color:rgba(245,158,11,.28); background:rgba(245,158,11,.10); color:var(--warning); }
+    /* Stats */
+    .stats-grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 14px;
+      margin: 18px 0 18px;
+    }
+    .stat-box{
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: 0 10px 28px rgba(13,18,32,.05);
+      transition: .15s ease;
+    }
+    .stat-box:hover{ transform: translateY(-2px); }
+    .stat-label{
+      font-size: 12px;
+      color: rgba(13,18,32,.55);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      margin-bottom: 8px;
+      font-weight: 900;
+    }
+    .stat-value{
+      font-size: 32px;
+      font-weight: 950;
+      letter-spacing: -0.5px;
+      color: var(--blue-700);
+      line-height: 1.05;
+    }
 
-.documents-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:12px; }
-.doc-card{
-  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
-  border-radius:16px; padding:14px; transition:.15s;
-}
-.doc-card:hover{ border-color:rgba(0,102,255,.35); }
-.doc-card.approved{ border-color:rgba(16,185,129,.42); background:rgba(16,185,129,.05); }
-.doc-card.rejected{ border-color:rgba(239,68,68,.42); background:rgba(239,68,68,.05); }
-.doc-header{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:10px; }
-.doc-icon{ font-size:28px; }
-.doc-status{
-  font-size:11px; font-weight:950; padding:4px 10px; border-radius:999px;
-  border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06);
-}
-.doc-status.pending{ color:var(--warning); border-color:rgba(245,158,11,.28); background:rgba(245,158,11,.10); }
-.doc-status.uploaded{ color:var(--success); border-color:rgba(16,185,129,.28); background:rgba(16,185,129,.10); }
-.doc-status.approved{ color:var(--success); border-color:rgba(16,185,129,.4); background:rgba(16,185,129,.14); }
-.doc-status.rejected{ color:var(--danger); border-color:rgba(239,68,68,.32); background:rgba(239,68,68,.12); }
-.doc-title{ font-size:13px; font-weight:950; margin-bottom:6px; }
-.doc-info{ font-size:12px; color:rgba(255,255,255,.55); font-weight:800; margin-bottom:10px; }
-.doc-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+    /* Actions bar */
+    .actions-bar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
 
-.notes-area{
-  width:100%; min-height:120px; padding:12px;
-  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
-  border-radius:12px; color:#fff; font-weight:800; resize:vertical;
-}
-.notes-area:focus{ outline:none; border-color:rgba(0,102,255,.5); background:rgba(255,255,255,.07); }
+    .search-box{
+      flex:1;
+      min-width: 260px;
+      max-width: 520px;
+      position: relative;
+    }
+    .search-icon{
+      position:absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: .45;
+      font-size: 14px;
+      pointer-events: none;
+    }
+    .search-input{
+      width: 100%;
+      padding: 12px 14px 12px 42px;
+      border-radius: 12px;
+      background: white;
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 14px;
+      transition: .15s ease;
+      outline: none;
+    }
+    .search-input:focus{
+      border-color: rgba(23,48,106,.35);
+      box-shadow: var(--ring);
+    }
+    .search-input::placeholder{
+      color: rgba(13,18,32,.38);
+      font-weight: 650;
+    }
 
-.form-grid{ display:grid; gap:10px; margin-top:10px; }
-.field-label{ font-size:12px; color:rgba(255,255,255,.6); font-weight:900; margin-bottom:6px; }
-.text-input, .select-input, .text-area{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.12);
-  color:#fff;
-  font-weight:800;
-  font-size:13px;
-  transition:.2s;
-}
-.text-area{ min-height:110px; resize:vertical; }
-.text-input:focus, .select-input:focus, .text-area:focus{
-  outline:none;
-  border-color:rgba(0,102,255,.55);
-  background:rgba(255,255,255,.07);
-}
-.select-input{
-  appearance:none;
-  background-image: linear-gradient(45deg, transparent 50%, rgba(255,255,255,.75) 50%),
-                    linear-gradient(135deg, rgba(255,255,255,.75) 50%, transparent 50%),
-                    linear-gradient(to right, transparent, transparent);
-  background-position: calc(100% - 18px) calc(50% - 3px), calc(100% - 12px) calc(50% - 3px), 0 0;
-  background-size: 6px 6px, 6px 6px, 100% 100%;
-  background-repeat: no-repeat;
-  padding-right:34px;
-}
-.select-input option{
-  background: #0A0E27;
-  color:#fff;
-}
-.message-list{ display:flex; flex-direction:column; gap:10px; margin-top:14px; }
-.msg-item{
-  padding:12px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.03);
-}
-.msg-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
-.msg-title{ font-weight:950; font-size:13px; }
-.msg-meta{ font-size:12px; color:rgba(255,255,255,.55); font-weight:800; margin-top:2px; }
-.msg-body{
-  margin-top:8px;
-  font-size:13px;
-  color:rgba(255,255,255,.85);
-  font-weight:800;
-  white-space:pre-wrap;
-}
-.msg-badges{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
-.msg-badge{
-  font-size:11px; font-weight:950; padding:4px 10px; border-radius:999px;
-  border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06);
-  white-space:nowrap;
-}
-.msg-badge.info{ border-color:rgba(0,102,255,.35); background:rgba(0,102,255,.14); color:#9ec2ff; }
-.msg-badge.update{ border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.12); color:var(--success); }
-.msg-badge.warning{ border-color:rgba(245,158,11,.30); background:rgba(245,158,11,.12); color:var(--warning); }
-.msg-badge.success{ border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.12); color:var(--success); }
-.msg-badge.unread{ border-color:rgba(239,68,68,.30); background:rgba(239,68,68,.10); color:var(--danger); }
-.msg-actions{ margin-top:10px; display:flex; justify-content:flex-end; gap:8px; flex-wrap:wrap; }
+    /* Table */
+    .clients-table{
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
 
-.loading-overlay{
-  position:fixed; inset:0; z-index:9999;
-  background:rgba(10,14,39,.72); backdrop-filter:blur(10px);
-  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;
-}
-.loading-overlay.hidden{ display:none; }
-.spinner{
-  width:42px; height:42px; border-radius:50%;
-  border:4px solid rgba(255,255,255,.15);
-  border-top-color: rgba(255,255,255,.85);
-  animation: spin .9s linear infinite;
-}
-@keyframes spin{ to { transform:rotate(360deg) } }
-.loading-text{ color:rgba(255,255,255,.85); font-weight:950; font-size:14px; }
+    .table-header, .client-row{
+      display:grid;
+      grid-template-columns: 2.2fr 1.5fr 1fr 1fr 1fr 120px;
+      gap: 14px;
+      padding: 16px 18px;
+      align-items:center;
+    }
+    .table-header{
+      background: var(--bg-soft);
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: rgba(13,18,32,.55);
+    }
 
-@media (max-width:1200px){
-  .table-header, .client-row { grid-template-columns: 2fr 1.4fr 1fr 1fr 120px; }
-  .hide-xl { display:none; }
-  .detail-grid { grid-template-columns:1fr; }
-}
-@media (max-width:768px){
-  .stats-grid { grid-template-columns:1fr; }
-  .actions-bar { flex-direction:column; align-items:stretch; }
-  .search-box { max-width:100%; }
-  .table-header, .client-row { grid-template-columns: 1fr 120px; }
-  .hide-md { display:none; }
-}
-</style>
+    .client-row{
+      border-bottom: 1px solid rgba(13,18,32,.06);
+      cursor: pointer;
+      transition: .12s ease;
+    }
+    .client-row:hover{
+      background: rgba(23,48,106,.04);
+    }
+    .client-row:last-child{ border-bottom: none; }
+
+    .client-name{
+      font-weight: 950;
+      font-size: 15px;
+      color: rgba(13,18,32,.92);
+    }
+    .client-email{
+      font-size: 13px;
+      color: rgba(13,18,32,.55);
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 650;
+    }
+    .small{
+      font-size: 13px;
+      color: rgba(13,18,32,.68);
+      font-weight: 650;
+    }
+
+    .status-badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+      border: 1px solid var(--line);
+      background: var(--bg-soft);
+      color: rgba(13,18,32,.75);
+    }
+    .status-badge.fase{
+      border-color: rgba(23,48,106,.18);
+      background: rgba(23,48,106,.08);
+      color: rgba(23,48,106,.95);
+    }
+    .status-badge.completed{
+      border-color: rgba(22,163,74,.20);
+      background: rgba(22,163,74,.08);
+      color: rgba(22,163,74,.95);
+    }
+
+    .docs-count{
+      font-size: 13px;
+      font-weight: 950;
+      color: rgba(13,18,32,.78);
+    }
+    .docs-count.complete{ color: rgba(22,163,74,.95); }
+
+    .action-btn{
+      width: 100%;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: white;
+      cursor: pointer;
+      font-weight: 950;
+      font-size: 12px;
+      transition: .12s ease;
+    }
+    .action-btn:hover{
+      background: rgba(23,48,106,.06);
+      border-color: rgba(23,48,106,.22);
+    }
+
+    .empty-state{
+      text-align:center;
+      padding: 54px 20px;
+    }
+    .empty-icon{ font-size: 56px; opacity: .35; margin-bottom: 10px; }
+    .empty-text{ font-size: 15px; color: rgba(13,18,32,.55); font-weight: 800; }
+
+    /* Modal */
+    .modal{
+      display:none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(13,18,32,.55);
+      backdrop-filter: blur(10px);
+      padding: 18px;
+    }
+    .modal.active{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .modal-content{
+      width: 100%;
+      max-width: 1200px;
+      max-height: 92vh;
+      overflow:auto;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+    .modal-header{
+      padding: 18px 18px;
+      border-bottom: 1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      background: rgba(255,255,255,.96);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    .modal-title{
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      margin: 0;
+    }
+    .modal-close{
+      width: 40px; height: 40px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: white;
+      cursor: pointer;
+      font-weight: 950;
+      font-size: 18px;
+      transition: .12s ease;
+    }
+    .modal-close:hover{
+      background: rgba(220,38,38,.08);
+      border-color: rgba(220,38,38,.18);
+    }
+    .modal-body{ padding: 18px; }
+
+    /* Detail cards */
+    .detail-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .detail-section{
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 10px 28px rgba(13,18,32,.05);
+    }
+    .section-title{
+      font-size: 14px;
+      font-weight: 950;
+      margin-bottom: 12px;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      color: rgba(13,18,32,.92);
+    }
+
+    .info-row{
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(13,18,32,.06);
+    }
+    .info-row:last-child{ border-bottom: none; }
+    .info-label{
+      font-size: 12px;
+      color: rgba(13,18,32,.55);
+      font-weight: 900;
+    }
+    .info-value{
+      font-size: 13px;
+      font-weight: 900;
+      color: rgba(13,18,32,.88);
+      text-align:right;
+    }
+
+    /* Phases */
+    .phases-list{ display:flex; flex-direction:column; gap: 10px; }
+    .phase-item{
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 12px;
+    }
+    .phase-item.active{
+      border-color: rgba(23,48,106,.28);
+      background: rgba(23,48,106,.06);
+    }
+    .phase-item.completed{
+      border-color: rgba(22,163,74,.20);
+      background: rgba(22,163,74,.06);
+    }
+    .phase-name{ font-size: 13px; font-weight: 950; margin-bottom: 2px; }
+    .phase-desc{ font-size: 12px; color: rgba(13,18,32,.55); font-weight: 650; }
+    .phase-actions{ display:flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+    /* Small buttons inside modal */
+    .btn-small{
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 950;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: white;
+      cursor: pointer;
+      transition: .12s ease;
+      white-space: nowrap;
+    }
+    .btn-small:hover{
+      background: rgba(23,48,106,.06);
+      border-color: rgba(23,48,106,.22);
+    }
+    .btn-small:disabled{
+      opacity: .65;
+      cursor: not-allowed;
+      background: var(--bg-soft);
+      transform: none;
+    }
+    .btn-small.success:hover{
+      background: rgba(22,163,74,.08);
+      border-color: rgba(22,163,74,.20);
+    }
+    .btn-small.danger:hover{
+      background: rgba(220,38,38,.08);
+      border-color: rgba(220,38,38,.18);
+    }
+
+    /* Steps */
+    .steps-panel{
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--bg-soft);
+    }
+    .steps-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .steps-title{
+      font-size: 14px;
+      font-weight: 950;
+      color: rgba(13,18,32,.92);
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .steps-sub{
+      font-size: 12px;
+      color: rgba(13,18,32,.55);
+      font-weight: 650;
+      margin-top: 2px;
+    }
+    .steps-list{ display:flex; flex-direction:column; gap: 10px; }
+
+    .step-item{
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: white;
+      padding: 12px 14px;
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      cursor: pointer;
+      transition: .12s ease;
+    }
+    .step-item:hover{
+      background: rgba(23,48,106,.04);
+      border-color: rgba(23,48,106,.18);
+    }
+    .step-check{
+      width: 20px; height: 20px;
+      border-radius: 999px;
+      border: 2px solid rgba(13,18,32,.25);
+      flex: 0 0 auto;
+      transition: .12s ease;
+      background: transparent;
+    }
+    .step-item.done .step-check{
+      border-color: rgba(22,163,74,.55);
+      background: rgba(22,163,74,.18);
+    }
+    .step-item.current .step-check{
+      border-color: rgba(23,48,106,.55);
+      background: rgba(23,48,106,.18);
+    }
+    .step-text{
+      flex: 1;
+      font-size: 13px;
+      font-weight: 900;
+      color: rgba(13,18,32,.88);
+    }
+    .step-badge{
+      font-size: 11px;
+      font-weight: 950;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--bg-soft);
+      white-space: nowrap;
+    }
+    .step-badge.done{
+      border-color: rgba(22,163,74,.20);
+      background: rgba(22,163,74,.08);
+      color: rgba(22,163,74,.95);
+    }
+    .step-badge.current{
+      border-color: rgba(23,48,106,.18);
+      background: rgba(23,48,106,.08);
+      color: rgba(23,48,106,.95);
+    }
+    .step-badge.pending{
+      border-color: rgba(245,158,11,.22);
+      background: rgba(245,158,11,.10);
+      color: rgba(180,83,9,.95);
+    }
+
+    /* Documents */
+    .documents-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+      gap: 12px;
+    }
+    .doc-card{
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: 0 10px 28px rgba(13,18,32,.05);
+      transition: .12s ease;
+    }
+    .doc-card:hover{
+      transform: translateY(-1px);
+    }
+    .doc-card.approved{
+      border-color: rgba(22,163,74,.20);
+      background: rgba(22,163,74,.05);
+    }
+    .doc-card.rejected{
+      border-color: rgba(220,38,38,.18);
+      background: rgba(220,38,38,.05);
+    }
+    .doc-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .doc-icon{ font-size: 26px; }
+    .doc-status{
+      font-size: 11px;
+      font-weight: 950;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--bg-soft);
+      white-space: nowrap;
+    }
+    .doc-status.pending{ color: rgba(180,83,9,.95); border-color: rgba(245,158,11,.22); background: rgba(245,158,11,.10); }
+    .doc-status.uploaded{ color: rgba(22,163,74,.95); border-color: rgba(22,163,74,.20); background: rgba(22,163,74,.08); }
+    .doc-status.approved{ color: rgba(22,163,74,.95); border-color: rgba(22,163,74,.20); background: rgba(22,163,74,.08); }
+    .doc-status.rejected{ color: rgba(220,38,38,.95); border-color: rgba(220,38,38,.18); background: rgba(220,38,38,.08); }
+
+    .doc-title{ font-size: 13px; font-weight: 950; margin-bottom: 6px; }
+    .doc-info{ font-size: 12px; color: rgba(13,18,32,.60); font-weight: 650; margin-bottom: 10px; }
+    .doc-actions{ display:flex; gap: 8px; flex-wrap: wrap; }
+
+    /* Notes */
+    .notes-area{
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--text);
+      font-weight: 650;
+      resize: vertical;
+      outline: none;
+      transition: .12s ease;
+    }
+    .notes-area:focus{
+      border-color: rgba(23,48,106,.35);
+      box-shadow: var(--ring);
+    }
+
+    /* Form elements (messages) */
+    .form-grid{ display:grid; gap: 10px; margin-top: 10px; }
+    .field-label{
+      font-size: 12px;
+      color: rgba(13,18,32,.60);
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .text-input, .select-input, .text-area{
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      background: white;
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-weight: 650;
+      font-size: 13px;
+      outline: none;
+      transition: .12s ease;
+    }
+    .text-area{ min-height: 110px; resize: vertical; }
+    .text-input:focus, .select-input:focus, .text-area:focus{
+      border-color: rgba(23,48,106,.35);
+      box-shadow: var(--ring);
+    }
+    .select-input{
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(13,18,32,.55) 50%),
+        linear-gradient(135deg, rgba(13,18,32,.55) 50%, transparent 50%),
+        linear-gradient(to right, transparent, transparent);
+      background-position:
+        calc(100% - 18px) calc(50% - 3px),
+        calc(100% - 12px) calc(50% - 3px),
+        0 0;
+      background-size: 6px 6px, 6px 6px, 100% 100%;
+      background-repeat: no-repeat;
+      padding-right: 34px;
+    }
+
+    /* Messages list */
+    .message-list{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .msg-item{
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: white;
+      box-shadow: 0 10px 28px rgba(13,18,32,.05);
+    }
+    .msg-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 10px;
+    }
+    .msg-title{ font-weight: 950; font-size: 13px; }
+    .msg-meta{
+      font-size: 12px;
+      color: rgba(13,18,32,.55);
+      font-weight: 650;
+      margin-top: 2px;
+    }
+    .msg-body{
+      margin-top: 8px;
+      font-size: 13px;
+      color: rgba(13,18,32,.82);
+      font-weight: 650;
+      white-space: pre-wrap;
+    }
+    .msg-badges{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .msg-badge{
+      font-size: 11px;
+      font-weight: 950;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--bg-soft);
+      white-space: nowrap;
+    }
+    .msg-badge.info{ border-color: rgba(23,48,106,.18); background: rgba(23,48,106,.08); color: rgba(23,48,106,.95); }
+    .msg-badge.update{ border-color: rgba(22,163,74,.20); background: rgba(22,163,74,.08); color: rgba(22,163,74,.95); }
+    .msg-badge.warning{ border-color: rgba(245,158,11,.22); background: rgba(245,158,11,.10); color: rgba(180,83,9,.95); }
+    .msg-badge.success{ border-color: rgba(22,163,74,.20); background: rgba(22,163,74,.08); color: rgba(22,163,74,.95); }
+    .msg-badge.unread{ border-color: rgba(220,38,38,.18); background: rgba(220,38,38,.08); color: rgba(220,38,38,.95); }
+    .msg-actions{
+      margin-top: 10px;
+      display:flex;
+      justify-content:flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Loading overlay */
+    .loading-overlay{
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(13,18,32,.55);
+      backdrop-filter: blur(10px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .loading-overlay.hidden{ display: none; }
+    .spinner{
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,.25);
+      border-top-color: rgba(255,255,255,.92);
+      animation: spin .9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text{
+      color: rgba(255,255,255,.92);
+      font-weight: 950;
+      font-size: 14px;
+      text-align: center;
+      max-width: 560px;
+      padding: 0 16px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px){
+      .table-header, .client-row { grid-template-columns: 2fr 1.4fr 1fr 1fr 120px; }
+      .hide-xl { display:none; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .stats-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width: 768px){
+      .stats-grid { grid-template-columns: 1fr; }
+      .actions-bar { flex-direction: column; align-items: stretch; }
+      .search-box { max-width: 100%; }
+      .table-header, .client-row { grid-template-columns: 1fr 120px; }
+      .hide-md { display:none; }
+      .container{ width: calc(100% - 28px); }
+      .btn{ width: 100%; }
+    }
+  </style>
 </head>
 
 <body>
-<div class="stars"></div>
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingText">Carregando…</div>
+  </div>
 
-<div class="loading-overlay" id="loading">
-  <div class="spinner"></div>
-  <div class="loading-text" id="loadingText">Carregando…</div>
-</div>
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="index.html" aria-label="GoArgentina">
+          <div class="mark">GO</div>
+          <div>
+            GoArgentina
+            <small>Painel Administrativo</small>
+          </div>
+        </a>
 
-<header>
-  <div class="header-container">
-    <a class="logo" href="index.html">
-      <div class="logo-icon">🇦🇷</div><span>GoArgentina</span>
-    </a>
+        <div class="header-right">
+          <span class="tag">🔐 Admin</span>
 
-    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-      <span class="admin-badge">🔐 Admin</span>
-      <div class="header-actions">
-        <div class="user-pill" title="Conta admin">
-          <div class="user-avatar" id="adminAvatar">AD</div>
-          <div class="user-name" id="adminName">Admin</div>
+          <div class="user-pill" title="Conta admin">
+            <div class="user-avatar" id="adminAvatar">AD</div>
+            <div class="user-name" id="adminName">Admin</div>
+          </div>
+
+          <button class="btn btn-ghost" id="logoutBtn" type="button">Sair</button>
         </div>
-        <button class="logout-btn" id="logoutBtn">Sair</button>
       </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="main-container">
-  <div class="page-header">
-    <h1 class="page-title">Painel Administrativo</h1>
-    <p class="page-subtitle">Gerencie clientes, fases, passos e documentos do processo de DNI</p>
-    <div class="notice" id="noticeBox"></div>
-  </div>
-
-  <div class="stats-grid">
-    <div class="stat-box"><div class="stat-label">Total de Clientes</div><div class="stat-value" id="totalClients">0</div></div>
-    <div class="stat-box"><div class="stat-label">Em Andamento</div><div class="stat-value" id="activeClients">0</div></div>
-    <div class="stat-box"><div class="stat-label">Concluídos</div><div class="stat-value" id="completedClients">0</div></div>
-    <div class="stat-box"><div class="stat-label">Novos (7 dias)</div><div class="stat-value" id="newClients">0</div></div>
-  </div>
-
-  <div class="actions-bar">
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input id="searchInput" class="search-input" placeholder="Buscar por nome ou email…" />
-    </div>
-    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
-      <button class="btn btn-ghost" id="refreshBtn">↻ Atualizar</button>
-      <button class="btn btn-primary" id="newClientBtn" title="Criação de conta depende do Auth (não expomos Service Key no front)">
-        ➕ Novo Cliente
-      </button>
-    </div>
-  </div>
-
-  <div class="clients-table">
-    <div class="table-header">
-      <div>Cliente</div>
-      <div>Contato</div>
-      <div class="hide-md">Status</div>
-      <div class="hide-xl">Docs</div>
-      <div class="hide-md">Fase</div>
-      <div>Ações</div>
-    </div>
-    <div id="clientsList"></div>
-  </div>
-
-  <div class="empty-state" id="emptyState" style="display:none;">
-    <div class="empty-icon">🗂️</div>
-    <div class="empty-text">Nenhum cliente encontrado.</div>
-  </div>
-</main>
-
-<!-- Modal: Detalhes do Cliente -->
-<div class="modal" id="clientDetailModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title" id="clientDetailTitle">Detalhes do Cliente</div>
-        <div class="small" id="clientDetailSubtitle" style="margin-top:4px; color:rgba(255,255,255,.6); font-weight:800;"></div>
+  <main>
+    <div class="container">
+      <div class="page-header">
+        <h1 class="page-title">Painel Administrativo</h1>
+        <p class="page-subtitle">Gerencie clientes, fases, passos e documentos do processo de DNI.</p>
+        <div class="notice" id="noticeBox"></div>
       </div>
-      <button class="modal-close" id="closeClientModal">✕</button>
-    </div>
 
-    <div class="modal-body">
-      <div class="detail-grid">
-        <div class="detail-section">
-          <div class="section-title">👤 Informações</div>
-          <div class="info-row"><span class="info-label">Nome</span><span class="info-value" id="detailName">-</span></div>
-          <div class="info-row"><span class="info-label">Email</span><span class="info-value" id="detailEmail">-</span></div>
-          <div class="info-row"><span class="info-label">User ID</span><span class="info-value" id="detailId" style="font-family:ui-monospace, SFMono-Regular, Menlo, monospace;">-</span></div>
-          <div class="info-row"><span class="info-label">Criado em</span><span class="info-value" id="detailCreated">-</span></div>
-          <div class="info-row"><span class="info-label">Fase atual</span><span class="info-value" id="detailPhase">-</span></div>
-          <div class="info-row"><span class="info-label">Passo atual</span><span class="info-value" id="detailStep">-</span></div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-label">Total de Clientes</div>
+          <div class="stat-value" id="totalClients">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Em Andamento</div>
+          <div class="stat-value" id="activeClients">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Concluídos</div>
+          <div class="stat-value" id="completedClients">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Novos (7 dias)</div>
+          <div class="stat-value" id="newClients">0</div>
+        </div>
+      </div>
+
+      <div class="actions-bar">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input id="searchInput" class="search-input" placeholder="Buscar por nome ou email…" />
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+          <button class="btn btn-ghost" id="refreshBtn" type="button">↻ Atualizar</button>
+          <button class="btn btn-primary" id="newClientBtn" type="button" title="Criação de conta depende do Auth (não expomos Service Key no front)">
+            ➕ Novo Cliente
+          </button>
+        </div>
+      </div>
+
+      <div class="clients-table">
+        <div class="table-header">
+          <div>Cliente</div>
+          <div>Contato</div>
+          <div class="hide-md">Status</div>
+          <div class="hide-xl">Docs</div>
+          <div class="hide-md">Fase</div>
+          <div>Ações</div>
+        </div>
+        <div id="clientsList"></div>
+      </div>
+
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <div class="empty-icon">🗂️</div>
+        <div class="empty-text">Nenhum cliente encontrado.</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal: Detalhes do Cliente -->
+  <div class="modal" id="clientDetailModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="clientDetailTitle">Detalhes do Cliente</div>
+          <div class="small" id="clientDetailSubtitle" style="margin-top:4px;"></div>
+        </div>
+        <button class="modal-close" id="closeClientModal" type="button">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="detail-grid">
+          <div class="detail-section">
+            <div class="section-title">👤 Informações</div>
+            <div class="info-row"><span class="info-label">Nome</span><span class="info-value" id="detailName">-</span></div>
+            <div class="info-row"><span class="info-label">Email</span><span class="info-value" id="detailEmail">-</span></div>
+            <div class="info-row"><span class="info-label">User ID</span><span class="info-value" id="detailId" style="font-family:ui-monospace, SFMono-Regular, Menlo, monospace;">-</span></div>
+            <div class="info-row"><span class="info-label">Criado em</span><span class="info-value" id="detailCreated">-</span></div>
+            <div class="info-row"><span class="info-label">Fase atual</span><span class="info-value" id="detailPhase">-</span></div>
+            <div class="info-row"><span class="info-label">Passo atual</span><span class="info-value" id="detailStep">-</span></div>
+          </div>
+
+          <div class="detail-section">
+            <div class="section-title">🔄 Fases do Processo</div>
+            <div class="phases-list" id="phasesList"></div>
+
+            <div class="steps-panel">
+              <div class="steps-header">
+                <div>
+                  <div class="steps-title">📍 Passos da fase atual</div>
+                  <div class="steps-sub">Clique no passo para definir como atual (anteriores ficam concluídos)</div>
+                </div>
+              </div>
+              <div class="steps-list" id="stepsList"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section" style="margin-bottom:14px;">
+          <div class="section-title">📄 Documentos</div>
+          <div class="documents-grid" id="documentsGrid"></div>
+          <div class="small" style="margin-top:10px; color:rgba(13,18,32,.55);">
+            Obs: “Remover” apaga do Storage e volta pra Pendente.
+          </div>
+        </div>
+
+        <div class="detail-section" style="margin-bottom:14px;">
+          <div class="section-title">📝 Notas Internas</div>
+          <textarea class="notes-area" id="clientNotes" placeholder="Notas internas sobre este cliente…"></textarea>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:12px; flex-wrap:wrap;">
+            <button class="btn-small" id="reloadNotesBtn" type="button">↻ Recarregar</button>
+            <button class="btn-small success" id="saveNotesBtn" type="button">Salvar Notas</button>
+          </div>
+
+          <div class="small" style="margin-top:10px; color:rgba(13,18,32,.55);">
+            Se aparecer erro ao salvar, confira se a tabela <b>admin_notes</b> existe e se as RLS estão liberando admin.
+          </div>
         </div>
 
         <div class="detail-section">
-          <div class="section-title">🔄 Fases do Processo</div>
-          <div class="phases-list" id="phasesList"></div>
+          <div class="section-title">📨 Mensagens para o Cliente</div>
 
-          <div class="steps-panel">
-            <div class="steps-header">
+          <div class="form-grid">
+            <div>
+              <div class="field-label">Título</div>
+              <input id="msgTitle" class="text-input" placeholder="Ex: Precisamos do comprovante de domicílio" />
+            </div>
+
+            <div>
+              <div class="field-label">Mensagem</div>
+              <textarea id="msgBody" class="text-area" placeholder="Escreva a mensagem que o cliente verá na caixa de entrada…"></textarea>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 200px; gap:10px;">
               <div>
-                <div class="steps-title">📍 Passos da fase atual</div>
-                <div class="steps-sub">Clique no passo para definir como atual (anteriores ficam concluídos)</div>
+                <div class="field-label">Tipo</div>
+                <select id="msgType" class="select-input">
+                  <option value="info">Informação</option>
+                  <option value="update">Atualização</option>
+                  <option value="warning">Atenção</option>
+                  <option value="success">Sucesso</option>
+                </select>
+              </div>
+
+              <div style="display:flex; align-items:flex-end; justify-content:flex-end;">
+                <button class="btn btn-primary" id="sendMsgBtn" type="button">Enviar</button>
               </div>
             </div>
-            <div class="steps-list" id="stepsList"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="detail-section" style="margin-bottom:16px;">
-        <div class="section-title">📄 Documentos</div>
-        <div class="documents-grid" id="documentsGrid"></div>
-      </div>
-
-      <div class="detail-section" style="margin-bottom:16px;">
-        <div class="section-title">📝 Notas Internas</div>
-        <textarea class="notes-area" id="clientNotes" placeholder="Notas internas sobre este cliente…"></textarea>
-        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:12px; flex-wrap:wrap;">
-          <button class="btn-small" id="reloadNotesBtn" type="button">↻ Recarregar</button>
-          <button class="btn-small success" id="saveNotesBtn" type="button">Salvar Notas</button>
-        </div>
-        <div class="small" style="margin-top:10px; color:rgba(255,255,255,.55); font-weight:800;">
-          Se aparecer erro ao salvar, confira se a tabela <b>admin_notes</b> existe e se as RLS estão liberando admin.
-        </div>
-      </div>
-
-      <div class="detail-section">
-        <div class="section-title">📨 Mensagens para o Cliente</div>
-
-        <div class="form-grid">
-          <div>
-            <div class="field-label">Título</div>
-            <input id="msgTitle" class="text-input" placeholder="Ex: Precisamos do comprovante de domicílio" />
           </div>
 
-          <div>
-            <div class="field-label">Mensagem</div>
-            <textarea id="msgBody" class="text-area" placeholder="Escreva a mensagem que o cliente verá na caixa de entrada…"></textarea>
+          <div class="message-list" id="messagesList"></div>
+
+          <div class="small" style="margin-top:10px; color:rgba(13,18,32,.55);">
+            O cliente verá essas mensagens no dashboard dele. “Não lida” some assim que ele abrir/ler.
           </div>
-
-          <div style="display:grid; grid-template-columns: 1fr 200px; gap:10px;">
-            <div>
-              <div class="field-label">Tipo</div>
-              <select id="msgType" class="select-input">
-                <option value="info">Informação</option>
-                <option value="update">Atualização</option>
-                <option value="warning">Atenção</option>
-                <option value="success">Sucesso</option>
-              </select>
-            </div>
-
-            <div style="display:flex; align-items:flex-end; justify-content:flex-end;">
-              <button class="btn btn-primary" id="sendMsgBtn" type="button">Enviar</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="message-list" id="messagesList"></div>
-
-        <div class="small" style="margin-top:10px; color:rgba(255,255,255,.55); font-weight:800;">
-          O cliente verá essas mensagens no dashboard dele (caixa de entrada). "Não lida" some assim que ele abrir/ler.
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Modal: Novo Cliente (orientação) -->
-<div class="modal" id="newClientModal">
-  <div class="modal-content" style="max-width:720px;">
-    <div class="modal-header">
-      <div class="modal-title">➕ Novo Cliente</div>
-      <button class="modal-close" id="closeNewClientModal">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="detail-section">
-        <div class="section-title">📌 Como criar cliente (sem Service Key no front)</div>
-        <div class="small" style="color:rgba(255,255,255,.7); font-weight:800;">
-          Por segurança, não dá pra criar contas de usuário "forçando" pelo front-end (isso exigiria a Service Role Key).
-          O jeito simples é:
-          <ol style="margin:10px 0 0 18px;">
-            <li>Deixar <b>Signups</b> habilitado no Supabase Auth (o cliente se cadastra sozinho)</li>
-            <li>Ou usar <b>Invite user</b> no painel do Supabase (Auth → Users)</li>
-          </ol>
-          <div style="margin-top:12px;">
-            Link para você mandar pro cliente:
-            <div style="margin-top:8px; padding:10px 12px; border-radius:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-weight:900;" id="signupLinkBox">—</div>
+  <!-- Modal: Novo Cliente (orientação) -->
+  <div class="modal" id="newClientModal">
+    <div class="modal-content" style="max-width:720px;">
+      <div class="modal-header">
+        <div class="modal-title">➕ Novo Cliente</div>
+        <button class="modal-close" id="closeNewClientModal" type="button">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-section">
+          <div class="section-title">📌 Como criar cliente (sem Service Key no front)</div>
+          <div class="small" style="color:rgba(13,18,32,.70); font-weight:650;">
+            Por segurança, não dá pra criar contas de usuário “forçando” pelo front-end (isso exigiria a Service Role Key).
+            O jeito simples é:
+            <ol style="margin:10px 0 0 18px;">
+              <li>Deixar <b>Signups</b> habilitado no Supabase Auth (o cliente se cadastra sozinho)</li>
+              <li>Ou usar <b>Invite user</b> no painel do Supabase (Auth → Users)</li>
+            </ol>
+
+            <div style="margin-top:12px;">
+              Link para você mandar pro cliente:
+              <div style="margin-top:8px; padding:10px 12px; border-radius:12px; background:var(--bg-soft); border:1px solid var(--line); font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-weight:900;" id="signupLinkBox">—</div>
+            </div>
+
+            <div style="margin-top:12px;">
+              Assim que o cliente criar conta e fizer login, ele aparece automaticamente aqui (via tabela <b>profiles</b>).
+            </div>
           </div>
-          <div style="margin-top:12px;">
-            Assim que o cliente criar conta e fizer login, ele aparece automaticamente aqui (via tabela <b>profiles</b>).
+
+          <div style="display:flex; justify-content:flex-end; margin-top:14px;">
+            <button class="btn btn-primary" id="copySignupLinkBtn" type="button">Copiar link</button>
           </div>
-        </div>
-        <div style="display:flex; justify-content:flex-end; margin-top:14px;">
-          <button class="btn btn-primary" id="copySignupLinkBtn" type="button">Copiar link</button>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-/* =========================
-   1) CONFIG (trocar só isso)
-========================= */
-const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k";
+  <script>
+  /* =========================
+     1) CONFIG (trocar só isso)
+  ========================= */
+  const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k";
 
-/* =========================
-   2) CLIENT
-========================= */
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: { persistSession:true, autoRefreshToken:true, detectSessionInUrl:true }
-});
-
-/* =========================
-   3) UI helpers
-========================= */
-const loadingEl = document.getElementById("loading");
-const loadingText = document.getElementById("loadingText");
-const noticeBox = document.getElementById("noticeBox");
-
-function setLoading(show, text){
-  if (text) loadingText.textContent = text;
-  loadingEl.classList.toggle("hidden", !show);
-}
-function showNotice(type, msg){
-  noticeBox.className = "notice show " + (type==="ok" ? "ok" : "err");
-  noticeBox.textContent = msg;
-}
-function hideNotice(){
-  noticeBox.className = "notice";
-  noticeBox.textContent = "";
-}
-function fmtDate(dt){
-  if (!dt) return "-";
-  try { return new Date(dt).toLocaleString("pt-BR"); } catch { return "-"; }
-}
-function initialsFrom(nameOrEmail){
-  const s = (nameOrEmail || "AD").trim();
-  const parts = s.split(" ").filter(Boolean);
-  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-  return (s.slice(0,2)).toUpperCase();
-}
-function filenameFromPath(path){
-  if (!path) return null;
-  const p = path.split("/");
-  return p[p.length-1] || path;
-}
-
-/* =========================
-   4) Stars
-========================= */
-const starsContainer = document.querySelector(".stars");
-for (let i=0;i<100;i++){
-  const star = document.createElement("div");
-  star.className="star";
-  star.style.left = Math.random()*100 + "%";
-  star.style.top = Math.random()*100 + "%";
-  star.style.animationDelay = Math.random()*3 + "s";
-  starsContainer.appendChild(star);
-}
-
-/* =========================
-   5) Data & constants
-========================= */
-const phases = [
-  { id:1, name:"Documentação inicial", desc:"RG e foto" },
-  { id:2, name:"Antecedentes criminais", desc:"Emissão de certidão" },
-  { id:3, name:"Domicílio", desc:"Comprovante de endereço" },
-  { id:4, name:"Cadastro RADEX", desc:"Sistema migratório" },
-  { id:5, name:"Pagamento de taxas", desc:"Boletos" },
-  { id:6, name:"Cita migratória", desc:"Agendamento" },
-  { id:7, name:"DNI emitido", desc:"Documento pronto" }
-];
-
-/**
- * PASSOS FIXOS - MESMOS DO DASHBOARD.HTML
- * Esses passos são IMUTÁVEIS e vêm direto do dashboard
- */
-const phaseSteps = {
-  1: [
-    "Envio dos documentos para nossa equipe",
-    "Upload dos documentos na plataforma correspondente",
-    "Análise dos documentos realizada por nós"
-  ],
-  2: [
-    "Emissão do documento",
-    "Upload do documento após a emissão"
-  ],
-  3: [
-    "Agendamento do trâmite",
-    "Retirada presencial do documento",
-    "Upload do documento obtido"
-  ],
-  4: [
-    "Realização do cadastro",
-    "Criação dos boletos das taxas migratórias"
-  ],
-  5: [
-    "Pagamento dos boletos",
-    "Upload dos comprovantes"
-  ],
-  6: [
-    "Agendamento da cita",
-    "Comparecimento presencial"
-  ],
-  7: [
-    "Aguardar a emissão e chegada do DNI argentino"
-  ],
-};
-
-const docsCatalog = [
-  { doc_type:"rg", name:"RG (Identidade)", icon:"🪪" },
-  { doc_type:"antecedentes", name:"Antecedentes Criminais", icon:"📋" },
-  { doc_type:"foto", name:"Foto 3x4", icon:"📸" },
-  { doc_type:"outros", name:"Outros Documentos", icon:"📁" },
-];
-
-let adminUser = null;
-let adminProfile = null;
-
-let clientsRaw = [];        // profiles (role=client)
-let processMap = new Map(); // user_id -> { current_phase, current_step, updated_at }
-let docsMap = new Map();    // user_id -> Map(doc_type -> docRow)
-
-let filteredClients = [];
-let currentClientId = null;
-let currentPhaseInModal = 1;
-let currentStepInModal = 1;
-
-/* =========================
-   6) Auth guard + init
-========================= */
-async function init(){
-  setLoading(true, "Validando acesso…");
-
-  const { data: sessionData } = await sb.auth.getSession();
-  if (!sessionData?.session){
-    window.location.href = "login.html";
-    return;
-  }
-
-  const { data: userData, error: userErr } = await sb.auth.getUser();
-  if (userErr || !userData?.user){
-    window.location.href = "login.html";
-    return;
-  }
-  adminUser = userData.user;
-
-  const { data: profile, error: profErr } = await sb
-    .from("profiles")
-    .select("id, email, full_name, role, created_at")
-    .eq("id", adminUser.id)
-    .single();
-
-  if (profErr || !profile){
-    showNotice("err", "Não consegui carregar seu perfil admin. Recarregue a página.");
-    setLoading(false);
-    return;
-  }
-
-  adminProfile = profile;
-  if (adminProfile.role !== "admin"){
-    window.location.href = "dashboard.html";
-    return;
-  }
-
-  // header
-  const display = (adminProfile.full_name || adminProfile.email || "Admin");
-  document.getElementById("adminName").textContent = display;
-  document.getElementById("adminAvatar").textContent = initialsFrom(display);
-
-  // link de cadastro
-  const signupLink = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, "/")}login.html`;
-  document.getElementById("signupLinkBox").textContent = signupLink;
-
-  wireEvents();
-  await loadAll();
-  setLoading(false);
-}
-
-function wireEvents(){
-  document.getElementById("logoutBtn").addEventListener("click", logout);
-  document.getElementById("refreshBtn").addEventListener("click", loadAll);
-
-  document.getElementById("searchInput").addEventListener("input", (e)=>{
-    renderClients(e.target.value || "");
+  /* =========================
+     2) CLIENT
+  ========================= */
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { persistSession:true, autoRefreshToken:true, detectSessionInUrl:true }
   });
 
-  document.getElementById("closeClientModal").addEventListener("click", closeClientModal);
-  document.getElementById("clientDetailModal").addEventListener("click", (e)=>{
-    if (e.target.id === "clientDetailModal") closeClientModal();
-  });
+  /* =========================
+     3) UI helpers
+  ========================= */
+  const loadingEl = document.getElementById("loading");
+  const loadingText = document.getElementById("loadingText");
+  const noticeBox = document.getElementById("noticeBox");
 
-  document.getElementById("saveNotesBtn").addEventListener("click", saveNotes);
-  document.getElementById("reloadNotesBtn").addEventListener("click", loadNotesForCurrentClient);
+  function setLoading(show, text){
+    if (text) loadingText.textContent = text;
+    loadingEl.classList.toggle("hidden", !show);
+  }
+  function showNotice(type, msg){
+    noticeBox.className = "notice show " + (type==="ok" ? "ok" : "err");
+    noticeBox.textContent = msg;
+  }
+  function hideNotice(){
+    noticeBox.className = "notice";
+    noticeBox.textContent = "";
+  }
+  function fmtDate(dt){
+    if (!dt) return "-";
+    try { return new Date(dt).toLocaleString("pt-BR"); } catch { return "-"; }
+  }
+  function initialsFrom(nameOrEmail){
+    const s = (nameOrEmail || "AD").trim();
+    const parts = s.split(" ").filter(Boolean);
+    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+    return (s.slice(0,2)).toUpperCase();
+  }
+  function filenameFromPath(path){
+    if (!path) return null;
+    const p = path.split("/");
+    return p[p.length-1] || path;
+  }
 
-  // mensagens
-  document.getElementById("sendMsgBtn").addEventListener("click", sendMessageToClient);
+  /* =========================
+     5) Data & constants
+  ========================= */
+  const phases = [
+    { id:1, name:"Documentação inicial", desc:"RG e foto" },
+    { id:2, name:"Antecedentes criminais", desc:"Emissão de certidão" },
+    { id:3, name:"Domicílio", desc:"Comprovante de endereço" },
+    { id:4, name:"Cadastro RADEX", desc:"Sistema migratório" },
+    { id:5, name:"Pagamento de taxas", desc:"Boletos" },
+    { id:6, name:"Cita migratória", desc:"Agendamento" },
+    { id:7, name:"DNI emitido", desc:"Documento pronto" }
+  ];
 
-  // new client modal
-  document.getElementById("newClientBtn").addEventListener("click", openNewClientModal);
-  document.getElementById("closeNewClientModal").addEventListener("click", closeNewClientModal);
-  document.getElementById("newClientModal").addEventListener("click", (e)=>{
-    if (e.target.id === "newClientModal") closeNewClientModal();
-  });
-  document.getElementById("copySignupLinkBtn").addEventListener("click", async ()=>{
-    const txt = document.getElementById("signupLinkBox").textContent;
-    try {
-      await navigator.clipboard.writeText(txt);
-      showNotice("ok", "Link copiado!");
-      closeNewClientModal();
-    } catch {
-      showNotice("err", "Não consegui copiar automaticamente. Copie manualmente.");
+  /**
+   * PASSOS FIXOS - MESMOS DO DASHBOARD.HTML
+   */
+  const phaseSteps = {
+    1: [
+      "Envio dos documentos para nossa equipe",
+      "Upload dos documentos na plataforma correspondente",
+      "Análise dos documentos realizada por nós"
+    ],
+    2: [
+      "Emissão do documento",
+      "Upload do documento após a emissão"
+    ],
+    3: [
+      "Agendamento do trâmite",
+      "Retirada presencial do documento",
+      "Upload do documento obtido"
+    ],
+    4: [
+      "Realização do cadastro",
+      "Criação dos boletos das taxas migratórias"
+    ],
+    5: [
+      "Pagamento dos boletos",
+      "Upload dos comprovantes"
+    ],
+    6: [
+      "Agendamento da cita",
+      "Comparecimento presencial"
+    ],
+    7: [
+      "Aguardar a emissão e chegada do DNI argentino"
+    ],
+  };
+
+  const docsCatalog = [
+    { doc_type:"rg", name:"RG (Identidade)", icon:"🪪" },
+    { doc_type:"antecedentes", name:"Antecedentes Criminais", icon:"📋" },
+    { doc_type:"foto", name:"Foto 3x4", icon:"📸" },
+    { doc_type:"outros", name:"Outros Documentos", icon:"📁" },
+  ];
+
+  let adminUser = null;
+  let adminProfile = null;
+
+  let clientsRaw = [];
+  let processMap = new Map();
+  let docsMap = new Map();
+
+  let filteredClients = [];
+  let currentClientId = null;
+  let currentPhaseInModal = 1;
+  let currentStepInModal = 1;
+
+  /* =========================
+     6) Auth guard + init
+  ========================= */
+  async function init(){
+    setLoading(true, "Validando acesso…");
+
+    const { data: sessionData } = await sb.auth.getSession();
+    if (!sessionData?.session){
+      window.location.href = "login.html";
+      return;
     }
-  });
-}
 
-async function logout(){
-  setLoading(true, "Saindo…");
-  await sb.auth.signOut();
-  window.location.href = "login.html";
-}
+    const { data: userData, error: userErr } = await sb.auth.getUser();
+    if (userErr || !userData?.user){
+      window.location.href = "login.html";
+      return;
+    }
+    adminUser = userData.user;
 
-/* =========================
-   7) Load data
-========================= */
-async function loadAll(){
-  hideNotice();
-  setLoading(true, "Carregando clientes…");
+    const { data: profile, error: profErr } = await sb
+      .from("profiles")
+      .select("id, email, full_name, role, created_at")
+      .eq("id", adminUser.id)
+      .single();
 
-  const { data: clients, error: cErr } = await sb
-    .from("profiles")
-    .select("id, email, full_name, role, created_at")
-    .eq("role", "client")
-    .order("created_at", { ascending:false });
+    if (profErr || !profile){
+      showNotice("err", "Não consegui carregar seu perfil admin. Recarregue a página.");
+      setLoading(false);
+      return;
+    }
 
-  if (cErr){
-    showNotice("err", "Erro ao carregar clientes. Confira RLS/políticas das tabelas.");
+    adminProfile = profile;
+    if (adminProfile.role !== "admin"){
+      window.location.href = "dashboard.html";
+      return;
+    }
+
+    const display = (adminProfile.full_name || adminProfile.email || "Admin");
+    document.getElementById("adminName").textContent = display;
+    document.getElementById("adminAvatar").textContent = initialsFrom(display);
+
+    const signupLink = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, "/")}login.html`;
+    document.getElementById("signupLinkBox").textContent = signupLink;
+
+    wireEvents();
+    await loadAll();
     setLoading(false);
-    return;
   }
 
-  clientsRaw = clients || [];
+  function wireEvents(){
+    document.getElementById("logoutBtn").addEventListener("click", logout);
+    document.getElementById("refreshBtn").addEventListener("click", loadAll);
 
-  const ids = clientsRaw.map(c => c.id);
-  processMap = new Map();
-  docsMap = new Map();
+    document.getElementById("searchInput").addEventListener("input", (e)=>{
+      renderClients(e.target.value || "");
+    });
 
-  // processes
-  if (ids.length){
-    const { data: procs } = await sb
-      .from("dni_process")
-      .select("user_id, current_phase, current_step, updated_at")
-      .in("user_id", ids);
+    document.getElementById("closeClientModal").addEventListener("click", closeClientModal);
+    document.getElementById("clientDetailModal").addEventListener("click", (e)=>{
+      if (e.target.id === "clientDetailModal") closeClientModal();
+    });
 
-    (procs || []).forEach(p => processMap.set(p.user_id, p));
-  }
+    document.getElementById("saveNotesBtn").addEventListener("click", saveNotes);
+    document.getElementById("reloadNotesBtn").addEventListener("click", loadNotesForCurrentClient);
 
-  // docs
-  if (ids.length){
-    const { data: docs } = await sb
-      .from("documents")
-      .select("user_id, doc_type, status, storage_path, uploaded_at, approved_at")
-      .in("user_id", ids);
+    document.getElementById("sendMsgBtn").addEventListener("click", sendMessageToClient);
 
-    (docs || []).forEach(d => {
-      if (!docsMap.has(d.user_id)) docsMap.set(d.user_id, new Map());
-      docsMap.get(d.user_id).set(d.doc_type, d);
+    document.getElementById("newClientBtn").addEventListener("click", openNewClientModal);
+    document.getElementById("closeNewClientModal").addEventListener("click", closeNewClientModal);
+    document.getElementById("newClientModal").addEventListener("click", (e)=>{
+      if (e.target.id === "newClientModal") closeNewClientModal();
+    });
+
+    document.getElementById("copySignupLinkBtn").addEventListener("click", async ()=>{
+      const txt = document.getElementById("signupLinkBox").textContent;
+      try {
+        await navigator.clipboard.writeText(txt);
+        showNotice("ok", "Link copiado!");
+        closeNewClientModal();
+      } catch {
+        showNotice("err", "Não consegui copiar automaticamente. Copie manualmente.");
+      }
     });
   }
 
-  renderStats();
-  renderClients(document.getElementById("searchInput").value || "");
+  async function logout(){
+    setLoading(true, "Saindo…");
+    await sb.auth.signOut();
+    window.location.href = "login.html";
+  }
 
-  setLoading(false);
-}
+  /* =========================
+     7) Load data
+  ========================= */
+  async function loadAll(){
+    hideNotice();
+    setLoading(true, "Carregando clientes…");
 
-function renderStats(){
-  const total = clientsRaw.length;
+    const { data: clients, error: cErr } = await sb
+      .from("profiles")
+      .select("id, email, full_name, role, created_at")
+      .eq("role", "client")
+      .order("created_at", { ascending:false });
 
-  let completed = 0;
-  let active = 0;
+    if (cErr){
+      showNotice("err", "Erro ao carregar clientes. Confira RLS/políticas das tabelas.");
+      setLoading(false);
+      return;
+    }
 
-  const now = Date.now();
-  const sevenDaysMs = 7*24*60*60*1000;
-  let new7 = 0;
+    clientsRaw = clients || [];
 
-  clientsRaw.forEach(c => {
-    const proc = processMap.get(c.id);
-    const phase = proc?.current_phase || 1;
+    const ids = clientsRaw.map(c => c.id);
+    processMap = new Map();
+    docsMap = new Map();
 
-    if (phase >= 7) completed++;
-    else active++;
+    if (ids.length){
+      const { data: procs } = await sb
+        .from("dni_process")
+        .select("user_id, current_phase, current_step, updated_at")
+        .in("user_id", ids);
 
-    const createdAt = c.created_at ? new Date(c.created_at).getTime() : null;
-    if (createdAt && (now - createdAt) <= sevenDaysMs) new7++;
-  });
+      (procs || []).forEach(p => processMap.set(p.user_id, p));
+    }
 
-  document.getElementById("totalClients").textContent = total;
-  document.getElementById("activeClients").textContent = active;
-  document.getElementById("completedClients").textContent = completed;
-  document.getElementById("newClients").textContent = new7;
-}
+    if (ids.length){
+      const { data: docs } = await sb
+        .from("documents")
+        .select("user_id, doc_type, status, storage_path, uploaded_at, approved_at")
+        .in("user_id", ids);
 
-/* =========================
-   8) Render clients table
-========================= */
-function docsUploadedCountFor(userId){
-  const perUser = docsMap.get(userId);
-  if (!perUser) return 0;
-  let count = 0;
-  docsCatalog.forEach(dc => {
-    const d = perUser.get(dc.doc_type);
-    if (d && (d.status === "uploaded" || d.status === "approved")) count++;
-  });
-  return count;
-}
-
-function phaseLabel(phase){
-  if (phase >= 7) return { txt:"Concluído", cls:"completed" };
-  return { txt:`Fase ${phase}`, cls:"fase" };
-}
-
-function renderClients(filter){
-  const list = document.getElementById("clientsList");
-  list.innerHTML = "";
-
-  const q = (filter || "").trim().toLowerCase();
-
-  filteredClients = clientsRaw.filter(c => {
-    const name = (c.full_name || "").toLowerCase();
-    const email = (c.email || "").toLowerCase();
-    return !q || name.includes(q) || email.includes(q);
-  });
-
-  document.getElementById("emptyState").style.display = filteredClients.length ? "none" : "block";
-
-  filteredClients.forEach(c => {
-    const proc = processMap.get(c.id);
-    const phase = proc?.current_phase || 1;
-    const phaseInfo = phaseLabel(phase);
-
-    const docsUploaded = docsUploadedCountFor(c.id);
-    const docsCls = docsUploaded === 4 ? "complete" : "";
-    const statusText = phase >= 7 ? "Concluído" : "Em andamento";
-
-    const row = document.createElement("div");
-    row.className = "client-row";
-    row.addEventListener("click", ()=> openClientModal(c.id));
-
-    row.innerHTML = `
-      <div>
-        <div class="client-name">${c.full_name || "(Sem nome)"}</div>
-        <div class="client-email">${c.email || "-"}</div>
-      </div>
-      <div>
-        <div class="small">${c.email || "-"}</div>
-        <div class="client-email">${fmtDate(c.created_at)}</div>
-      </div>
-      <div class="hide-md">
-        <span class="status-badge ${phase >= 7 ? "completed" : "fase"}">${statusText}</span>
-      </div>
-      <div class="hide-xl">
-        <span class="docs-count ${docsCls}">${docsUploaded}/4</span>
-      </div>
-      <div class="hide-md">
-        <span class="status-badge ${phaseInfo.cls}">${phaseInfo.txt}</span>
-      </div>
-      <div>
-        <button class="action-btn" type="button">Ver</button>
-      </div>
-    `;
-    row.querySelector("button").addEventListener("click", (e)=>{
-      e.stopPropagation();
-      openClientModal(c.id);
-    });
-
-    list.appendChild(row);
-  });
-}
-
-/* =========================
-   9) Client modal
-========================= */
-async function openClientModal(userId){
-  currentClientId = userId;
-  const client = clientsRaw.find(c => c.id === userId);
-  if (!client) return;
-
-  const proc = processMap.get(userId);
-  const phase = proc?.current_phase || 1;
-  const step = proc?.current_step || 1;
-  
-  currentPhaseInModal = phase;
-  currentStepInModal = step;
-
-  document.getElementById("clientDetailTitle").textContent = client.full_name || "Detalhes do Cliente";
-  document.getElementById("clientDetailSubtitle").textContent = client.email || "";
-  document.getElementById("detailName").textContent = client.full_name || "-";
-  document.getElementById("detailEmail").textContent = client.email || "-";
-  document.getElementById("detailId").textContent = client.id;
-  document.getElementById("detailCreated").textContent = fmtDate(client.created_at);
-  document.getElementById("detailPhase").textContent = `Fase ${phase}`;
-  
-  const steps = phaseSteps[phase] || [];
-  document.getElementById("detailStep").textContent = step > steps.length ? "Fase concluída" : `Passo ${step}`;
-
-  renderPhases(userId, phase);
-  renderSteps(userId, phase, step);
-  renderDocs(userId);
-
-  await loadNotesForCurrentClient();
-  await loadMessagesForCurrentClient();
-
-  // limpa form de mensagem
-  document.getElementById("msgTitle").value = "";
-  document.getElementById("msgBody").value = "";
-  document.getElementById("msgType").value = "info";
-
-  document.getElementById("clientDetailModal").classList.add("active");
-}
-
-function closeClientModal(){
-  document.getElementById("clientDetailModal").classList.remove("active");
-  currentClientId = null;
-  currentPhaseInModal = 1;
-  currentStepInModal = 1;
-}
-
-function renderPhases(userId, currentPhase){
-  const container = document.getElementById("phasesList");
-  container.innerHTML = "";
-
-  phases.forEach(ph => {
-    const isActive = (ph.id === currentPhase);
-    const isDone = (ph.id < currentPhase);
-
-    const div = document.createElement("div");
-    div.className = `phase-item ${isDone ? "completed" : (isActive ? "active" : "")}`;
-
-    div.innerHTML = `
-      <div style="flex:1;">
-        <div class="phase-name">${ph.id}. ${ph.name}</div>
-        <div class="phase-desc">${ph.desc}</div>
-      </div>
-      <div class="phase-actions">
-        ${isDone ? `<button class="btn-small success" type="button" disabled>✓ Concluída</button>` : ""}
-        ${isActive ? `<button class="btn-small" type="button" disabled>Atual</button>` : `<button class="btn-small" type="button">Definir como atual</button>`}
-      </div>
-    `;
-
-    const btn = div.querySelector(".phase-actions button:not([disabled])");
-    if (btn){
-      btn.addEventListener("click", async ()=>{
-        await setClientPhase(userId, ph.id);
+      (docs || []).forEach(d => {
+        if (!docsMap.has(d.user_id)) docsMap.set(d.user_id, new Map());
+        docsMap.get(d.user_id).set(d.doc_type, d);
       });
     }
 
-    container.appendChild(div);
-  });
-}
+    renderStats();
+    renderClients(document.getElementById("searchInput").value || "");
 
-async function setClientPhase(userId, phaseId){
-  hideNotice();
-  setLoading(true, "Atualizando fase…");
-
-  const nowIso = new Date().toISOString();
-
-  const { data, error } = await sb
-    .from("dni_process")
-    .upsert({ 
-      user_id: userId, 
-      current_phase: phaseId, 
-      current_step: 1, // reset step quando muda fase
-      updated_at: nowIso 
-    }, { onConflict:"user_id" })
-    .select("user_id, current_phase, current_step, updated_at")
-    .single();
-
-  if (error){
-    showNotice("err", "Não consegui atualizar a fase. Confira políticas RLS da tabela dni_process.");
     setLoading(false);
-    return;
   }
 
-  processMap.set(userId, data);
-  currentPhaseInModal = phaseId;
-  currentStepInModal = 1;
+  function renderStats(){
+    const total = clientsRaw.length;
 
-  renderStats();
-  renderClients(document.getElementById("searchInput").value || "");
+    let completed = 0;
+    let active = 0;
 
-  document.getElementById("detailPhase").textContent = `Fase ${phaseId}`;
-  document.getElementById("detailStep").textContent = "Passo 1";
-  
-  renderPhases(userId, phaseId);
-  renderSteps(userId, phaseId, 1);
+    const now = Date.now();
+    const sevenDaysMs = 7*24*60*60*1000;
+    let new7 = 0;
 
-  showNotice("ok", `Fase atualizada para Fase ${phaseId}, Passo 1.`);
-  setLoading(false);
-}
+    clientsRaw.forEach(c => {
+      const proc = processMap.get(c.id);
+      const phase = proc?.current_phase || 1;
 
-/* =========================
-   9.1) Steps (fixed steps - mesmos do dashboard)
-========================= */
-function renderSteps(userId, phase, currentStep){
-  const list = document.getElementById("stepsList");
-  list.innerHTML = "";
+      if (phase >= 7) completed++;
+      else active++;
 
-  const steps = phaseSteps[phase] || [];
-  
-  if (!steps.length){
-    list.innerHTML = '<div class="small" style="padding:12px; text-align:center; color:rgba(255,255,255,.6);">Nenhum passo definido para esta fase</div>';
-    return;
+      const createdAt = c.created_at ? new Date(c.created_at).getTime() : null;
+      if (createdAt && (now - createdAt) <= sevenDaysMs) new7++;
+    });
+
+    document.getElementById("totalClients").textContent = total;
+    document.getElementById("activeClients").textContent = active;
+    document.getElementById("completedClients").textContent = completed;
+    document.getElementById("newClients").textContent = new7;
   }
 
-  steps.forEach((stepText, idx) => {
-    const stepNum = idx + 1;
-    const isDone = stepNum < currentStep;
-    const isCurrent = stepNum === currentStep;
-    const isPending = stepNum > currentStep;
+  /* =========================
+     8) Render clients table
+  ========================= */
+  function docsUploadedCountFor(userId){
+    const perUser = docsMap.get(userId);
+    if (!perUser) return 0;
+    let count = 0;
+    docsCatalog.forEach(dc => {
+      const d = perUser.get(dc.doc_type);
+      if (d && (d.status === "uploaded" || d.status === "approved")) count++;
+    });
+    return count;
+  }
 
-    let badge = "";
-    let itemClass = "";
-    
-    if (isDone){
-      badge = '<span class="step-badge done">✓ Concluído</span>';
-      itemClass = "done";
-    } else if (isCurrent){
-      badge = '<span class="step-badge current">📍 Atual</span>';
-      itemClass = "current";
-    } else {
-      badge = '<span class="step-badge pending">⏳ Pendente</span>';
-      itemClass = "";
+  function phaseLabel(phase){
+    if (phase >= 7) return { txt:"Concluído", cls:"completed" };
+    return { txt:`Fase ${phase}`, cls:"fase" };
+  }
+
+  function renderClients(filter){
+    const list = document.getElementById("clientsList");
+    list.innerHTML = "";
+
+    const q = (filter || "").trim().toLowerCase();
+
+    filteredClients = clientsRaw.filter(c => {
+      const name = (c.full_name || "").toLowerCase();
+      const email = (c.email || "").toLowerCase();
+      return !q || name.includes(q) || email.includes(q);
+    });
+
+    document.getElementById("emptyState").style.display = filteredClients.length ? "none" : "block";
+
+    filteredClients.forEach(c => {
+      const proc = processMap.get(c.id);
+      const phase = proc?.current_phase || 1;
+      const phaseInfo = phaseLabel(phase);
+
+      const docsUploaded = docsUploadedCountFor(c.id);
+      const docsCls = docsUploaded === 4 ? "complete" : "";
+      const statusText = phase >= 7 ? "Concluído" : "Em andamento";
+
+      const row = document.createElement("div");
+      row.className = "client-row";
+      row.addEventListener("click", ()=> openClientModal(c.id));
+
+      row.innerHTML = `
+        <div>
+          <div class="client-name">${c.full_name || "(Sem nome)"}</div>
+          <div class="client-email">${c.email || "-"}</div>
+        </div>
+        <div>
+          <div class="small">${c.email || "-"}</div>
+          <div class="client-email">${fmtDate(c.created_at)}</div>
+        </div>
+        <div class="hide-md">
+          <span class="status-badge ${phase >= 7 ? "completed" : "fase"}">${statusText}</span>
+        </div>
+        <div class="hide-xl">
+          <span class="docs-count ${docsCls}">${docsUploaded}/4</span>
+        </div>
+        <div class="hide-md">
+          <span class="status-badge ${phaseInfo.cls}">${phaseInfo.txt}</span>
+        </div>
+        <div>
+          <button class="action-btn" type="button">Ver</button>
+        </div>
+      `;
+
+      row.querySelector("button").addEventListener("click", (e)=>{
+        e.stopPropagation();
+        openClientModal(c.id);
+      });
+
+      list.appendChild(row);
+    });
+  }
+
+  /* =========================
+     9) Client modal
+  ========================= */
+  async function openClientModal(userId){
+    currentClientId = userId;
+    const client = clientsRaw.find(c => c.id === userId);
+    if (!client) return;
+
+    const proc = processMap.get(userId);
+    const phase = proc?.current_phase || 1;
+    const step = proc?.current_step || 1;
+
+    currentPhaseInModal = phase;
+    currentStepInModal = step;
+
+    document.getElementById("clientDetailTitle").textContent = client.full_name || "Detalhes do Cliente";
+    document.getElementById("clientDetailSubtitle").textContent = client.email || "";
+    document.getElementById("detailName").textContent = client.full_name || "-";
+    document.getElementById("detailEmail").textContent = client.email || "-";
+    document.getElementById("detailId").textContent = client.id;
+    document.getElementById("detailCreated").textContent = fmtDate(client.created_at);
+    document.getElementById("detailPhase").textContent = `Fase ${phase}`;
+
+    const steps = phaseSteps[phase] || [];
+    document.getElementById("detailStep").textContent = step > steps.length ? "Fase concluída" : `Passo ${step}`;
+
+    renderPhases(userId, phase);
+    renderSteps(userId, phase, step);
+    renderDocs(userId);
+
+    await loadNotesForCurrentClient();
+    await loadMessagesForCurrentClient();
+
+    document.getElementById("msgTitle").value = "";
+    document.getElementById("msgBody").value = "";
+    document.getElementById("msgType").value = "info";
+
+    document.getElementById("clientDetailModal").classList.add("active");
+  }
+
+  function closeClientModal(){
+    document.getElementById("clientDetailModal").classList.remove("active");
+    currentClientId = null;
+    currentPhaseInModal = 1;
+    currentStepInModal = 1;
+  }
+
+  function renderPhases(userId, currentPhase){
+    const container = document.getElementById("phasesList");
+    container.innerHTML = "";
+
+    phases.forEach(ph => {
+      const isActive = (ph.id === currentPhase);
+      const isDone = (ph.id < currentPhase);
+
+      const div = document.createElement("div");
+      div.className = `phase-item ${isDone ? "completed" : (isActive ? "active" : "")}`;
+
+      div.innerHTML = `
+        <div style="flex:1;">
+          <div class="phase-name">${ph.id}. ${ph.name}</div>
+          <div class="phase-desc">${ph.desc}</div>
+        </div>
+        <div class="phase-actions">
+          ${isDone ? `<button class="btn-small success" type="button" disabled>✓ Concluída</button>` : ""}
+          ${isActive ? `<button class="btn-small" type="button" disabled>Atual</button>` : `<button class="btn-small" type="button">Definir como atual</button>`}
+        </div>
+      `;
+
+      const btn = div.querySelector(".phase-actions button:not([disabled])");
+      if (btn){
+        btn.addEventListener("click", async ()=>{
+          await setClientPhase(userId, ph.id);
+        });
+      }
+
+      container.appendChild(div);
+    });
+  }
+
+  async function setClientPhase(userId, phaseId){
+    hideNotice();
+    setLoading(true, "Atualizando fase…");
+
+    const nowIso = new Date().toISOString();
+
+    const { data, error } = await sb
+      .from("dni_process")
+      .upsert({
+        user_id: userId,
+        current_phase: phaseId,
+        current_step: 1,
+        updated_at: nowIso
+      }, { onConflict:"user_id" })
+      .select("user_id, current_phase, current_step, updated_at")
+      .single();
+
+    if (error){
+      showNotice("err", "Não consegui atualizar a fase. Confira políticas RLS da tabela dni_process.");
+      setLoading(false);
+      return;
     }
 
-    const div = document.createElement("div");
-    div.className = `step-item ${itemClass}`;
-    
-    div.innerHTML = `
-      <div class="step-check"></div>
-      <div class="step-text">${stepNum}. ${stepText}</div>
-      ${badge}
-    `;
+    processMap.set(userId, data);
+    currentPhaseInModal = phaseId;
+    currentStepInModal = 1;
 
-    // Clique define este passo como atual
-    div.addEventListener("click", async ()=>{
-      await setClientStep(userId, phase, stepNum);
+    renderStats();
+    renderClients(document.getElementById("searchInput").value || "");
+
+    document.getElementById("detailPhase").textContent = `Fase ${phaseId}`;
+    document.getElementById("detailStep").textContent = "Passo 1";
+
+    renderPhases(userId, phaseId);
+    renderSteps(userId, phaseId, 1);
+
+    showNotice("ok", `Fase atualizada para Fase ${phaseId}, Passo 1.`);
+    setLoading(false);
+  }
+
+  /* =========================
+     9.1) Steps
+  ========================= */
+  function renderSteps(userId, phase, currentStep){
+    const list = document.getElementById("stepsList");
+    list.innerHTML = "";
+
+    const steps = phaseSteps[phase] || [];
+
+    if (!steps.length){
+      list.innerHTML = '<div class="small" style="padding:12px; text-align:center; color:rgba(13,18,32,.55);">Nenhum passo definido para esta fase</div>';
+      return;
+    }
+
+    steps.forEach((stepText, idx) => {
+      const stepNum = idx + 1;
+      const isDone = stepNum < currentStep;
+      const isCurrent = stepNum === currentStep;
+
+      let badge = "";
+      let itemClass = "";
+
+      if (isDone){
+        badge = '<span class="step-badge done">✓ Concluído</span>';
+        itemClass = "done";
+      } else if (isCurrent){
+        badge = '<span class="step-badge current">📍 Atual</span>';
+        itemClass = "current";
+      } else {
+        badge = '<span class="step-badge pending">⏳ Pendente</span>';
+        itemClass = "";
+      }
+
+      const div = document.createElement("div");
+      div.className = `step-item ${itemClass}`;
+
+      div.innerHTML = `
+        <div class="step-check"></div>
+        <div class="step-text">${stepNum}. ${stepText}</div>
+        ${badge}
+      `;
+
+      div.addEventListener("click", async ()=>{
+        await setClientStep(userId, phase, stepNum);
+      });
+
+      list.appendChild(div);
     });
+  }
 
-    list.appendChild(div);
-  });
-}
+  async function setClientStep(userId, phase, stepNum){
+    hideNotice();
+    setLoading(true, "Atualizando passo…");
 
-async function setClientStep(userId, phase, stepNum){
-  hideNotice();
-  setLoading(true, "Atualizando passo…");
+    const nowIso = new Date().toISOString();
 
-  const nowIso = new Date().toISOString();
+    const { data, error } = await sb
+      .from("dni_process")
+      .upsert({
+        user_id: userId,
+        current_phase: phase,
+        current_step: stepNum,
+        updated_at: nowIso
+      }, { onConflict:"user_id" })
+      .select("user_id, current_phase, current_step, updated_at")
+      .single();
 
-  const { data, error } = await sb
-    .from("dni_process")
-    .upsert({ 
-      user_id: userId, 
-      current_phase: phase,
-      current_step: stepNum,
-      updated_at: nowIso 
-    }, { onConflict:"user_id" })
-    .select("user_id, current_phase, current_step, updated_at")
-    .single();
+    if (error){
+      showNotice("err", "Não consegui atualizar o passo. Confira políticas RLS da tabela dni_process.");
+      setLoading(false);
+      return;
+    }
 
-  if (error){
-    showNotice("err", "Não consegui atualizar o passo. Confira políticas RLS da tabela dni_process.");
+    processMap.set(userId, data);
+    currentStepInModal = stepNum;
+
+    const steps = phaseSteps[phase] || [];
+    document.getElementById("detailStep").textContent = stepNum > steps.length ? "Fase concluída" : `Passo ${stepNum}`;
+
+    renderSteps(userId, phase, stepNum);
+
+    showNotice("ok", `Passo atualizado para Passo ${stepNum}.`);
     setLoading(false);
-    return;
   }
 
-  processMap.set(userId, data);
-  currentStepInModal = stepNum;
-
-  const steps = phaseSteps[phase] || [];
-  document.getElementById("detailStep").textContent = stepNum > steps.length ? "Fase concluída" : `Passo ${stepNum}`;
-  
-  renderSteps(userId, phase, stepNum);
-
-  showNotice("ok", `Passo atualizado para Passo ${stepNum}.`);
-  setLoading(false);
-}
-
-/* =========================
-   10) Documents (view / approve / reject / remove)
-========================= */
-function docRowFor(userId, docType){
-  const perUser = docsMap.get(userId);
-  return perUser ? perUser.get(docType) : null;
-}
-function docStatusBadge(status){
-  if (status === "approved") return { cls:"approved", txt:"✅ Aprovado" };
-  if (status === "rejected") return { cls:"rejected", txt:"⚠️ Rejeitado" };
-  if (status === "uploaded") return { cls:"uploaded", txt:"✓ Enviado" };
-  return { cls:"pending", txt:"⏳ Pendente" };
-}
-function renderDocs(userId){
-  const grid = document.getElementById("documentsGrid");
-  grid.innerHTML = "";
-
-  docsCatalog.forEach(dc => {
-    const row = docRowFor(userId, dc.doc_type);
-    const status = row?.status || "pending";
-    const badge = docStatusBadge(status);
-
-    const fileInfo = row?.storage_path
-      ? `Arquivo: ${filenameFromPath(row.storage_path)}`
-      : "Sem envio ainda";
-
-    const timeInfo = row?.uploaded_at ? `Enviado em ${fmtDate(row.uploaded_at)}` : "";
-
-    const card = document.createElement("div");
-    card.className = `doc-card ${status === "approved" ? "approved" : (status === "rejected" ? "rejected" : "")}`;
-
-    card.innerHTML = `
-      <div class="doc-header">
-        <div class="doc-icon">${dc.icon}</div>
-        <div class="doc-status ${badge.cls}">${badge.txt}</div>
-      </div>
-      <div class="doc-title">${dc.name}</div>
-      <div class="doc-info">${fileInfo}${timeInfo ? "<br>"+timeInfo : ""}</div>
-      <div class="doc-actions">
-        <button class="btn-small" type="button" ${row?.storage_path ? "" : "disabled"}>👁️ Ver</button>
-        <button class="btn-small success" type="button" ${row?.storage_path ? "" : "disabled"}>✓ Aprovar</button>
-        <button class="btn-small danger" type="button" ${row?.storage_path ? "" : "disabled"}>↺ Rejeitar</button>
-        <button class="btn-small danger" type="button" ${row?.storage_path ? "" : "disabled"}>✕ Remover</button>
-      </div>
-      <div class="small" style="margin-top:8px; color:rgba(255,255,255,.55); font-weight:800;">
-        Obs: "Remover" apaga do Storage e volta pra Pendente.
-      </div>
-    `;
-
-    const [btnView, btnApprove, btnReject, btnRemove] = card.querySelectorAll("button");
-
-    btnView.addEventListener("click", async ()=> {
-      if (!row?.storage_path) return;
-      await viewDoc(row.storage_path);
-    });
-    btnApprove.addEventListener("click", async ()=> {
-      if (!row?.storage_path) return;
-      await updateDocStatus(userId, dc.doc_type, "approved");
-    });
-    btnReject.addEventListener("click", async ()=> {
-      if (!row?.storage_path) return;
-      await updateDocStatus(userId, dc.doc_type, "rejected");
-    });
-    btnRemove.addEventListener("click", async ()=> {
-      if (!row?.storage_path) return;
-      const ok = confirm("Remover este arquivo? (Vai apagar do Storage)");
-      if (!ok) return;
-      await removeDocFile(userId, dc.doc_type, row.storage_path);
-    });
-
-    grid.appendChild(card);
-  });
-}
-
-async function viewDoc(storagePath){
-  hideNotice();
-  setLoading(true, "Abrindo arquivo…");
-
-  const { data, error } = await sb.storage.from("documents").createSignedUrl(storagePath, 60);
-  if (error || !data?.signedUrl){
-    showNotice("err", "Não consegui gerar link para visualizar.");
-    setLoading(false);
-    return;
+  /* =========================
+     10) Documents
+  ========================= */
+  function docRowFor(userId, docType){
+    const perUser = docsMap.get(userId);
+    return perUser ? perUser.get(docType) : null;
   }
-  window.open(data.signedUrl, "_blank", "noopener,noreferrer");
-  setLoading(false);
-}
-
-async function updateDocStatus(userId, docType, status){
-  hideNotice();
-  setLoading(true, "Atualizando documento…");
-
-  const nowIso = new Date().toISOString();
-  const patch = { status, approved_at: status === "approved" ? nowIso : null };
-
-  const { data, error } = await sb
-    .from("documents")
-    .update(patch)
-    .eq("user_id", userId)
-    .eq("doc_type", docType)
-    .select("user_id, doc_type, status, storage_path, uploaded_at, approved_at")
-    .single();
-
-  if (error){
-    showNotice("err", "Não consegui atualizar status do documento. Confira RLS na tabela documents.");
-    setLoading(false);
-    return;
+  function docStatusBadge(status){
+    if (status === "approved") return { cls:"approved", txt:"✅ Aprovado" };
+    if (status === "rejected") return { cls:"rejected", txt:"⚠️ Rejeitado" };
+    if (status === "uploaded") return { cls:"uploaded", txt:"✓ Enviado" };
+    return { cls:"pending", txt:"⏳ Pendente" };
   }
+  function renderDocs(userId){
+    const grid = document.getElementById("documentsGrid");
+    grid.innerHTML = "";
 
-  if (!docsMap.has(userId)) docsMap.set(userId, new Map());
-  docsMap.get(userId).set(docType, data);
+    docsCatalog.forEach(dc => {
+      const row = docRowFor(userId, dc.doc_type);
+      const status = row?.status || "pending";
+      const badge = docStatusBadge(status);
 
-  renderClients(document.getElementById("searchInput").value || "");
-  if (currentClientId === userId) renderDocs(userId);
+      const fileInfo = row?.storage_path
+        ? `Arquivo: ${filenameFromPath(row.storage_path)}`
+        : "Sem envio ainda";
 
-  showNotice("ok", status === "approved" ? "Documento aprovado." : "Documento rejeitado.");
-  setLoading(false);
-}
+      const timeInfo = row?.uploaded_at ? `Enviado em ${fmtDate(row.uploaded_at)}` : "";
 
-async function removeDocFile(userId, docType, storagePath){
-  hideNotice();
-  setLoading(true, "Removendo arquivo…");
+      const card = document.createElement("div");
+      card.className = `doc-card ${status === "approved" ? "approved" : (status === "rejected" ? "rejected" : "")}`;
 
-  const { error: rmErr } = await sb.storage.from("documents").remove([storagePath]);
-  if (rmErr){
-    showNotice("err", "Não consegui remover do Storage.");
-    setLoading(false);
-    return;
-  }
-
-  const { data, error } = await sb
-    .from("documents")
-    .update({ storage_path:null, status:"pending", uploaded_at:null, approved_at:null })
-    .eq("user_id", userId)
-    .eq("doc_type", docType)
-    .select("user_id, doc_type, status, storage_path, uploaded_at, approved_at")
-    .single();
-
-  if (error){
-    showNotice("err", "Removido do Storage, mas falhou ao atualizar no banco.");
-    setLoading(false);
-    return;
-  }
-
-  if (!docsMap.has(userId)) docsMap.set(userId, new Map());
-  docsMap.get(userId).set(docType, data);
-
-  renderClients(document.getElementById("searchInput").value || "");
-  if (currentClientId === userId) renderDocs(userId);
-
-  showNotice("ok", "Arquivo removido e status voltou para Pendente.");
-  setLoading(false);
-}
-
-/* =========================
-   11) Notes (admin_notes)
-========================= */
-async function loadNotesForCurrentClient(){
-  if (!currentClientId) return;
-  document.getElementById("clientNotes").value = "";
-  hideNotice();
-
-  const { data, error } = await sb
-    .from("admin_notes")
-    .select("user_id, notes, updated_at")
-    .eq("user_id", currentClientId)
-    .single();
-
-  if (error){
-    // se não existir linha, ok
-    return;
-  }
-  document.getElementById("clientNotes").value = data?.notes || "";
-}
-
-async function saveNotes(){
-  if (!currentClientId) return;
-  hideNotice();
-  setLoading(true, "Salvando notas…");
-
-  const notes = document.getElementById("clientNotes").value || "";
-  const nowIso = new Date().toISOString();
-
-  const { error } = await sb
-    .from("admin_notes")
-    .upsert({ user_id: currentClientId, notes, updated_at: nowIso }, { onConflict:"user_id" });
-
-  if (error){
-    showNotice("err", "Falha ao salvar notas. Provável: RLS bloqueando ou tabela admin_notes inexistente.");
-    setLoading(false);
-    return;
-  }
-
-  showNotice("ok", "Notas salvas!");
-  setLoading(false);
-}
-
-/* =========================
-   12) Messages (client_messages)
-========================= */
-function typeLabelPt(type){
-  if (type === "update") return "Atualização";
-  if (type === "warning") return "Atenção";
-  if (type === "success") return "Sucesso";
-  return "Informação";
-}
-
-function typeBadgeClass(type){
-  if (type === "update") return "update";
-  if (type === "warning") return "warning";
-  if (type === "success") return "success";
-  return "info";
-}
-
-async function loadMessagesForCurrentClient(){
-  if (!currentClientId) return;
-  const box = document.getElementById("messagesList");
-  box.innerHTML = "";
-
-  const { data, error } = await sb
-    .from("client_messages")
-    .select("id, user_id, title, message, message_type, is_read, created_at, read_at")
-    .eq("user_id", currentClientId)
-    .order("created_at", { ascending:false })
-    .limit(10);
-
-  if (error){
-    // se tabela não existir / RLS, mostra aviso leve
-    box.innerHTML = `<div class="small" style="color:rgba(255,255,255,.65); font-weight:800;">Não consegui carregar mensagens (verifique tabela client_messages e RLS).</div>`;
-    return;
-  }
-
-  if (!data || !data.length){
-    box.innerHTML = `<div class="small" style="color:rgba(255,255,255,.65); font-weight:800;">Nenhuma mensagem enviada ainda.</div>`;
-    return;
-  }
-
-  data.forEach(m => {
-    const div = document.createElement("div");
-    div.className = "msg-item";
-    div.innerHTML = `
-      <div class="msg-top">
-        <div>
-          <div class="msg-title">${m.title || "(Sem título)"}</div>
-          <div class="msg-meta">${fmtDate(m.created_at)} • ${typeLabelPt(m.message_type || "info")}</div>
+      card.innerHTML = `
+        <div class="doc-header">
+          <div class="doc-icon">${dc.icon}</div>
+          <div class="doc-status ${badge.cls}">${badge.txt}</div>
         </div>
-        <div class="msg-badges">
-          <span class="msg-badge ${typeBadgeClass(m.message_type || "info")}">${typeLabelPt(m.message_type || "info")}</span>
-          ${m.is_read ? "" : `<span class="msg-badge unread">Não lida</span>`}
+        <div class="doc-title">${dc.name}</div>
+        <div class="doc-info">${fileInfo}${timeInfo ? "<br>"+timeInfo : ""}</div>
+        <div class="doc-actions">
+          <button class="btn-small" type="button" ${row?.storage_path ? "" : "disabled"}>👁️ Ver</button>
+          <button class="btn-small success" type="button" ${row?.storage_path ? "" : "disabled"}>✓ Aprovar</button>
+          <button class="btn-small danger" type="button" ${row?.storage_path ? "" : "disabled"}>↺ Rejeitar</button>
+          <button class="btn-small danger" type="button" ${row?.storage_path ? "" : "disabled"}>✕ Remover</button>
         </div>
-      </div>
-      <div class="msg-body">${(m.message || "").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
-      <div class="msg-actions">
-        <button class="btn-small danger" type="button">Apagar</button>
-      </div>
-    `;
+      `;
 
-    div.querySelector("button").addEventListener("click", async ()=>{
-      const ok = confirm("Apagar esta mensagem? (o cliente não verá mais)");
-      if (!ok) return;
-      await deleteMessage(m.id);
+      const [btnView, btnApprove, btnReject, btnRemove] = card.querySelectorAll("button");
+
+      btnView.addEventListener("click", async ()=> {
+        if (!row?.storage_path) return;
+        await viewDoc(row.storage_path);
+      });
+      btnApprove.addEventListener("click", async ()=> {
+        if (!row?.storage_path) return;
+        await updateDocStatus(userId, dc.doc_type, "approved");
+      });
+      btnReject.addEventListener("click", async ()=> {
+        if (!row?.storage_path) return;
+        await updateDocStatus(userId, dc.doc_type, "rejected");
+      });
+      btnRemove.addEventListener("click", async ()=> {
+        if (!row?.storage_path) return;
+        const ok = confirm("Remover este arquivo? (Vai apagar do Storage)");
+        if (!ok) return;
+        await removeDocFile(userId, dc.doc_type, row.storage_path);
+      });
+
+      grid.appendChild(card);
     });
-
-    box.appendChild(div);
-  });
-}
-
-async function sendMessageToClient(){
-  if (!currentClientId) return;
-
-  const title = (document.getElementById("msgTitle").value || "").trim();
-  const message = (document.getElementById("msgBody").value || "").trim();
-  const type = document.getElementById("msgType").value || "info";
-
-  if (!title || !message){
-    showNotice("err", "Preencha Título e Mensagem.");
-    return;
   }
 
-  hideNotice();
-  setLoading(true, "Enviando mensagem…");
+  async function viewDoc(storagePath){
+    hideNotice();
+    setLoading(true, "Abrindo arquivo…");
 
-  const { error } = await sb
-    .from("client_messages")
-    .insert({
-      user_id: currentClientId,
-      title,
-      message,
-      message_type: type,
-      is_read: false
+    const { data, error } = await sb.storage.from("documents").createSignedUrl(storagePath, 60);
+    if (error || !data?.signedUrl){
+      showNotice("err", "Não consegui gerar link para visualizar.");
+      setLoading(false);
+      return;
+    }
+    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+    setLoading(false);
+  }
+
+  async function updateDocStatus(userId, docType, status){
+    hideNotice();
+    setLoading(true, "Atualizando documento…");
+
+    const nowIso = new Date().toISOString();
+    const patch = { status, approved_at: status === "approved" ? nowIso : null };
+
+    const { data, error } = await sb
+      .from("documents")
+      .update(patch)
+      .eq("user_id", userId)
+      .eq("doc_type", docType)
+      .select("user_id, doc_type, status, storage_path, uploaded_at, approved_at")
+      .single();
+
+    if (error){
+      showNotice("err", "Não consegui atualizar status do documento. Confira RLS na tabela documents.");
+      setLoading(false);
+      return;
+    }
+
+    if (!docsMap.has(userId)) docsMap.set(userId, new Map());
+    docsMap.get(userId).set(docType, data);
+
+    renderClients(document.getElementById("searchInput").value || "");
+    if (currentClientId === userId) renderDocs(userId);
+
+    showNotice("ok", status === "approved" ? "Documento aprovado." : "Documento rejeitado.");
+    setLoading(false);
+  }
+
+  async function removeDocFile(userId, docType, storagePath){
+    hideNotice();
+    setLoading(true, "Removendo arquivo…");
+
+    const { error: rmErr } = await sb.storage.from("documents").remove([storagePath]);
+    if (rmErr){
+      showNotice("err", "Não consegui remover do Storage.");
+      setLoading(false);
+      return;
+    }
+
+    const { data, error } = await sb
+      .from("documents")
+      .update({ storage_path:null, status:"pending", uploaded_at:null, approved_at:null })
+      .eq("user_id", userId)
+      .eq("doc_type", docType)
+      .select("user_id, doc_type, status, storage_path, uploaded_at, approved_at")
+      .single();
+
+    if (error){
+      showNotice("err", "Removido do Storage, mas falhou ao atualizar no banco.");
+      setLoading(false);
+      return;
+    }
+
+    if (!docsMap.has(userId)) docsMap.set(userId, new Map());
+    docsMap.get(userId).set(docType, data);
+
+    renderClients(document.getElementById("searchInput").value || "");
+    if (currentClientId === userId) renderDocs(userId);
+
+    showNotice("ok", "Arquivo removido e status voltou para Pendente.");
+    setLoading(false);
+  }
+
+  /* =========================
+     11) Notes (admin_notes)
+  ========================= */
+  async function loadNotesForCurrentClient(){
+    if (!currentClientId) return;
+    document.getElementById("clientNotes").value = "";
+    hideNotice();
+
+    const { data, error } = await sb
+      .from("admin_notes")
+      .select("user_id, notes, updated_at")
+      .eq("user_id", currentClientId)
+      .single();
+
+    if (error){
+      return; // ok se não existir linha
+    }
+    document.getElementById("clientNotes").value = data?.notes || "";
+  }
+
+  async function saveNotes(){
+    if (!currentClientId) return;
+    hideNotice();
+    setLoading(true, "Salvando notas…");
+
+    const notes = document.getElementById("clientNotes").value || "";
+    const nowIso = new Date().toISOString();
+
+    const { error } = await sb
+      .from("admin_notes")
+      .upsert({ user_id: currentClientId, notes, updated_at: nowIso }, { onConflict:"user_id" });
+
+    if (error){
+      showNotice("err", "Falha ao salvar notas. Provável: RLS bloqueando ou tabela admin_notes inexistente.");
+      setLoading(false);
+      return;
+    }
+
+    showNotice("ok", "Notas salvas!");
+    setLoading(false);
+  }
+
+  /* =========================
+     12) Messages (client_messages)
+  ========================= */
+  function typeLabelPt(type){
+    if (type === "update") return "Atualização";
+    if (type === "warning") return "Atenção";
+    if (type === "success") return "Sucesso";
+    return "Informação";
+  }
+  function typeBadgeClass(type){
+    if (type === "update") return "update";
+    if (type === "warning") return "warning";
+    if (type === "success") return "success";
+    return "info";
+  }
+
+  async function loadMessagesForCurrentClient(){
+    if (!currentClientId) return;
+    const box = document.getElementById("messagesList");
+    box.innerHTML = "";
+
+    const { data, error } = await sb
+      .from("client_messages")
+      .select("id, user_id, title, message, message_type, is_read, created_at, read_at")
+      .eq("user_id", currentClientId)
+      .order("created_at", { ascending:false })
+      .limit(10);
+
+    if (error){
+      box.innerHTML = `<div class="small" style="color:rgba(13,18,32,.60); font-weight:650;">Não consegui carregar mensagens (verifique tabela client_messages e RLS).</div>`;
+      return;
+    }
+
+    if (!data || !data.length){
+      box.innerHTML = `<div class="small" style="color:rgba(13,18,32,.60); font-weight:650;">Nenhuma mensagem enviada ainda.</div>`;
+      return;
+    }
+
+    data.forEach(m => {
+      const div = document.createElement("div");
+      div.className = "msg-item";
+      div.innerHTML = `
+        <div class="msg-top">
+          <div>
+            <div class="msg-title">${m.title || "(Sem título)"}</div>
+            <div class="msg-meta">${fmtDate(m.created_at)} • ${typeLabelPt(m.message_type || "info")}</div>
+          </div>
+          <div class="msg-badges">
+            <span class="msg-badge ${typeBadgeClass(m.message_type || "info")}">${typeLabelPt(m.message_type || "info")}</span>
+            ${m.is_read ? "" : `<span class="msg-badge unread">Não lida</span>`}
+          </div>
+        </div>
+        <div class="msg-body">${(m.message || "").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
+        <div class="msg-actions">
+          <button class="btn-small danger" type="button">Apagar</button>
+        </div>
+      `;
+
+      div.querySelector("button").addEventListener("click", async ()=>{
+        const ok = confirm("Apagar esta mensagem? (o cliente não verá mais)");
+        if (!ok) return;
+        await deleteMessage(m.id);
+      });
+
+      box.appendChild(div);
     });
-
-  if (error){
-    console.error(error);
-    showNotice("err", "Não consegui enviar. Confira RLS da tabela client_messages.");
-    setLoading(false);
-    return;
   }
 
-  document.getElementById("msgTitle").value = "";
-  document.getElementById("msgBody").value = "";
-  document.getElementById("msgType").value = "info";
+  async function sendMessageToClient(){
+    if (!currentClientId) return;
 
-  await loadMessagesForCurrentClient();
+    const title = (document.getElementById("msgTitle").value || "").trim();
+    const message = (document.getElementById("msgBody").value || "").trim();
+    const type = document.getElementById("msgType").value || "info";
 
-  showNotice("ok", "Mensagem enviada para o cliente.");
-  setLoading(false);
-}
+    if (!title || !message){
+      showNotice("err", "Preencha Título e Mensagem.");
+      return;
+    }
 
-async function deleteMessage(messageId){
-  hideNotice();
-  setLoading(true, "Apagando mensagem…");
+    hideNotice();
+    setLoading(true, "Enviando mensagem…");
 
-  const { error } = await sb
-    .from("client_messages")
-    .delete()
-    .eq("id", messageId);
+    const { error } = await sb
+      .from("client_messages")
+      .insert({
+        user_id: currentClientId,
+        title,
+        message,
+        message_type: type,
+        is_read: false
+      });
 
-  if (error){
-    console.error(error);
-    showNotice("err", "Não consegui apagar. Confira RLS da tabela client_messages.");
+    if (error){
+      console.error(error);
+      showNotice("err", "Não consegui enviar. Confira RLS da tabela client_messages.");
+      setLoading(false);
+      return;
+    }
+
+    document.getElementById("msgTitle").value = "";
+    document.getElementById("msgBody").value = "";
+    document.getElementById("msgType").value = "info";
+
+    await loadMessagesForCurrentClient();
+
+    showNotice("ok", "Mensagem enviada para o cliente.");
     setLoading(false);
-    return;
   }
 
-  await loadMessagesForCurrentClient();
-  showNotice("ok", "Mensagem apagada.");
-  setLoading(false);
-}
+  async function deleteMessage(messageId){
+    hideNotice();
+    setLoading(true, "Apagando mensagem…");
 
-/* =========================
-   13) New client modal
-========================= */
-function openNewClientModal(){
-  document.getElementById("newClientModal").classList.add("active");
-}
-function closeNewClientModal(){
-  document.getElementById("newClientModal").classList.remove("active");
-}
+    const { error } = await sb
+      .from("client_messages")
+      .delete()
+      .eq("id", messageId);
 
-/* =========================
-   Start
-========================= */
-init();
-</script>
+    if (error){
+      console.error(error);
+      showNotice("err", "Não consegui apagar. Confira RLS da tabela client_messages.");
+      setLoading(false);
+      return;
+    }
+
+    await loadMessagesForCurrentClient();
+    showNotice("ok", "Mensagem apagada.");
+    setLoading(false);
+  }
+
+  /* =========================
+     13) New client modal
+  ========================= */
+  function openNewClientModal(){
+    document.getElementById("newClientModal").classList.add("active");
+  }
+  function closeNewClientModal(){
+    document.getElementById("newClientModal").classList.remove("active");
+  }
+
+  /* =========================
+     Start
+  ========================= */
+  init();
+  </script>
 </body>
 </html>
