@@ -10,33 +10,29 @@
     *{ margin:0; padding:0; box-sizing:border-box; }
 
     :root{
-      /* Mesma linguagem da landing (mais sóbria/discreta) */
       --blue-900:#0A0E27;
       --blue-800:#0F1B3D;
       --blue-700:#17306A;
-
+      --blue-600:#1E4A9A;
+      
       --text:#0D1220;
       --muted:#5B6475;
-
+      
       --bg:#FFFFFF;
       --bg-soft:#F6F7FB;
-      --surface:#FFFFFF;
-
+      
       --sand:#F3E7C6;
-      --sand-2:#F7F1DD;
-
+      
       --line:rgba(13,18,32,.10);
       --line-strong:rgba(13,18,32,.16);
-
+      
       --radius:16px;
-      --shadow: 0 18px 50px rgba(13,18,32,.10);
-
+      
       --success:#10B981;
       --warning:#F59E0B;
       --danger:#EF4444;
-
+      
       --ring: rgba(23,48,106,.18);
-      --ring-2: rgba(23,48,106,.28);
     }
 
     body{
@@ -175,18 +171,23 @@
     }
 
     .page-header{
-      background: linear-gradient(180deg, #fff, rgba(246,247,251,.55));
+      background: linear-gradient(135deg, #fff 0%, rgba(246,247,251,.55) 100%);
       border: 1px solid var(--line);
       border-radius: calc(var(--radius) + 4px);
-      padding: 18px;
+      padding: 22px;
       box-shadow: 0 12px 34px rgba(13,18,32,.06);
+      margin-bottom: 18px;
     }
     .page-title{
-      font-size: clamp(24px, 3.6vw, 34px);
+      font-size: clamp(26px, 4vw, 36px);
       line-height: 1.15;
       font-weight: 950;
-      letter-spacing: -0.4px;
-      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-700) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .page-subtitle{
       color: var(--muted);
@@ -222,7 +223,7 @@
       display:flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin: 16px 0 18px;
+      margin-bottom: 18px;
     }
     .tab-btn{
       border: 1px solid var(--line);
@@ -230,37 +231,37 @@
       cursor:pointer;
       font-weight: 900;
       font-size: 13px;
-      padding: 10px 14px;
+      padding: 11px 16px;
       border-radius: 999px;
-      transition: all .15s ease;
+      transition: all .2s ease;
       display:inline-flex;
       align-items:center;
       gap: 10px;
       color: rgba(13,18,32,.86);
     }
     .tab-btn:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 12px 28px rgba(13,18,32,.06);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(13,18,32,.08);
     }
     .tab-btn.active{
-      background: var(--blue-700);
+      background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-600) 100%);
       border-color: rgba(23,48,106,.35);
       color: #fff;
-      box-shadow: 0 16px 40px rgba(23,48,106,.18);
+      box-shadow: 0 16px 40px rgba(23,48,106,.22);
     }
     .tab-badge{
       display:none;
       font-size: 11px;
       font-weight: 950;
-      padding: 2px 8px;
+      padding: 3px 9px;
       border-radius: 999px;
       background: rgba(245,158,11,.14);
       border: 1px solid rgba(245,158,11,.28);
       color: rgba(145, 92, 18, .95);
     }
     .tab-btn.active .tab-badge{
-      background: rgba(255,255,255,.16);
-      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.18);
+      border-color: rgba(255,255,255,.25);
       color:#fff;
     }
 
@@ -291,271 +292,259 @@
     }
 
     /* =========================
-       TIMELINE (CORREÇÃO DEFINITIVA)
-       - track e fill com z-index: 0
-       - dots com z-index: 100 e position: relative
+       NOVA TIMELINE VERTICAL ELEGANTE
     ========================= */
-    .timeline-wrapper{
-      background: #fff;
+    .progress-overview{
+      background: linear-gradient(135deg, #fff 0%, rgba(246,247,251,.65) 100%);
       border: 1px solid var(--line);
       border-radius: calc(var(--radius) + 4px);
-      padding: 18px;
-      box-shadow: 0 12px 34px rgba(13,18,32,.06);
-      margin-bottom: 14px;
-    }
-    .timeline-title{
-      font-size: 15px;
-      font-weight: 950;
-      letter-spacing: -0.2px;
-      margin-bottom: 12px;
-    }
-    .timeline-container{
-      overflow-x:auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 10px 4px 6px;
-    }
-    .timeline-strip{
-      position:relative;
-      min-width: 520px;
-      padding: 10px 6px;
+      padding: 20px;
+      box-shadow: 0 14px 38px rgba(13,18,32,.07);
+      margin-bottom: 18px;
     }
     
-    /* Track e Fill - SEMPRE NO FUNDO */
-    .timeline-track{
-      position:absolute;
-      left: 6px;
-      right: 6px;
-      top: 50%;
-      height: 4px;
-      transform: translateY(-50%);
-      background: rgba(13,18,32,.08);
-      border-radius: 999px;
-      z-index: 0;
-      pointer-events:none;
-    }
-    .timeline-fill{
-      position:absolute;
-      left: 6px;
-      top: 50%;
-      height: 4px;
-      transform: translateY(-50%);
-      width: 0%;
-      background: rgba(23,48,106,.85);
-      border-radius: 999px;
-      z-index: 0;
-      pointer-events:none;
-    }
-
-    /* Container dos círculos - NA FRENTE */
-    #timelinePhases{
-      position:relative;
-      z-index: 100;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap: 10px;
-      width: 100%;
-    }
-    
-    .timeline-phase{
-      position:relative;
-      z-index: 100;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      flex:1;
-      cursor:default;
-    }
-    
-    /* Círculos - MÁXIMA PRIORIDADE */
-    .timeline-dot{
-      position:relative;
-      z-index: 100;
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      background: #fff;
-      border: 2px solid rgba(13,18,32,.14);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size: 13px;
-      font-weight: 950;
-      color: rgba(13,18,32,.70);
-      transition: all .2s ease;
-      box-shadow: 0 10px 22px rgba(13,18,32,.05);
-    }
-    .timeline-phase.done .timeline-dot{
-      border-color: rgba(16,185,129,.35);
-      background: rgba(16,185,129,.08);
-      color: rgba(10, 93, 64, .95);
-      box-shadow: none;
-    }
-    .timeline-phase.current .timeline-dot{
-      border-color: rgba(23,48,106,.35);
-      background: rgba(23,48,106,.10);
-      color: var(--blue-700);
-      transform: scale(1.08);
-      box-shadow: 0 18px 36px rgba(23,48,106,.16);
-    }
-
-    .timeline-current{
-      margin-top: 10px;
-      font-size: 13px;
-      font-weight: 750;
-      color: rgba(13,18,32,.78);
-    }
-    .timeline-current b{ color: var(--text); }
-
-    /* Current phase card */
-    .current-phase-card{
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: calc(var(--radius) + 4px);
-      padding: 18px;
-      box-shadow: 0 12px 34px rgba(13,18,32,.06);
-    }
-    .current-phase-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap: 14px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 14px;
+    .progress-header{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
       flex-wrap: wrap;
+      gap: 12px;
     }
-    .current-phase-number{
+    
+    .progress-title{
+      font-size: 17px;
+      font-weight: 950;
+      letter-spacing: -0.3px;
+      color: var(--text);
+    }
+    
+    .progress-badge{
+      padding: 8px 16px;
+      border-radius: 999px;
       font-size: 12px;
       font-weight: 900;
-      color: rgba(23,48,106,.90);
-      letter-spacing: .2px;
-      margin-bottom: 4px;
+      background: linear-gradient(135deg, rgba(23,48,106,.10) 0%, rgba(23,48,106,.06) 100%);
+      border: 1px solid rgba(23,48,106,.20);
+      color: rgba(23,48,106,.95);
     }
-    .current-phase-name{
-      font-size: 20px;
-      line-height: 1.25;
+
+    .timeline-vertical{
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    .phase-item{
+      display: flex;
+      gap: 18px;
+      position: relative;
+      padding-bottom: 24px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    
+    .phase-item:last-child{
+      padding-bottom: 0;
+    }
+    
+    .phase-item:not(:last-child)::after{
+      content: '';
+      position: absolute;
+      left: 22px;
+      top: 48px;
+      bottom: 0;
+      width: 2px;
+      background: rgba(13,18,32,.08);
+    }
+    
+    .phase-item.done:not(:last-child)::after{
+      background: linear-gradient(180deg, rgba(16,185,129,.35) 0%, rgba(13,18,32,.08) 100%);
+    }
+    
+    .phase-item.current:not(:last-child)::after{
+      background: linear-gradient(180deg, rgba(23,48,106,.45) 0%, rgba(13,18,32,.08) 100%);
+    }
+
+    .phase-marker{
+      flex-shrink: 0;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: 950;
-      letter-spacing: -0.25px;
-      margin-bottom: 3px;
+      font-size: 15px;
+      border: 3px solid rgba(13,18,32,.12);
+      background: #fff;
+      color: rgba(13,18,32,.65);
+      transition: all .25s ease;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 8px 20px rgba(13,18,32,.06);
     }
-    .current-phase-desc{
+
+    .phase-item.done .phase-marker{
+      background: linear-gradient(135deg, rgba(16,185,129,.12) 0%, rgba(16,185,129,.08) 100%);
+      border-color: rgba(16,185,129,.35);
+      color: rgba(10, 93, 64, .95);
+      box-shadow: 0 10px 24px rgba(16,185,129,.15);
+    }
+
+    .phase-item.current .phase-marker{
+      background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-600) 100%);
+      border-color: rgba(23,48,106,.50);
+      color: #fff;
+      transform: scale(1.12);
+      box-shadow: 0 14px 32px rgba(23,48,106,.28);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 14px 32px rgba(23,48,106,.28); }
+      50% { box-shadow: 0 18px 42px rgba(23,48,106,.38); }
+    }
+
+    .phase-item:hover .phase-marker{
+      transform: scale(1.08);
+    }
+    
+    .phase-item.current:hover .phase-marker{
+      transform: scale(1.16);
+    }
+
+    .phase-content{
+      flex: 1;
+      padding-top: 4px;
+    }
+
+    .phase-name{
+      font-size: 16px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      color: var(--text);
+      margin-bottom: 4px;
+      transition: color .2s ease;
+    }
+
+    .phase-item:hover .phase-name{
+      color: var(--blue-700);
+    }
+
+    .phase-desc{
       font-size: 13px;
       font-weight: 650;
       color: var(--muted);
-    }
-    .current-phase-badge{
-      padding: 8px 14px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 900;
-      background: rgba(23,48,106,.08);
-      border: 1px solid rgba(23,48,106,.18);
-      color: rgba(23,48,106,.92);
-      white-space: nowrap;
+      margin-bottom: 8px;
     }
 
-    .steps-vertical{
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-    .step-item{
-      display:flex;
-      gap: 12px;
-      padding: 14px;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background: rgba(246,247,251,.55);
-      transition: all .15s ease;
-    }
-    .step-item:hover{
-      background: rgba(246,247,251,.85);
-      border-color: var(--line-strong);
-    }
-    .step-check{
-      width: 30px;
-      height: 30px;
-      border-radius: 999px;
-      border: 2px solid rgba(13,18,32,.16);
-      background: #fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight: 950;
-      font-size: 13px;
-      flex: 0 0 auto;
-      color: rgba(13,18,32,.72);
-      box-shadow: 0 10px 22px rgba(13,18,32,.05);
-    }
-    .step-content{ flex:1; }
-    .step-number-label{
-      font-size: 12px;
-      font-weight: 900;
-      color: rgba(13,18,32,.55);
-      margin-bottom: 4px;
-    }
-    .step-text{
-      font-size: 14px;
-      font-weight: 900;
-      letter-spacing: -0.1px;
-      color: rgba(13,18,32,.90);
-      line-height: 1.35;
-    }
-    .step-status-badge{
-      margin-top: 8px;
-      display:inline-flex;
-      padding: 4px 10px;
+    .phase-status{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
       border-radius: 999px;
       font-size: 11px;
-      font-weight: 950;
+      font-weight: 900;
       border: 1px solid var(--line);
-      background: #fff;
+      background: rgba(246,247,251,.65);
       color: rgba(13,18,32,.72);
     }
 
-    .step-item.done{
-      background: rgba(16,185,129,.06);
-      border-color: rgba(16,185,129,.20);
-    }
-    .step-item.done .step-check{
-      border-color: rgba(16,185,129,.30);
-      background: rgba(16,185,129,.10);
-      color: rgba(10, 93, 64, .95);
-      box-shadow: none;
-    }
-    .step-item.done .step-status-badge{
+    .phase-item.done .phase-status{
       border-color: rgba(16,185,129,.22);
       background: rgba(16,185,129,.10);
       color: rgba(10, 93, 64, .95);
     }
 
-    .step-item.current{
-      background: rgba(23,48,106,.06);
-      border-color: rgba(23,48,106,.18);
-    }
-    .step-item.current .step-check{
+    .phase-item.current .phase-status{
       border-color: rgba(23,48,106,.28);
-      background: rgba(23,48,106,.10);
+      background: linear-gradient(135deg, rgba(23,48,106,.12) 0%, rgba(23,48,106,.08) 100%);
       color: rgba(23,48,106,.95);
-      box-shadow: 0 16px 34px rgba(23,48,106,.14);
-    }
-    .step-item.current .step-number-label{
-      color: rgba(23,48,106,.92);
-    }
-    .step-item.current .step-status-badge{
-      border-color: rgba(23,48,106,.22);
-      background: rgba(23,48,106,.10);
-      color: rgba(23,48,106,.92);
     }
 
-    .step-item.pending{
-      background: rgba(246,247,251,.55);
+    /* Steps expandíveis */
+    .phase-steps{
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(246,247,251,.85) 0%, rgba(246,247,251,.55) 100%);
+      border: 1px solid rgba(13,18,32,.08);
+      display: none;
     }
-    .step-item.pending .step-status-badge{
-      border-color: rgba(245,158,11,.18);
-      background: rgba(245,158,11,.10);
-      color: rgba(145, 92, 18, .95);
+
+    .phase-item.current .phase-steps{
+      display: block;
+      animation: slideDown .3s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .step-mini{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid rgba(13,18,32,.08);
+      transition: all .15s ease;
+    }
+
+    .step-mini:last-child{
+      margin-bottom: 0;
+    }
+
+    .step-mini:hover{
+      border-color: rgba(23,48,106,.18);
+      box-shadow: 0 8px 18px rgba(13,18,32,.05);
+    }
+
+    .step-mini-icon{
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 950;
+      border: 2px solid rgba(13,18,32,.12);
+      background: #fff;
+      color: rgba(13,18,32,.65);
+      flex-shrink: 0;
+    }
+
+    .step-mini.done .step-mini-icon{
+      border-color: rgba(16,185,129,.30);
+      background: rgba(16,185,129,.10);
+      color: rgba(10, 93, 64, .95);
+    }
+
+    .step-mini.current .step-mini-icon{
+      border-color: rgba(23,48,106,.35);
+      background: rgba(23,48,106,.10);
+      color: rgba(23,48,106,.95);
+    }
+
+    .step-mini-text{
+      flex: 1;
+      font-size: 13px;
+      font-weight: 750;
+      color: rgba(13,18,32,.85);
+      line-height: 1.3;
     }
 
     /* Documents */
@@ -571,20 +560,20 @@
       border-radius: var(--radius);
       padding: 16px;
       box-shadow: 0 12px 28px rgba(13,18,32,.05);
-      transition: all .15s ease;
+      transition: all .2s ease;
     }
     .doc-card:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 18px 40px rgba(13,18,32,.08);
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(13,18,32,.10);
       border-color: rgba(23,48,106,.22);
     }
     .doc-card.approved{
       border-color: rgba(16,185,129,.22);
-      background: linear-gradient(180deg, rgba(16,185,129,.07), #fff);
+      background: linear-gradient(135deg, rgba(16,185,129,.08) 0%, #fff 100%);
     }
     .doc-card.rejected{
       border-color: rgba(239,68,68,.22);
-      background: linear-gradient(180deg, rgba(239,68,68,.06), #fff);
+      background: linear-gradient(135deg, rgba(239,68,68,.07) 0%, #fff 100%);
     }
     .doc-header{
       display:flex;
@@ -593,7 +582,7 @@
       gap: 10px;
       margin-bottom: 10px;
     }
-    .doc-icon{ font-size: 26px; }
+    .doc-icon{ font-size: 28px; }
     .doc-title{
       font-size: 13px;
       font-weight: 950;
@@ -609,7 +598,7 @@
     .doc-status{
       font-size: 11px;
       font-weight: 950;
-      padding: 4px 10px;
+      padding: 5px 11px;
       border-radius: 999px;
       border: 1px solid var(--line);
       background: rgba(246,247,251,.65);
@@ -666,14 +655,14 @@
       align-items:center;
       justify-content:center;
       gap: 8px;
-      padding: 9px 10px;
+      padding: 9px 11px;
       font-size: 12px;
       font-weight: 900;
       border-radius: 999px;
       border: 1px solid var(--line);
       background: #fff;
       cursor:pointer;
-      transition: all .15s ease;
+      transition: all .2s ease;
     }
     .btn-small:hover{
       transform: translateY(-1px);
@@ -704,13 +693,13 @@
     }
     .empty-state{
       text-align:center;
-      padding: 34px 12px;
+      padding: 36px 14px;
       border: 1px dashed rgba(13,18,32,.18);
       border-radius: calc(var(--radius) + 4px);
       background: rgba(246,247,251,.65);
       margin-top: 14px;
     }
-    .empty-icon{ font-size: 40px; opacity: .55; margin-bottom: 6px; }
+    .empty-icon{ font-size: 42px; opacity: .55; margin-bottom: 8px; }
     .empty-title{ font-size: 15px; font-weight: 950; letter-spacing: -0.15px; }
     .empty-text{ font-size: 13px; font-weight: 650; color: var(--muted); margin-top: 4px; }
 
@@ -719,21 +708,21 @@
       position:fixed;
       inset:0;
       z-index:9999;
-      background: rgba(246,247,251,.82);
-      backdrop-filter: blur(10px);
+      background: rgba(246,247,251,.88);
+      backdrop-filter: blur(12px);
       display:flex;
       align-items:center;
       justify-content:center;
       flex-direction:column;
-      gap: 10px;
+      gap: 12px;
     }
     .loading-overlay.hidden{ display:none; }
     .spinner{
-      width: 42px; height: 42px;
+      width: 44px; height: 44px;
       border-radius: 999px;
-      border: 4px solid rgba(13,18,32,.12);
-      border-top-color: rgba(23,48,106,.75);
-      animation: spin .9s linear infinite;
+      border: 4px solid rgba(13,18,32,.10);
+      border-top-color: var(--blue-700);
+      animation: spin .85s linear infinite;
     }
     @keyframes spin{ to{ transform: rotate(360deg);} }
     .loading-text{
@@ -749,13 +738,13 @@
       color: rgba(13,18,32,.60);
     }
 
-    @media (max-width: 520px){
+    @media (max-width: 640px){
       .btn{ width: 100%; }
       .header-right{ width:100%; }
       .pill{ width:100%; justify-content:flex-start; }
       .tabs{ gap: 8px; }
       .tab-btn{ width: 100%; justify-content:space-between; }
-      .timeline-strip{ min-width: 520px; }
+      .phase-marker{ width: 40px; height: 40px; font-size: 14px; }
     }
   </style>
 </head>
@@ -796,7 +785,7 @@
     <div class="container">
       <div class="page-header">
         <h1 class="page-title">Seu painel</h1>
-        <p class="page-subtitle">Acompanhe o progresso do seu DNI argentino por fases e passos.</p>
+        <p class="page-subtitle">Acompanhe o progresso do seu DNI argentino em tempo real.</p>
         <div class="notice" id="noticeBox"></div>
       </div>
 
@@ -810,21 +799,14 @@
 
       <!-- PROCESSO -->
       <section class="section active" id="tab-process">
-        <div class="timeline-wrapper">
-          <div class="timeline-title">Progresso do processo (7 fases)</div>
-
-          <div class="timeline-container">
-            <div class="timeline-strip">
-              <div class="timeline-track"></div>
-              <div class="timeline-fill" id="timelineProgress"></div>
-              <div id="timelinePhases"></div>
-            </div>
+        <div class="progress-overview">
+          <div class="progress-header">
+            <div class="progress-title">📋 Jornada do seu DNI Argentino</div>
+            <div class="progress-badge" id="progressBadge">Fase 1 de 7</div>
           </div>
 
-          <div class="timeline-current" id="timelineCurrentName"></div>
+          <div class="timeline-vertical" id="timelineVertical"></div>
         </div>
-
-        <div class="current-phase-card" id="currentPhaseCard"></div>
       </section>
 
       <!-- DOCUMENTOS -->
@@ -836,7 +818,7 @@
           <div class="documents-grid" id="documentsGrid"></div>
 
           <div class="footer-note">
-            Dica: prefira imagens nítidas ou PDF. Se um documento for rejeitado, reenvie uma versão melhor.
+            💡 Dica: prefira imagens nítidas ou PDF. Se um documento for rejeitado, reenvie uma versão melhor.
           </div>
         </div>
       </section>
@@ -878,22 +860,13 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    /* =========================
-       1) CONFIG (trocar só isso)
-    ========================= */
     const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k";
 
-    /* =========================
-       2) CLIENT
-    ========================= */
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: { persistSession:true, autoRefreshToken:true, detectSessionInUrl:true }
     });
 
-    /* =========================
-       3) UI helpers
-    ========================= */
     const loadingEl = document.getElementById("loading");
     const loadingText = document.getElementById("loadingText");
     const noticeBox = document.getElementById("noticeBox");
@@ -931,17 +904,14 @@
       }[m]));
     }
 
-    /* =========================
-       5) Data & constants
-    ========================= */
     const phases = [
-      { id:1, name:"Documentação inicial", desc:"RG e foto" },
-      { id:2, name:"Antecedentes criminais", desc:"Emissão de certidão" },
-      { id:3, name:"Domicílio", desc:"Comprovante de endereço" },
-      { id:4, name:"Cadastro RADEX", desc:"Sistema migratório" },
-      { id:5, name:"Pagamento de taxas", desc:"Boletos" },
-      { id:6, name:"Cita migratória", desc:"Agendamento" },
-      { id:7, name:"DNI emitido", desc:"Documento pronto" }
+      { id:1, name:"Documentação inicial", desc:"RG e foto", icon:"📝" },
+      { id:2, name:"Antecedentes criminais", desc:"Emissão de certidão", icon:"📋" },
+      { id:3, name:"Domicílio", desc:"Comprovante de endereço", icon:"🏠" },
+      { id:4, name:"Cadastro RADEX", desc:"Sistema migratório", icon:"💻" },
+      { id:5, name:"Pagamento de taxas", desc:"Boletos", icon:"💳" },
+      { id:6, name:"Cita migratória", desc:"Agendamento", icon:"📅" },
+      { id:7, name:"DNI emitido", desc:"Documento pronto", icon:"🎉" }
     ];
 
     const phaseSteps = {
@@ -985,15 +955,11 @@
 
     let currentUser = null;
     let currentProfile = null;
-
     let currentPhase = 1;
     let currentStep = 1;
     let docsMap = new Map();
     let inboxMsgs = [];
 
-    /* =========================
-       6) Tabs
-    ========================= */
     function setActiveTab(key){
       document.querySelectorAll(".tab-btn").forEach(b=>{
         const active = (b.dataset.tab === key);
@@ -1011,9 +977,6 @@
       });
     }
 
-    /* =========================
-       7) Auth guard + init
-    ========================= */
     async function init(){
       setLoading(true, "Validando acesso…");
 
@@ -1075,9 +1038,6 @@
       window.location.href = "login.html";
     }
 
-    /* =========================
-       8) Load data
-    ========================= */
     async function loadAll(){
       hideNotice();
       setLoading(true, "Carregando dados…");
@@ -1089,7 +1049,6 @@
       ]);
 
       renderTimeline();
-      renderCurrentPhaseCard();
       renderDocuments();
       renderInbox();
 
@@ -1142,7 +1101,7 @@
         .eq("user_id", currentUser.id);
 
       if (error){
-        showNotice("err", "Erro ao carregar documentos. Confira as políticas (RLS) da tabela documents.");
+        showNotice("err", "Erro ao carregar documentos.");
         return;
       }
 
@@ -1163,105 +1122,76 @@
       inboxMsgs = data || [];
     }
 
-    /* =========================
-       9) Timeline (7 fases)
-    ========================= */
     function renderTimeline(){
-      const container = document.getElementById("timelinePhases");
+      const container = document.getElementById("timelineVertical");
+      const badge = document.getElementById("progressBadge");
+      
       container.innerHTML = "";
-
-      const progressBar = document.getElementById("timelineProgress");
-
-      const totalPhases = 7;
-      const progressPct = ((currentPhase - 1) / (totalPhases - 1)) * 100;
-      progressBar.style.width = Math.min(100, Math.max(0, progressPct)) + "%";
+      badge.textContent = `Fase ${currentPhase} de 7`;
 
       phases.forEach(ph => {
         const isDone = ph.id < currentPhase;
         const isCurrent = ph.id === currentPhase;
-
-        const div = document.createElement("div");
-        div.className = `timeline-phase ${isDone ? "done" : (isCurrent ? "current" : "")}`;
-        div.innerHTML = `<div class="timeline-dot" aria-label="Fase ${ph.id}">${ph.id}</div>`;
-        container.appendChild(div);
-      });
-
-      const currentLabel = document.getElementById("timelineCurrentName");
-      const phaseInfo = phases.find(p => p.id === currentPhase);
-      if (currentLabel && phaseInfo){
-        currentLabel.innerHTML = `<b>Fase ${currentPhase}:</b> ${phaseInfo.name}`;
-      }
-    }
-
-    /* =========================
-       10) Current phase card
-    ========================= */
-    function renderCurrentPhaseCard(){
-      const card = document.getElementById("currentPhaseCard");
-
-      const phaseInfo = phases.find(p => p.id === currentPhase);
-      if (!phaseInfo){
-        card.innerHTML = '<div class="small" style="text-align:center; padding:18px;">Fase não encontrada</div>';
-        return;
-      }
-
-      const steps = phaseSteps[currentPhase] || [];
-
-      let stepsHTML = "";
-      steps.forEach((stepText, idx) => {
-        const stepNum = idx + 1;
-        const isDone = stepNum < currentStep;
-        const isCurrent = stepNum === currentStep;
-
-        let itemClass = "";
-        let checkIcon = "";
+        
         let statusText = "";
-
+        let statusClass = "";
+        
         if (isDone){
-          itemClass = "done";
-          checkIcon = "✓";
-          statusText = "Concluído";
+          statusText = "✓ Concluída";
+          statusClass = "done";
         } else if (isCurrent){
-          itemClass = "current";
-          checkIcon = "●";
-          statusText = "Passo atual";
+          statusText = "● Em andamento";
+          statusClass = "current";
         } else {
-          itemClass = "pending";
-          checkIcon = stepNum;
           statusText = "Pendente";
+          statusClass = "";
         }
 
-        stepsHTML += `
-          <div class="step-item ${itemClass}">
-            <div class="step-check">${checkIcon}</div>
-            <div class="step-content">
-              <div class="step-number-label">Passo ${stepNum}</div>
-              <div class="step-text">${stepText}</div>
-              <div class="step-status-badge ${itemClass}">${statusText}</div>
-            </div>
+        const steps = phaseSteps[ph.id] || [];
+        let stepsHTML = "";
+        
+        if (isCurrent && steps.length > 0){
+          steps.forEach((stepText, idx) => {
+            const stepNum = idx + 1;
+            const stepDone = stepNum < currentStep;
+            const stepCurrent = stepNum === currentStep;
+            
+            let stepClass = "";
+            let stepIcon = stepNum;
+            
+            if (stepDone){
+              stepClass = "done";
+              stepIcon = "✓";
+            } else if (stepCurrent){
+              stepClass = "current";
+              stepIcon = "●";
+            }
+            
+            stepsHTML += `
+              <div class="step-mini ${stepClass}">
+                <div class="step-mini-icon">${stepIcon}</div>
+                <div class="step-mini-text">${stepText}</div>
+              </div>
+            `;
+          });
+        }
+
+        const item = document.createElement("div");
+        item.className = `phase-item ${statusClass}`;
+        item.innerHTML = `
+          <div class="phase-marker">${ph.icon || ph.id}</div>
+          <div class="phase-content">
+            <div class="phase-name">${ph.name}</div>
+            <div class="phase-desc">${ph.desc}</div>
+            <div class="phase-status">${statusText}</div>
+            ${stepsHTML ? `<div class="phase-steps">${stepsHTML}</div>` : ''}
           </div>
         `;
+        
+        container.appendChild(item);
       });
-
-      card.innerHTML = `
-        <div class="current-phase-header">
-          <div>
-            <div class="current-phase-number">Fase ${currentPhase} de 7</div>
-            <div class="current-phase-name">${phaseInfo.name}</div>
-            <div class="current-phase-desc">${phaseInfo.desc}</div>
-          </div>
-          <div class="current-phase-badge">Em andamento</div>
-        </div>
-
-        <div class="steps-vertical">
-          ${stepsHTML || '<div class="small" style="text-align:center; padding:18px;">Nenhum passo definido para esta fase</div>'}
-        </div>
-      `;
     }
 
-    /* =========================
-       11) Documents UI
-    ========================= */
     function docStatusBadge(status){
       if (status === "approved") return { cls:"approved", txt:"✅ Aprovado" };
       if (status === "rejected") return { cls:"rejected", txt:"⚠️ Rejeitado" };
@@ -1387,7 +1317,7 @@
             .maybeSingle();
 
           if (error || !data){
-            showNotice("err", "Upload ok, mas falhou ao salvar no banco. Verifique RLS/policies da tabela documents.");
+            showNotice("err", "Upload ok, mas falhou ao salvar no banco.");
             setLoading(false);
             return;
           }
@@ -1455,9 +1385,6 @@
       setLoading(false);
     }
 
-    /* =========================
-       12) Inbox UI
-    ========================= */
     function renderInbox(){
       const list = document.getElementById("inboxList");
       const empty = document.getElementById("inboxEmpty");
@@ -1517,9 +1444,6 @@
       });
     }
 
-    /* =========================
-       Start
-    ========================= */
     init();
   </script>
 </body>
