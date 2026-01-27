@@ -311,6 +311,8 @@
       overflow-x:auto;
       -webkit-overflow-scrolling: touch;
     }
+
+    /* ✅ CORREÇÃO: garantir que a linha/progresso fiquem SEMPRE atrás dos círculos */
     .timeline-line{
       position:absolute;
       top:50%;
@@ -320,7 +322,8 @@
       background: rgba(13,18,32,.08);
       border-radius: 999px;
       transform: translateY(-50%);
-      z-index:0;
+      z-index: 0;
+      pointer-events:none;
     }
     .timeline-progress{
       position:absolute;
@@ -330,10 +333,13 @@
       background: rgba(23,48,106,.85);
       border-radius: 999px;
       transition: width .6s ease-out;
+      z-index: 0;
+      pointer-events:none;
     }
+
     #timelinePhases{
       position:relative;
-      z-index:1;
+      z-index: 2;              /* acima da linha */
       display:flex;
       justify-content:space-between;
       align-items:center;
@@ -342,6 +348,8 @@
       min-width: 520px;
     }
     .timeline-phase{
+      position:relative;
+      z-index: 2;              /* redundância pra garantir */
       display:flex;
       flex-direction:column;
       align-items:center;
@@ -349,6 +357,8 @@
       cursor:default;
     }
     .timeline-dot{
+      position:relative;
+      z-index: 3;              /* acima de tudo */
       width: 34px;
       height: 34px;
       border-radius: 999px;
@@ -720,7 +730,6 @@
       font-size: 14px;
     }
 
-    /* Footer spacing in dashboard */
     .footer-note{
       margin-top: 16px;
       font-size: 12px;
@@ -728,9 +737,6 @@
       color: rgba(13,18,32,.60);
     }
 
-    @media (max-width: 900px){
-      .btn{ width:auto; }
-    }
     @media (max-width: 520px){
       .btn{ width: 100%; }
       .header-right{ width:100%; }
@@ -1112,7 +1118,6 @@
         currentStep = data.current_step || 1;
       }
 
-      // segurança: clamp de fase/passo para não quebrar UI
       currentPhase = Math.min(7, Math.max(1, Number(currentPhase) || 1));
       const maxSteps = (phaseSteps[currentPhase] || []).length || 1;
       currentStep = Math.min(maxSteps, Math.max(1, Number(currentStep) || 1));
@@ -1344,7 +1349,6 @@
 
         const nowIso = new Date().toISOString();
 
-        // tenta update primeiro
         let updated = null;
         {
           const { data, error } = await sb
@@ -1358,7 +1362,6 @@
           if (!error && data) updated = data;
         }
 
-        // fallback: upsert
         if (!updated){
           const { data, error } = await sb
             .from("documents")
@@ -1476,7 +1479,6 @@
 
       inboxMsgs.forEach(m => {
         const box = document.createElement("div");
-        // mantém sua lógica de destacar as não lidas usando a classe "approved"
         box.className = "doc-card " + (m.is_read ? "" : "approved");
         box.style.cursor = "pointer";
 
