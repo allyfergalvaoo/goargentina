@@ -13,380 +13,567 @@
       --blue-900:#0A0E27;
       --blue-800:#0F1B3D;
       --blue-700:#17306A;
-      --blue-600:#1F4ED1;
-      --blue-500:#2A6BFF;
-      --yellow-500:#FFD500;
-      --yellow-400:#FFE36D;
-      --bg:#F5F7FB;
-      --card:#FFFFFF;
+      --blue-600:#1E4A9A;
+      
       --text:#0D1220;
-      --muted:rgba(13,18,32,.65);
+      --muted:#5B6475;
+      
+      --bg:#FFFFFF;
+      --bg-soft:#F6F7FB;
+      
+      --sand:#F3E7C6;
+      
       --line:rgba(13,18,32,.10);
-      --ring:rgba(42,107,255,.22);
+      --line-strong:rgba(13,18,32,.16);
+      
       --radius:16px;
+      
+      --success:#10B981;
+      --warning:#F59E0B;
+      --danger:#EF4444;
+      
+      --ring: rgba(23,48,106,.18);
     }
 
-    html,body{ height:100%; }
     body{
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background: radial-gradient(1200px 700px at 15% 10%, rgba(42,107,255,.12), transparent 55%),
-                  radial-gradient(900px 600px at 90% 20%, rgba(255,213,0,.10), transparent 55%),
-                  var(--bg);
-      color:var(--text);
-      line-height:1.55;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Arial, sans-serif;
+      background: var(--bg-soft);
+      color: var(--text);
+      line-height: 1.6;
     }
 
-    a{ color:inherit; text-decoration:none; }
-    .wrap{ max-width:1100px; margin:0 auto; padding:18px; }
+    a{ color: inherit; text-decoration:none; }
+    button{ font-family: inherit; }
+
+    .container{
+      width:min(1120px, calc(100% - 40px));
+      margin:0 auto;
+    }
 
     /* Header */
-    .topbar{
-      position:sticky;
-      top:0;
-      z-index:30;
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.92);
       backdrop-filter: blur(10px);
-      background: rgba(245,247,251,.72);
-      border-bottom:1px solid rgba(13,18,32,.06);
+      border-bottom: 1px solid var(--line);
     }
-    .topbar-inner{
-      max-width:1100px;
-      margin:0 auto;
-      padding:14px 18px;
+    .nav{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
+      gap: 16px;
+      padding: 14px 0;
+      flex-wrap: wrap;
     }
     .brand{
       display:flex;
       align-items:center;
-      gap:10px;
-      user-select:none;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: .2px;
     }
-    .logo{
-      width:34px;
-      height:34px;
-      border-radius:12px;
-      background: linear-gradient(135deg, var(--yellow-500), var(--blue-500));
-      box-shadow: 0 10px 26px rgba(0,0,0,.12);
-    }
-    .brand h1{
-      font-size:14px;
-      font-weight:900;
-      letter-spacing:-0.2px;
-      margin:0;
+    .mark{
+      width: 38px; height: 38px;
+      border-radius: 12px;
+      background: var(--blue-700);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-weight: 950;
     }
     .brand small{
       display:block;
-      font-size:11px;
-      color:var(--muted);
-      font-weight:700;
-      margin-top:-2px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: -2px;
+      font-size: 12px;
+      letter-spacing: 0;
     }
 
-    .user{
+    .header-right{
       display:flex;
       align-items:center;
-      gap:10px;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 10px 28px rgba(13,18,32,.04);
     }
     .avatar{
-      width:36px;
-      height:36px;
-      border-radius:14px;
-      display:grid;
-      place-items:center;
-      font-weight:900;
-      background: linear-gradient(135deg, rgba(42,107,255,.20), rgba(255,213,0,.20));
-      border:1px solid rgba(13,18,32,.10);
-      color: rgba(13,18,32,.85);
+      width: 34px; height: 34px;
+      border-radius: 999px;
+      background: var(--sand);
+      border: 1px solid rgba(0,0,0,.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 950;
+      color: var(--text);
     }
-    .user-meta{
+    .pill .name{
       display:flex;
       flex-direction:column;
-      line-height:1.1;
-      max-width: 240px;
+      line-height: 1.1;
     }
-    .user-name{
-      font-weight:950;
-      font-size:12px;
-      letter-spacing:-0.1px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+    .pill .name b{
+      font-size: 13px;
+      letter-spacing: -0.1px;
     }
-    .user-email{
-      font-weight:700;
-      font-size:11px;
-      color:var(--muted);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+    .pill .name span{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-top: 2px;
     }
 
     .btn{
-      border:none;
-      cursor:pointer;
-      font-weight:900;
-      border-radius:999px;
-      padding:10px 14px;
-      font-size:12px;
-      letter-spacing:-0.1px;
       display:inline-flex;
-      gap:8px;
       align-items:center;
       justify-content:center;
-      transition: all .2s ease;
-      background: rgba(13,18,32,.06);
-      color: rgba(13,18,32,.85);
-      border:1px solid rgba(13,18,32,.10);
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 850;
+      font-size: 14px;
+      border: 1px solid var(--line);
+      background: white;
+      cursor: pointer;
+      transition: all .15s ease;
+      white-space: nowrap;
     }
     .btn:hover{
       transform: translateY(-1px);
-      box-shadow: 0 16px 30px rgba(13,18,32,.10);
-      border-color: rgba(23,48,106,.22);
+      box-shadow: 0 10px 25px rgba(13,18,32,.08);
     }
-    .btn.primary{
-      background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
-      color:#fff;
-      border:none;
-      box-shadow: 0 18px 38px rgba(42,107,255,.20);
+    .btn-primary{
+      background: var(--blue-700);
+      color: #fff;
+      border-color: rgba(255,255,255,.18);
     }
-    .btn.primary:hover{ box-shadow: 0 20px 44px rgba(42,107,255,.26); }
-    .btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; box-shadow:none; }
+    .btn-primary:hover{ background: var(--blue-800); }
+    .btn-ghost{ background: var(--bg-soft); }
+
+    /* Page */
+    .main{
+      padding: 26px 0 56px;
+    }
+
+    .page-header{
+      background: linear-gradient(135deg, #fff 0%, rgba(246,247,251,.55) 100%);
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 22px;
+      box-shadow: 0 12px 34px rgba(13,18,32,.06);
+      margin-bottom: 18px;
+    }
+    .page-title{
+      font-size: clamp(26px, 4vw, 36px);
+      line-height: 1.15;
+      font-weight: 950;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-700) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-subtitle{
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 14px;
+    }
+
+    .notice{
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(13,18,32,.86);
+      display:none;
+    }
+    .notice.show{ display:block; }
+    .notice.ok{
+      border-color: rgba(16,185,129,.30);
+      background: rgba(16,185,129,.08);
+      color: rgba(13,18,32,.92);
+    }
+    .notice.err{
+      border-color: rgba(239,68,68,.28);
+      background: rgba(239,68,68,.08);
+      color: rgba(13,18,32,.92);
+    }
 
     /* Tabs */
     .tabs{
       display:flex;
-      gap:10px;
+      gap: 10px;
       flex-wrap: wrap;
-      padding: 16px 0 10px 0;
+      margin-bottom: 18px;
     }
     .tab-btn{
-      position:relative;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border:1px solid rgba(13,18,32,.10);
-      background: rgba(255,255,255,.75);
-      font-weight:950;
-      font-size:12px;
+      border: 1px solid var(--line);
+      background: #fff;
       cursor:pointer;
-      transition:.18s ease;
+      font-weight: 900;
+      font-size: 13px;
+      padding: 11px 16px;
+      border-radius: 999px;
+      transition: all .2s ease;
       display:inline-flex;
       align-items:center;
-      gap:8px;
+      gap: 10px;
       color: rgba(13,18,32,.86);
     }
     .tab-btn:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 14px 26px rgba(13,18,32,.10);
-      border-color: rgba(23,48,106,.18);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(13,18,32,.08);
     }
     .tab-btn.active{
-      background: linear-gradient(135deg, rgba(42,107,255,.16), rgba(255,213,0,.14));
-      border-color: rgba(42,107,255,.22);
-      box-shadow: 0 18px 36px rgba(42,107,255,.10);
+      background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-600) 100%);
+      border-color: rgba(23,48,106,.35);
+      color: #fff;
+      box-shadow: 0 16px 40px rgba(23,48,106,.22);
+    }
+    .tab-badge{
+      display:none;
+      font-size: 11px;
+      font-weight: 950;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(245,158,11,.14);
+      border: 1px solid rgba(245,158,11,.28);
+      color: rgba(145, 92, 18, .95);
+    }
+    .tab-btn.active .tab-badge{
+      background: rgba(255,255,255,.18);
+      border-color: rgba(255,255,255,.25);
+      color:#fff;
     }
 
-    .badge{
-      font-size:10px;
-      font-weight:950;
-      padding: 4px 8px;
-      border-radius:999px;
-      background: rgba(239,68,68,.10);
-      border:1px solid rgba(239,68,68,.18);
-      color: rgba(145, 25, 25, .95);
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-    }
-    .badge.blue{
-      background: rgba(42,107,255,.10);
-      border-color: rgba(42,107,255,.18);
-      color: rgba(23,48,106,.92);
-    }
-
-    /* Cards / Sections */
     .section{ display:none; }
     .section.active{ display:block; }
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 16px;
-      margin-top: 10px;
-    }
-    @media (max-width: 920px){
-      .grid{ grid-template-columns: 1fr; }
-    }
-
+    /* Cards */
     .card{
-      background: rgba(255,255,255,.82);
-      border:1px solid rgba(13,18,32,.08);
-      border-radius: calc(var(--radius) + 6px);
-      box-shadow: 0 22px 46px rgba(13,18,32,.06);
-      overflow:hidden;
-    }
-    .card-head{
-      padding: 18px 18px 12px 18px;
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      border-bottom:1px solid rgba(13,18,32,.06);
-      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(246,247,251,.85));
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 18px;
+      box-shadow: 0 12px 34px rgba(13,18,32,.06);
     }
     .card-title{
-      font-weight:950;
-      letter-spacing:-0.2px;
-      font-size:14px;
-    }
-    .card-sub{
-      color:var(--muted);
-      font-weight:650;
-      font-size:12px;
-      margin-top:4px;
-    }
-    .card-body{ padding: 16px 18px 18px 18px; }
-
-    .notice{
-      display:none;
-      margin: 12px 0;
-      padding: 12px 14px;
-      border-radius: 14px;
-      font-weight:800;
-      font-size: 13px;
-      border: 1px solid rgba(13,18,32,.10);
-      background: rgba(255,255,255,.70);
-    }
-    .notice.show{ display:block; }
-    .notice.ok{
-      border-color: rgba(16,185,129,.22);
-      background: rgba(16,185,129,.08);
-      color: rgba(10, 93, 64, .95);
-    }
-    .notice.err{
-      border-color: rgba(239,68,68,.22);
-      background: rgba(239,68,68,.08);
-      color: rgba(128, 24, 24, .95);
-    }
-
-    /* Process timeline */
-    .phases{
-      display:flex;
-      gap: 10px;
-      overflow:auto;
-      padding: 10px 2px 2px 2px;
-    }
-    .phase-item{
-      min-width: 190px;
-      padding: 14px 14px;
-      border-radius: 18px;
-      border: 1px solid rgba(13,18,32,.10);
-      background: rgba(255,255,255,.80);
-      transition: .18s ease;
-      position:relative;
-    }
-    .phase-item:hover{
-      transform: translateY(-2px);
-      box-shadow: 0 18px 36px rgba(13,18,32,.10);
-      border-color: rgba(23,48,106,.16);
-    }
-    .phase-item.active{
-      border-color: rgba(42,107,255,.24);
-      background: linear-gradient(135deg, rgba(42,107,255,.14), rgba(255,213,0,.10));
-      box-shadow: 0 22px 44px rgba(42,107,255,.12);
-    }
-    .phase-marker{
-      width: 34px;
-      height: 34px;
-      border-radius: 14px;
-      display:grid;
-      place-items:center;
-      font-weight:950;
-      background: rgba(42,107,255,.12);
-      border:1px solid rgba(42,107,255,.16);
+      font-size: 15px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
       margin-bottom: 8px;
+      display:flex;
+      align-items:center;
+      gap: 8px;
     }
-    .phase-name{
-      font-weight:950;
+    .small{
       font-size: 13px;
-      letter-spacing:-0.15px;
-    }
-    .phase-desc{
-      margin-top: 4px;
-      font-size: 12px;
-      color: var(--muted);
       font-weight: 650;
-    }
-
-    /* Vertical step box */
-    .steps{
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-    .step{
-      display:flex;
-      gap: 10px;
-      padding: 12px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(13,18,32,.10);
-      background: rgba(255,255,255,.80);
-      align-items:flex-start;
-    }
-    .dot{
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      border: 2px solid rgba(13,18,32,.16);
-      margin-top: 3px;
-      flex:0 0 auto;
-    }
-    .step.done .dot{
-      border-color: rgba(16,185,129,.45);
-      background: rgba(16,185,129,.22);
-    }
-    .step.active .dot{
-      border-color: rgba(42,107,255,.55);
-      box-shadow: 0 0 0 6px rgba(42,107,255,.14);
-      background: rgba(42,107,255,.14);
-    }
-    .step-title{
-      font-weight:900;
-      font-size: 12px;
-      color: rgba(13,18,32,.88);
-    }
-    .step-sub{
       color: var(--muted);
-      font-weight:650;
-      font-size: 12px;
-      margin-top: 2px;
     }
 
-    /* Documents grid */
-    .docs-grid{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* =========================
+       NOVA TIMELINE VERTICAL ELEGANTE
+    ========================= */
+    .progress-overview{
+      background: linear-gradient(135deg, #fff 0%, rgba(246,247,251,.65) 100%);
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 20px;
+      box-shadow: 0 14px 38px rgba(13,18,32,.07);
+      margin-bottom: 18px;
+    }
+    
+    .progress-header{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
       gap: 12px;
     }
-    @media (max-width: 820px){
-      .docs-grid{ grid-template-columns: 1fr; }
+    
+    .progress-title{
+      font-size: 17px;
+      font-weight: 950;
+      letter-spacing: -0.3px;
+      color: var(--text);
+    }
+    
+    .progress-badge{
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      background: linear-gradient(135deg, rgba(23,48,106,.10) 0%, rgba(23,48,106,.06) 100%);
+      border: 1px solid rgba(23,48,106,.20);
+      color: rgba(23,48,106,.95);
+    }
+
+    .timeline-vertical{
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    .phase-item{
+      display: flex;
+      gap: 18px;
+      position: relative;
+      padding-bottom: 24px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    
+    .phase-item:last-child{
+      padding-bottom: 0;
+    }
+    
+    .phase-item:not(:last-child)::after{
+      content: '';
+      position: absolute;
+      left: 22px;
+      top: 48px;
+      bottom: 0;
+      width: 2px;
+      background: rgba(13,18,32,.08);
+    }
+    
+    .phase-item.done:not(:last-child)::after{
+      background: linear-gradient(180deg, rgba(16,185,129,.35) 0%, rgba(13,18,32,.08) 100%);
+    }
+    
+    .phase-item.current:not(:last-child)::after{
+      background: linear-gradient(180deg, rgba(23,48,106,.45) 0%, rgba(13,18,32,.08) 100%);
+    }
+
+    .phase-marker{
+      flex-shrink: 0;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 950;
+      font-size: 15px;
+      border: 3px solid rgba(13,18,32,.12);
+      background: #fff;
+      color: rgba(13,18,32,.65);
+      transition: all .25s ease;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 8px 20px rgba(13,18,32,.06);
+    }
+
+    .phase-item.done .phase-marker{
+      background: linear-gradient(135deg, rgba(16,185,129,.12) 0%, rgba(16,185,129,.08) 100%);
+      border-color: rgba(16,185,129,.35);
+      color: rgba(10, 93, 64, .95);
+      box-shadow: 0 10px 24px rgba(16,185,129,.15);
+    }
+
+    .phase-item.current .phase-marker{
+      background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-600) 100%);
+      border-color: rgba(23,48,106,.50);
+      color: #fff;
+      transform: scale(1.12);
+      box-shadow: 0 14px 32px rgba(23,48,106,.28);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 14px 32px rgba(23,48,106,.28); }
+      50% { box-shadow: 0 18px 42px rgba(23,48,106,.38); }
+    }
+
+    .phase-item:hover .phase-marker{
+      transform: scale(1.08);
+    }
+    
+    .phase-item.current:hover .phase-marker{
+      transform: scale(1.16);
+    }
+
+    .phase-content{
+      flex: 1;
+      padding-top: 4px;
+    }
+
+    .phase-name{
+      font-size: 16px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
+      color: var(--text);
+      margin-bottom: 4px;
+      transition: color .2s ease;
+    }
+
+    .phase-item:hover .phase-name{
+      color: var(--blue-700);
+    }
+
+    .phase-desc{
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .phase-status{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+      border: 1px solid var(--line);
+      background: rgba(246,247,251,.65);
+      color: rgba(13,18,32,.72);
+    }
+
+    .phase-item.done .phase-status{
+      border-color: rgba(16,185,129,.22);
+      background: rgba(16,185,129,.10);
+      color: rgba(10, 93, 64, .95);
+    }
+
+    .phase-item.current .phase-status{
+      border-color: rgba(23,48,106,.28);
+      background: linear-gradient(135deg, rgba(23,48,106,.12) 0%, rgba(23,48,106,.08) 100%);
+      color: rgba(23,48,106,.95);
+    }
+
+    /* Steps expandíveis */
+    .phase-steps{
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(246,247,251,.85) 0%, rgba(246,247,251,.55) 100%);
+      border: 1px solid rgba(13,18,32,.08);
+      display: none;
+    }
+
+    .phase-item.current .phase-steps{
+      display: block;
+      animation: slideDown .3s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .step-mini{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid rgba(13,18,32,.08);
+      transition: all .15s ease;
+    }
+
+    .step-mini:last-child{
+      margin-bottom: 0;
+    }
+
+    .step-mini:hover{
+      border-color: rgba(23,48,106,.18);
+      box-shadow: 0 8px 18px rgba(13,18,32,.05);
+    }
+
+    .step-mini-icon{
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 950;
+      border: 2px solid rgba(13,18,32,.12);
+      background: #fff;
+      color: rgba(13,18,32,.65);
+      flex-shrink: 0;
+    }
+
+    .step-mini.done .step-mini-icon{
+      border-color: rgba(16,185,129,.30);
+      background: rgba(16,185,129,.10);
+      color: rgba(10, 93, 64, .95);
+    }
+
+    .step-mini.current .step-mini-icon{
+      border-color: rgba(23,48,106,.35);
+      background: rgba(23,48,106,.10);
+      color: rgba(23,48,106,.95);
+    }
+
+    .step-mini-text{
+      flex: 1;
+      font-size: 13px;
+      font-weight: 750;
+      color: rgba(13,18,32,.85);
+      line-height: 1.3;
+    }
+
+    /* Documents */
+    .documents-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
     }
     .doc-card{
-      border-radius: 18px;
-      border: 1px solid rgba(13,18,32,.10);
-      background: rgba(255,255,255,.80);
-      padding: 14px 14px;
-      position:relative;
-      overflow:hidden;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 12px 28px rgba(13,18,32,.05);
+      transition: all .2s ease;
+    }
+    .doc-card:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(13,18,32,.10);
+      border-color: rgba(23,48,106,.22);
     }
     .doc-card.approved{
       border-color: rgba(16,185,129,.22);
-      background: linear-gradient(180deg, rgba(16,185,129,.09) 0%, #fff 100%);
+      background: linear-gradient(135deg, rgba(16,185,129,.08) 0%, #fff 100%);
     }
     .doc-card.rejected{
       border-color: rgba(239,68,68,.22);
-      background: linear-gradient(180deg, rgba(239,68,68,.07) 0%, #fff 100%);
+      background: linear-gradient(135deg, rgba(239,68,68,.07) 0%, #fff 100%);
     }
     .doc-header{
       display:flex;
@@ -493,6 +680,86 @@
       box-shadow:none;
     }
 
+    /* Viewer (pré-visualização dentro do site) */
+    .viewer-overlay{
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(13,18,32,.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+    .viewer-overlay.hidden{ display:none; }
+
+    .viewer-modal{
+      width: min(980px, 100%);
+      max-height: min(86vh, 860px);
+      background: #fff;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: calc(var(--radius) + 6px);
+      box-shadow: 0 28px 80px rgba(13,18,32,.26);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .viewer-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(246,247,251,.75);
+    }
+    .viewer-title{
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: -0.15px;
+      color: rgba(13,18,32,.86);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 70ch;
+    }
+    .viewer-actions{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+
+    .viewer-body{
+      padding: 0;
+      background: #fff;
+      overflow: auto;
+      flex: 1;
+      display:flex;
+      align-items:stretch;
+      justify-content:stretch;
+    }
+
+    .viewer-frame{
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .viewer-img{
+      width: 100%;
+      height: auto;
+      display:block;
+    }
+
+    .viewer-fallback{
+      padding: 16px;
+      font-size: 13px;
+      font-weight: 650;
+      color: rgba(13,18,32,.78);
+    }
+
     /* Inbox */
     .inbox-top{
       display:flex;
@@ -510,253 +777,128 @@
       border: 1px dashed rgba(13,18,32,.18);
       border-radius: calc(var(--radius) + 4px);
       background: rgba(246,247,251,.65);
-      color: rgba(13,18,32,.66);
-      font-weight: 750;
+      margin-top: 14px;
     }
+    .empty-icon{ font-size: 42px; opacity: .55; margin-bottom: 8px; }
+    .empty-title{ font-size: 15px; font-weight: 950; letter-spacing: -0.15px; }
+    .empty-text{ font-size: 13px; font-weight: 650; color: var(--muted); margin-top: 4px; }
 
-    .small{
-      font-size: 12px;
-      color: rgba(13,18,32,.72);
-      font-weight: 650;
-    }
-    .footer-note{
-      font-size: 11px;
-      color: rgba(13,18,32,.58);
-      font-weight: 650;
-    }
-
-    /* Loading */
-    .loading{
-      position: fixed;
-      inset: 0;
+    /* Loading overlay */
+    .loading-overlay{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      background: rgba(246,247,251,.88);
+      backdrop-filter: blur(12px);
       display:flex;
       align-items:center;
       justify-content:center;
-      background: rgba(245,247,251,.78);
-      backdrop-filter: blur(10px);
-      z-index: 50;
+      flex-direction:column;
+      gap: 12px;
     }
-    .loading.hidden{ display:none; }
-    .loading-card{
-      width: min(520px, 92vw);
-      border-radius: 22px;
-      border:1px solid rgba(13,18,32,.10);
-      background: rgba(255,255,255,.85);
-      box-shadow: 0 26px 60px rgba(13,18,32,.16);
-      padding: 18px 18px;
-      display:flex;
-      gap: 14px;
-      align-items:center;
-    }
+    .loading-overlay.hidden{ display:none; }
     .spinner{
-      width: 26px;
-      height: 26px;
+      width: 44px; height: 44px;
       border-radius: 999px;
-      border: 3px solid rgba(13,18,32,.10);
-      border-top-color: rgba(42,107,255,.85);
-      animation: spin 1s linear infinite;
-      flex:0 0 auto;
+      border: 4px solid rgba(13,18,32,.10);
+      border-top-color: var(--blue-700);
+      animation: spin .85s linear infinite;
     }
-    @keyframes spin{ to{ transform: rotate(360deg); } }
+    @keyframes spin{ to{ transform: rotate(360deg);} }
     .loading-text{
-      font-weight:900;
-      color: rgba(13,18,32,.86);
-      letter-spacing:-0.15px;
+      color: rgba(13,18,32,.78);
+      font-weight: 900;
+      font-size: 14px;
     }
 
-    /* Preview modal (in-page file viewer) */
-    .modal{
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: grid;
-      place-items: center;
-      padding: 18px;
+    .footer-note{
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 650;
+      color: rgba(13,18,32,.60);
     }
-    .modal.hidden{ display:none; }
-    .modal-backdrop{
-      position:absolute;
-      inset:0;
-      background: rgba(10,14,39,.62);
-      backdrop-filter: blur(8px);
-    }
-    .modal-card{
-      position: relative;
-      width: min(980px, 100%);
-      max-height: min(82vh, 780px);
-      display:flex;
-      flex-direction: column;
-      border-radius: calc(var(--radius) + 10px);
-      border: 1px solid rgba(255,255,255,.14);
-      background: linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(246,247,251,.98) 100%);
-      box-shadow: 0 28px 80px rgba(0,0,0,.28);
-      overflow:hidden;
-    }
-    .modal-header{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 12px;
-      padding: 14px 14px 12px 14px;
-      border-bottom: 1px solid rgba(13,18,32,.10);
-      background: rgba(255,255,255,.75);
-    }
-    .modal-kicker{
-      font-size: 11px;
-      font-weight: 900;
-      color: rgba(13,18,32,.55);
-      letter-spacing: .16px;
-      text-transform: uppercase;
-      margin-bottom: 2px;
-    }
-    .modal-title{
-      font-size: 15px;
-      font-weight: 950;
-      letter-spacing: -0.2px;
-      color: rgba(13,18,32,.92);
-      max-width: 70ch;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .icon-btn{
-      border: 1px solid rgba(13,18,32,.12);
-      background: rgba(255,255,255,.85);
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      cursor:pointer;
-      font-size: 16px;
-      font-weight: 950;
-      display:grid;
-      place-items:center;
-      transition: .18s ease;
-    }
-    .icon-btn:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 14px 26px rgba(13,18,32,.12);
-      border-color: rgba(23,48,106,.22);
-    }
-    .modal-body{
-      padding: 12px 14px;
-      overflow:auto;
-    }
-    .preview-frame{
-      width: 100%;
-      height: min(64vh, 560px);
-      border: 1px solid rgba(13,18,32,.12);
-      border-radius: 16px;
-      background: #fff;
-      overflow:hidden;
-    }
-    .preview-img{
-      width: 100%;
-      height: auto;
-      display:block;
-      border: 1px solid rgba(13,18,32,.12);
-      border-radius: 16px;
-      background:#fff;
-    }
-    .modal-footer{
-      padding: 12px 14px 14px 14px;
-      border-top: 1px solid rgba(13,18,32,.10);
-      background: rgba(255,255,255,.75);
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content:flex-end;
+
+    @media (max-width: 640px){
+      .btn{ width: 100%; }
+      .header-right{ width:100%; }
+      .pill{ width:100%; justify-content:flex-start; }
+      .tabs{ gap: 8px; }
+      .tab-btn{ width: 100%; justify-content:space-between; }
+      .phase-marker{ width: 40px; height: 40px; font-size: 14px; }
     }
   </style>
 </head>
+
 <body>
-
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <h1>GoArgentina</h1>
-          <small>DNI sem drama 🇦🇷</small>
-        </div>
-      </div>
-
-      <div class="user">
-        <div class="avatar" id="userAvatar">CL</div>
-        <div class="user-meta">
-          <div class="user-name" id="userName">Carregando…</div>
-          <div class="user-email" id="userEmail">—</div>
-        </div>
-        <button class="btn" id="logoutBtn" type="button">Sair</button>
-      </div>
-    </div>
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingText">Carregando…</div>
   </div>
 
-  <div class="wrap">
-    <div class="notice" id="noticeBox"></div>
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="index.html" aria-label="GoArgentina">
+          <div class="mark">GO</div>
+          <div>
+            GoArgentina
+            <small>Área do cliente</small>
+          </div>
+        </a>
 
-    <div class="tabs" role="tablist" aria-label="Navegação do painel">
-      <button class="tab-btn active" data-tab="process" role="tab" aria-selected="true">
-        🧭 Processo <span class="badge blue" id="progressBadge">Fase —</span>
-      </button>
-      <button class="tab-btn" data-tab="docs" role="tab" aria-selected="false">
-        📎 Documentos
-      </button>
-      <button class="tab-btn" data-tab="support" role="tab" aria-selected="false">
-        💬 Suporte <span class="badge" id="supportBadge" style="display:none;">0</span>
-      </button>
+        <div class="header-right">
+          <div class="pill" title="Sua conta">
+            <div class="avatar" id="userAvatar">CL</div>
+            <div class="name">
+              <b id="userName">Cliente</b>
+              <span>Acompanhamento do DNI</span>
+            </div>
+          </div>
+
+          <button class="btn btn-ghost" id="logoutBtn">Sair</button>
+        </div>
+      </div>
     </div>
+  </header>
 
-    <main>
+  <main class="main">
+    <div class="container">
+      <div class="page-header">
+        <h1 class="page-title">Seu painel</h1>
+        <p class="page-subtitle">Acompanhe o progresso do seu DNI argentino em tempo real.</p>
+        <div class="notice" id="noticeBox"></div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Navegação do painel">
+        <button class="tab-btn active" data-tab="process" role="tab" aria-selected="true">🧭 Processo</button>
+        <button class="tab-btn" data-tab="docs" role="tab" aria-selected="false">📄 Documentos</button>
+        <button class="tab-btn" data-tab="support" role="tab" aria-selected="false">
+          💬 Suporte <span class="tab-badge" id="supportBadge">0</span>
+        </button>
+      </div>
+
       <!-- PROCESSO -->
       <section class="section active" id="tab-process">
-        <div class="grid">
-          <div class="card">
-            <div class="card-head">
-              <div>
-                <div class="card-title">Seu progresso</div>
-                <div class="card-sub">As 7 fases do DNI — com passos claros</div>
-              </div>
-              <div class="badge blue" id="progressPill">Fase —</div>
-            </div>
-            <div class="card-body">
-              <div class="phases" id="phasesRow"></div>
-
-              <div class="footer-note" style="margin-top:10px;">
-                Dica: as fases são atualizadas pela nossa equipe. Você acompanha tudo aqui 🙂
-              </div>
-            </div>
+        <div class="progress-overview">
+          <div class="progress-header">
+            <div class="progress-title">📋 Jornada do seu DNI Argentino</div>
+            <div class="progress-badge" id="progressBadge">Fase 1 de 7</div>
           </div>
 
-          <div class="card">
-            <div class="card-head">
-              <div>
-                <div class="card-title">Fase atual</div>
-                <div class="card-sub" id="currentPhaseDesc">—</div>
-              </div>
-              <div class="badge blue" id="currentPhaseBadge">—</div>
-            </div>
-            <div class="card-body">
-              <div class="steps" id="timelineVertical"></div>
-            </div>
-          </div>
+          <div class="timeline-vertical" id="timelineVertical"></div>
         </div>
       </section>
 
       <!-- DOCUMENTOS -->
       <section class="section" id="tab-docs">
         <div class="card">
-          <div class="card-head">
-            <div>
-              <div class="card-title">Envio de documentos</div>
-              <div class="card-sub">Envie seus arquivos com segurança e acompanhe o status.</div>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="docs-grid" id="documentsGrid"></div>
+          <div class="card-title">📄 Seus documentos</div>
+          <div class="small">Envie os arquivos abaixo. Após envio, nossa equipe revisa e aprova.</div>
 
-            <div class="footer-note" style="margin-top:10px;">
-              Após enviar: status vira "Enviado". Depois a equipe pode aprovar ou rejeitar.
-            </div>
+          <div class="documents-grid" id="documentsGrid"></div>
+
+          <div class="footer-note">
+            💡 Dica: prefira imagens nítidas ou PDF. Se um documento for rejeitado, reenvie uma versão melhor.
           </div>
         </div>
       </section>
@@ -764,54 +906,53 @@
       <!-- SUPORTE -->
       <section class="section" id="tab-support">
         <div class="card">
-          <div class="card-head">
-            <div class="inbox-top">
-              <div>
-                <div class="card-title">Mensagens</div>
-                <div class="card-sub">Atualizações e avisos da equipe GoArgentina.</div>
-              </div>
-
-              <div class="badge" id="inboxBadge">0</div>
+          <div class="inbox-top">
+            <div>
+              <div class="card-title" style="margin-bottom:4px;">📨 Caixa de entrada</div>
+              <div class="small">Atualizações, dicas e solicitações da nossa equipe.</div>
             </div>
+            <div class="doc-status pending" id="inboxBadge"></div>
           </div>
-          <div class="card-body">
-            <div id="inboxEmpty" class="empty-state">Sem mensagens por aqui ainda 🙂</div>
-            <div class="docs-grid" id="inboxList"></div>
+
+          <div id="inboxList" style="margin-top:14px; display:flex; flex-direction:column; gap:10px;"></div>
+
+          <div class="empty-state" id="inboxEmpty" style="display:none;">
+            <div class="empty-icon">📭</div>
+            <div class="empty-title">Sem mensagens</div>
+            <div class="empty-text">Quando tivermos atualizações ou pedidos, elas aparecem aqui.</div>
+          </div>
+
+          <div class="empty-state" style="margin-top:16px;">
+            <div class="empty-icon">💬</div>
+            <div class="empty-title">Precisa falar com a gente?</div>
+            <div class="empty-text">Chame no WhatsApp para atendimento humano.</div>
+            <div style="margin-top:12px;">
+              <a class="btn btn-primary" href="https://wa.me/5491159023706" target="_blank" rel="noopener noreferrer">
+                💬 Abrir WhatsApp
+              </a>
+            </div>
           </div>
         </div>
       </section>
-    </main>
-  </div>
-
-  <div class="loading hidden" id="loading" aria-live="polite" aria-busy="true">
-    <div class="loading-card">
-      <div class="spinner" aria-hidden="true"></div>
-      <div class="loading-text" id="loadingText">Carregando…</div>
     </div>
-  </div>
+  </main>
 
-  <!-- Preview Modal -->
-  <div id="previewModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
-    <div class="modal-backdrop" data-close="1"></div>
-    <div class="modal-card" role="document">
-      <div class="modal-header">
-        <div style="min-width:0;">
-          <div class="modal-kicker">Visualização</div>
-          <div id="previewTitle" class="modal-title">Arquivo</div>
+  <!-- Viewer Modal (visualização de arquivos sem abrir aba externa) -->
+  <div class="viewer-overlay hidden" id="viewerOverlay" role="dialog" aria-modal="true" aria-label="Visualização de documento">
+    <div class="viewer-modal">
+      <div class="viewer-top">
+        <div class="viewer-title" id="viewerTitle">Visualização</div>
+        <div class="viewer-actions">
+          <a class="btn-small" id="viewerDownload" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">⬇️ Baixar</a>
+          <button class="btn-small danger" type="button" id="viewerClose">✕ Fechar</button>
         </div>
-        <button id="previewClose" class="icon-btn" type="button" aria-label="Fechar">✕</button>
       </div>
-      <div class="modal-body">
-        <div id="previewBody"></div>
-      </div>
-      <div class="modal-footer">
-        <a id="previewDownload" class="btn-small" href="#" target="_blank" rel="noopener noreferrer">⬇️ Baixar</a>
-        <a id="previewOpenNew" class="btn-small" href="#" target="_blank" rel="noopener noreferrer">↗️ Abrir em nova guia</a>
+      <div class="viewer-body" id="viewerBody">
+        <!-- conteúdo inserido via JS -->
       </div>
     </div>
   </div>
 
-  <!-- versão travada para evitar que mudanças do CDN quebrem o site -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.93.2"></script>
 
   <script>
@@ -830,7 +971,6 @@
       if (text) loadingText.textContent = text;
       loadingEl.classList.toggle("hidden", !show);
     }
-
     function showNotice(type, msg){
       noticeBox.className = "notice show " + (type==="ok" ? "ok" : "err");
       noticeBox.textContent = msg;
@@ -843,8 +983,7 @@
       if (!dt) return "-";
       try { return new Date(dt).toLocaleString("pt-BR"); } catch { return "-"; }
     }
-
-    function initials(nameOrEmail){
+    function initialsFrom(nameOrEmail){
       const s = (nameOrEmail || "CL").trim();
       const parts = s.split(" ").filter(Boolean);
       if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
@@ -910,140 +1049,6 @@
       { doc_type:"outros", name:"Outros Documentos", icon:"📁" },
     ];
 
-    // Regras de upload (validação no front — sem depender de mudanças no banco/policies)
-    const DOC_RULES = {
-      rg: { maxMB: 10, exts: ["pdf","jpg","jpeg","png","webp"], mimes: ["application/pdf","image/jpeg","image/png","image/webp"] },
-      antecedentes: { maxMB: 10, exts: ["pdf","jpg","jpeg","png","webp"], mimes: ["application/pdf","image/jpeg","image/png","image/webp"] },
-      foto: { maxMB: 5, exts: ["jpg","jpeg","png","webp"], mimes: ["image/jpeg","image/png","image/webp"] },
-      outros: { maxMB: 15, exts: ["pdf","jpg","jpeg","png","webp","doc","docx"], mimes: ["application/pdf","image/jpeg","image/png","image/webp",
-        "application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document"] },
-    };
-
-    function safeExtFromName(name=""){
-      const m = String(name).toLowerCase().match(/\.([a-z0-9]{1,10})$/);
-      return m ? m[1] : "";
-    }
-    function extFromPath(path=""){
-      const clean = String(path).split("?")[0];
-      const m = clean.toLowerCase().match(/\.([a-z0-9]{1,10})$/);
-      return m ? m[1] : "";
-    }
-    function mb(bytes){ return bytes / (1024 * 1024); }
-
-    function validateFile(docType, file){
-      const rules = DOC_RULES[docType] || { maxMB: 10, exts: [], mimes: [] };
-      const ext = safeExtFromName(file.name);
-      const sizeMB = mb(file.size);
-
-      if (sizeMB > rules.maxMB){
-        return { ok:false, message:`Arquivo muito grande (${sizeMB.toFixed(1)} MB). Limite para ${docType.toUpperCase()}: ${rules.maxMB} MB.` };
-      }
-
-      // Alguns dispositivos/OS podem não preencher file.type; por isso validamos por ext + mime (quando existir)
-      const mimeOk = !file.type || rules.mimes.length===0 || rules.mimes.includes(file.type);
-      const extOk  = rules.exts.length===0 || rules.exts.includes(ext);
-
-      if (!extOk || !mimeOk){
-        const allowed = (rules.exts || []).map(e=>"."+e).join(", ");
-        return { ok:false, message:`Tipo de arquivo não permitido para ${docType.toUpperCase()}. Permitidos: ${allowed || "—"}.` };
-      }
-
-      return { ok:true, ext };
-    }
-
-    function acceptFor(docType){
-      const rules = DOC_RULES[docType];
-      if (!rules) return "image/*,application/pdf";
-      const set = new Set();
-      (rules.mimes || []).forEach(m=> set.add(m));
-      (rules.exts || []).forEach(e=> set.add("."+e));
-      return Array.from(set).join(",");
-    }
-
-    // Preview Modal
-    const previewModal = document.getElementById("previewModal");
-    const previewClose = document.getElementById("previewClose");
-    const previewBody  = document.getElementById("previewBody");
-    const previewTitle = document.getElementById("previewTitle");
-    const previewDownload = document.getElementById("previewDownload");
-    const previewOpenNew  = document.getElementById("previewOpenNew");
-
-    function closePreview(){
-      if (!previewModal) return;
-      previewModal.classList.add("hidden");
-      previewBody.replaceChildren();
-      previewTitle.textContent = "Arquivo";
-      previewDownload.href = "#";
-      previewOpenNew.href = "#";
-    }
-
-    function openPreview({ url, title, ext }){
-      if (!previewModal) return;
-
-      previewTitle.textContent = title || "Arquivo";
-      previewDownload.href = url;
-      previewOpenNew.href = url;
-
-      previewBody.replaceChildren();
-
-      const e = (ext || "").toLowerCase();
-      const imageExts = ["jpg","jpeg","png","webp","gif"];
-      if (imageExts.includes(e)){
-        const img = document.createElement("img");
-        img.src = url;
-        img.alt = title || "Pré-visualização";
-        img.className = "preview-img";
-        img.loading = "lazy";
-        img.referrerPolicy = "no-referrer";
-        previewBody.appendChild(img);
-      } else if (e === "pdf"){
-        const frame = document.createElement("iframe");
-        frame.src = url;
-        frame.className = "preview-frame";
-        frame.title = title || "Pré-visualização";
-        frame.loading = "lazy";
-        frame.referrerPolicy = "no-referrer";
-        // Observação: sem sandbox para não quebrar o viewer de PDF em alguns browsers.
-        previewBody.appendChild(frame);
-      } else {
-        const box = document.createElement("div");
-        box.className = "card";
-        box.style.padding = "14px";
-        box.style.background = "rgba(255,255,255,.75)";
-        box.style.border = "1px solid rgba(13,18,32,.12)";
-        box.style.borderRadius = "16px";
-
-        const t = document.createElement("div");
-        t.style.fontWeight = "950";
-        t.style.marginBottom = "6px";
-        t.textContent = "Pré-visualização indisponível neste formato.";
-
-        const p = document.createElement("div");
-        p.style.color = "rgba(13,18,32,.7)";
-        p.style.fontWeight = "650";
-        p.style.fontSize = "13px";
-        p.textContent = "Use os botões abaixo para baixar ou abrir em uma nova guia.";
-
-        box.appendChild(t);
-        box.appendChild(p);
-        previewBody.appendChild(box);
-      }
-
-      previewModal.classList.remove("hidden");
-    }
-
-    // Fechar modal: botão, backdrop e ESC
-    previewClose?.addEventListener("click", closePreview);
-    previewModal?.addEventListener("click", (e)=>{
-      const t = e.target;
-      if (t && t.dataset && t.dataset.close) closePreview();
-    });
-    document.addEventListener("keydown", (e)=>{
-      if (e.key === "Escape" && previewModal && !previewModal.classList.contains("hidden")){
-        closePreview();
-      }
-    });
-
     let currentUser = null;
     let currentProfile = null;
     let currentPhase = 1;
@@ -1078,122 +1083,214 @@
       }
 
       const { data: userData, error: userErr } = await sb.auth.getUser();
-
       if (userErr || !userData?.user){
         window.location.href = "login.html";
         return;
       }
-
       currentUser = userData.user;
 
-      // Profile
-      const { data: profile, error: pErr } = await sb
+      const { data: profile, error: profErr } = await sb
         .from("profiles")
-        .select("id, full_name, email, role")
+        .select("id, email, full_name, role, created_at")
         .eq("id", currentUser.id)
-        .maybeSingle();
+        .single();
 
-      if (pErr){
-        showNotice("err","Erro ao buscar perfil. Verifique a tabela profiles e RLS.");
+      if (profErr || !profile){
+        showNotice("err", "Não consegui carregar seu perfil. Recarregue a página.");
+        setLoading(false);
+        return;
+      }
+      currentProfile = profile;
+
+      if (currentProfile.role === "admin"){
+        window.location.href = "admin.html";
+        return;
       }
 
-      currentProfile = profile || {
-        full_name: currentUser.email || "Cliente",
-        email: currentUser.email,
-        role: "client"
-      };
-
-      // UI header
-      document.getElementById("userAvatar").textContent = initials(currentProfile.full_name || currentProfile.email);
-      document.getElementById("userName").textContent = currentProfile.full_name || "Cliente";
-      document.getElementById("userEmail").textContent = currentProfile.email || currentUser.email || "—";
-
-      // Process
-      const { data: proc } = await sb
-        .from("dni_process")
-        .select("current_phase, current_step")
-        .eq("user_id", currentUser.id)
-        .maybeSingle();
-
-      currentPhase = proc?.current_phase || 1;
-      currentStep  = proc?.current_step  || 1;
-
-      renderProcess();
-
-      // Documents
-      const { data: docs } = await sb
-        .from("documents")
-        .select("doc_type, status, storage_path, uploaded_at, approved_at")
-        .eq("user_id", currentUser.id);
-
-      docsMap = new Map();
-      (docs || []).forEach(r => docsMap.set(r.doc_type, r));
-      renderDocuments();
-
-      // Inbox
-      await refreshInbox();
-
-      // Logout
-      document.getElementById("logoutBtn").addEventListener("click", async ()=>{
-        setLoading(true, "Saindo…");
-        await sb.auth.signOut();
-        window.location.href = "login.html";
-      });
+      const display = (currentProfile.full_name || currentProfile.email || "Cliente");
+      document.getElementById("userName").textContent = display;
+      document.getElementById("userAvatar").textContent = initialsFrom(display);
 
       wireTabs();
+      wireEvents();
+
+      await loadAll();
       setLoading(false);
     }
 
-    function renderProcess(){
-      const row = document.getElementById("phasesRow");
-      const badge = document.getElementById("progressBadge");
-      const pill = document.getElementById("progressPill");
-      const currentBadge = document.getElementById("currentPhaseBadge");
-      const currentDesc = document.getElementById("currentPhaseDesc");
+    function wireEvents(){
+      document.getElementById("logoutBtn").addEventListener("click", logout);
+
+      sb.auth.onAuthStateChange((event) => {
+        if (event === "SIGNED_OUT"){
+          window.location.href = "login.html";
+        }
+      });
+    }
+
+    async function logout(){
+      setLoading(true, "Saindo…");
+      await sb.auth.signOut();
+      window.location.href = "login.html";
+    }
+
+    async function loadAll(){
+      hideNotice();
+      setLoading(true, "Carregando dados…");
+
+      await Promise.all([
+        loadProcess(),
+        loadDocuments(),
+        loadInboxMessages()
+      ]);
+
+      renderTimeline();
+      renderDocuments();
+      renderInbox();
+
+      setLoading(false);
+    }
+
+    async function loadProcess(){
+      const { data, error } = await sb
+        .from("dni_process")
+        .select("user_id, current_phase, current_step, updated_at")
+        .eq("user_id", currentUser.id)
+        .maybeSingle();
+
+      if (error){
+        currentPhase = 1;
+        currentStep = 1;
+        return;
+      }
+
+      if (!data){
+        const nowIso = new Date().toISOString();
+        const { data: created } = await sb
+          .from("dni_process")
+          .upsert({
+            user_id: currentUser.id,
+            current_phase: 1,
+            current_step: 1,
+            updated_at: nowIso
+          }, { onConflict:"user_id" })
+          .select("current_phase, current_step")
+          .maybeSingle();
+        currentPhase = created?.current_phase || 1;
+        currentStep = created?.current_step || 1;
+      } else {
+        currentPhase = data.current_phase || 1;
+        currentStep = data.current_step || 1;
+      }
+
+      currentPhase = Math.min(7, Math.max(1, Number(currentPhase) || 1));
+      const maxSteps = (phaseSteps[currentPhase] || []).length || 1;
+      currentStep = Math.min(maxSteps, Math.max(1, Number(currentStep) || 1));
+    }
+
+    async function loadDocuments(){
+      docsMap = new Map();
+
+      const { data, error } = await sb
+        .from("documents")
+        .select("user_id, doc_type, status, storage_path, uploaded_at, approved_at")
+        .eq("user_id", currentUser.id);
+
+      if (error){
+        showNotice("err", "Erro ao carregar documentos.");
+        return;
+      }
+
+      (data || []).forEach(d => docsMap.set(d.doc_type, d));
+    }
+
+    async function loadInboxMessages(){
+      inboxMsgs = [];
+
+      const { data, error } = await sb
+        .from("client_messages")
+        .select("id, title, message, message_type, is_read, created_at")
+        .eq("user_id", currentUser.id)
+        .order("created_at", { ascending:false })
+        .limit(30);
+
+      if (error) return;
+      inboxMsgs = data || [];
+    }
+
+    function renderTimeline(){
       const container = document.getElementById("timelineVertical");
-
-      row.innerHTML = "";
+      const badge = document.getElementById("progressBadge");
+      
+      container.innerHTML = "";
       badge.textContent = `Fase ${currentPhase} de 7`;
-      pill.textContent = `Fase ${currentPhase} de 7`;
-      currentBadge.textContent = `Fase ${currentPhase}`;
-      currentDesc.textContent = phases.find(p=>p.id===currentPhase)?.name || "—";
 
-      phases.forEach(ph=>{
-        const active = ph.id === currentPhase;
-        const done = ph.id < currentPhase;
+      phases.forEach(ph => {
+        const isDone = ph.id < currentPhase;
+        const isCurrent = ph.id === currentPhase;
+        
+        let statusText = "";
+        let statusClass = "";
+        
+        if (isDone){
+          statusText = "✓ Concluída";
+          statusClass = "done";
+        } else if (isCurrent){
+          statusText = "● Em andamento";
+          statusClass = "current";
+        } else {
+          statusText = "Pendente";
+          statusClass = "";
+        }
 
-        const statusClass = active ? "active" : (done ? "done" : "");
+        const steps = phaseSteps[ph.id] || [];
+        let stepsHTML = "";
+        
+        if (isCurrent && steps.length > 0){
+          steps.forEach((stepText, idx) => {
+            const stepNum = idx + 1;
+            const stepDone = stepNum < currentStep;
+            const stepCurrent = stepNum === currentStep;
+            
+            let stepClass = "";
+            let stepIcon = stepNum;
+            
+            if (stepDone){
+              stepClass = "done";
+              stepIcon = "✓";
+            } else if (stepCurrent){
+              stepClass = "current";
+              stepIcon = "●";
+            }
+            
+            stepsHTML += `
+              <div class="step-mini ${stepClass}">
+                <div class="step-mini-icon">${stepIcon}</div>
+                <div class="step-mini-text">${stepText}</div>
+              </div>
+            `;
+          });
+        }
+
         const item = document.createElement("div");
         item.className = `phase-item ${statusClass}`;
         item.innerHTML = `
           <div class="phase-marker">${ph.icon || ph.id}</div>
-          <div class="phase-name">${ph.name}</div>
-          <div class="phase-desc">${ph.desc}</div>
-        `;
-        row.appendChild(item);
-      });
-
-      container.innerHTML = "";
-      const steps = phaseSteps[currentPhase] || [];
-
-      steps.forEach((label, idx)=>{
-        const n = idx + 1;
-        const st = document.createElement("div");
-        st.className = "step " + (n < currentStep ? "done" : (n === currentStep ? "active" : ""));
-        st.innerHTML = `
-          <div class="dot"></div>
-          <div>
-            <div class="step-title">Passo ${n}</div>
-            <div class="step-sub">${label}</div>
+          <div class="phase-content">
+            <div class="phase-name">${ph.name}</div>
+            <div class="phase-desc">${ph.desc}</div>
+            <div class="phase-status">${statusText}</div>
+            ${stepsHTML ? `<div class="phase-steps">${stepsHTML}</div>` : ''}
           </div>
         `;
-        container.appendChild(st);
+        
+        container.appendChild(item);
       });
     }
 
     function docStatusBadge(status){
       if (status === "approved") return { cls:"approved", txt:"✅ Aprovado" };
-      if (status === "rejected") return { cls:"rejected", txt:"✕ Rejeitado" };
+      if (status === "rejected") return { cls:"rejected", txt:"⚠️ Rejeitado" };
       if (status === "uploaded") return { cls:"uploaded", txt:"✓ Enviado" };
       return { cls:"pending", txt:"⏳ Pendente" };
     }
@@ -1207,13 +1304,11 @@
         const status = row?.status || "pending";
         const badge = docStatusBadge(status);
 
-        const fileNameSafe = row?.storage_path ? escapeHTML(filenameFromPath(row.storage_path) || "arquivo") : "";
-
         const fileInfo = row?.storage_path
-          ? `Arquivo: ${fileNameSafe}`
+          ? `Arquivo: ${filenameFromPath(row.storage_path)}`
           : "Sem envio ainda";
 
-        const timeInfo = row?.uploaded_at ? `Enviado em ${escapeHTML(fmtDate(row.uploaded_at))}` : "";
+        const timeInfo = row?.uploaded_at ? `Enviado em ${fmtDate(row.uploaded_at)}` : "";
 
         const card = document.createElement("div");
         card.className = `doc-card ${status === "approved" ? "approved" : (status === "rejected" ? "rejected" : "")}`;
@@ -1225,9 +1320,9 @@
           </div>
 
           <div class="doc-title">${dc.name}</div>
-          <div class="doc-info">${fileInfo}${timeInfo ? "<br>"+timeInfo : ""}</div>
+          <div class="doc-info">${escapeHTML(fileInfo)}${timeInfo ? "<br>"+escapeHTML(timeInfo) : ""}</div>
 
-          <input type="file" class="input" style="padding:10px 12px;" accept="${acceptFor(dc.doc_type)}" />
+          <input type="file" class="input" style="padding:10px 12px;" accept="image/*,application/pdf" />
 
           <div class="doc-actions">
             <button class="btn-small" type="button" ${row?.storage_path ? "" : "disabled"}>👁️ Visualizar</button>
@@ -1251,7 +1346,7 @@
 
         btnView.addEventListener("click", async ()=>{
           if (!row?.storage_path) return;
-          await viewDoc(row.storage_path);
+          await viewDoc(row.storage_path, dc.name);
         });
 
         btnRemove.addEventListener("click", async ()=>{
@@ -1265,26 +1360,143 @@
       });
     }
 
-    function safeExt(name=""){ return safeExtFromName(name); }
+    // ==========================
+    // Segurança + validação de arquivos
+    // ==========================
+    const FILE_MAX_BYTES = 15 * 1024 * 1024; // 15 MB
+    const ALLOWED_MIMES = new Set([
+      "application/pdf",
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/heic",
+      "image/heif"
+    ]);
+
+    function extFromMime(mime=""){
+      const m = (mime || "").toLowerCase();
+      if (m === "application/pdf") return "pdf";
+      if (m === "image/jpeg") return "jpg";
+      if (m === "image/png") return "png";
+      if (m === "image/webp") return "webp";
+      if (m === "image/heic") return "heic";
+      if (m === "image/heif") return "heif";
+      return "";
+    }
+
+    function validateFile(file){
+      if (!file) return { ok:false, msg:"Selecione um arquivo." };
+
+      if (file.size > FILE_MAX_BYTES){
+        const mb = (FILE_MAX_BYTES / (1024*1024)).toFixed(0);
+        return { ok:false, msg:`Arquivo muito grande. Limite: ${mb} MB.` };
+      }
+
+      const mime = (file.type || "").toLowerCase();
+      if (!ALLOWED_MIMES.has(mime)){
+        return { ok:false, msg:"Tipo de arquivo não permitido. Use PDF ou imagem (JPG/PNG/WebP)." };
+      }
+
+      return { ok:true, msg:"OK" };
+    }
+
+    // ==========================
+    // Viewer (pré-visualização dentro do site)
+    // ==========================
+    const viewerOverlay = document.getElementById("viewerOverlay");
+    const viewerTitleEl = document.getElementById("viewerTitle");
+    const viewerBodyEl = document.getElementById("viewerBody");
+    const viewerCloseBtn = document.getElementById("viewerClose");
+    const viewerDownload = document.getElementById("viewerDownload");
+    let viewerObjectUrl = null;
+
+    function closeViewer(){
+      viewerOverlay.classList.add("hidden");
+      viewerTitleEl.textContent = "Visualização";
+      viewerBodyEl.innerHTML = "";
+      viewerDownload.style.display = "none";
+      viewerDownload.href = "#";
+
+      if (viewerObjectUrl){
+        try{ URL.revokeObjectURL(viewerObjectUrl); }catch{}
+        viewerObjectUrl = null;
+      }
+    }
+
+    viewerCloseBtn?.addEventListener("click", closeViewer);
+    viewerOverlay?.addEventListener("click", (e)=>{
+      if (e.target === viewerOverlay) closeViewer();
+    });
+    window.addEventListener("keydown", (e)=>{
+      if (e.key === "Escape" && !viewerOverlay.classList.contains("hidden")) closeViewer();
+    });
+
+    function openViewer({ title, blobUrl, mime, signedUrl }){
+      viewerTitleEl.textContent = title || "Visualização do documento";
+      viewerBodyEl.innerHTML = "";
+      viewerOverlay.classList.remove("hidden");
+
+      if (signedUrl){
+        viewerDownload.href = signedUrl;
+        viewerDownload.style.display = "inline-flex";
+      } else {
+        viewerDownload.style.display = "none";
+      }
+
+      const m = (mime || "").toLowerCase();
+
+      if (m.startsWith("image/")){
+        const img = document.createElement("img");
+        img.className = "viewer-img";
+        img.src = blobUrl;
+        img.alt = title || "Imagem";
+        viewerBodyEl.appendChild(img);
+        return;
+      }
+
+      if (m.includes("pdf")){
+        const iframe = document.createElement("iframe");
+        iframe.className = "viewer-frame";
+        iframe.setAttribute("sandbox", "allow-same-origin allow-downloads");
+        iframe.src = blobUrl;
+        viewerBodyEl.appendChild(iframe);
+        return;
+      }
+
+      const div = document.createElement("div");
+      div.className = "viewer-fallback";
+      div.innerHTML = "Não consegui pré-visualizar este formato no navegador. Use o botão <b>Baixar</b>.";
+      viewerBodyEl.appendChild(div);
+    }
 
     async function uploadDoc(docType, file){
       hideNotice();
 
-      const v = validateFile(docType, file);
+      const v = validateFile(file);
       if (!v.ok){
-        showNotice("err", v.message);
+        showNotice("err", v.msg);
         return;
       }
 
       setLoading(true, "Enviando arquivo…");
 
       try{
-        const ext = v.ext || safeExt(file.name) || "bin";
+        const ext = extFromMime(file.type);
+        if (!ext){
+          showNotice("err", "Tipo de arquivo inválido. Use PDF ou imagem (JPG/PNG/WebP).");
+          setLoading(false);
+          return;
+        }
+
         const storagePath = `${currentUser.id}/${docType}/${Date.now()}-${Math.random().toString(16).slice(2)}.${ext}`;
 
         const { error: upErr } = await sb.storage
           .from("documents")
-          .upload(storagePath, file, { upsert:false });
+          .upload(storagePath, file, {
+            upsert:false,
+            contentType: file.type || undefined,
+            cacheControl: "3600"
+          });
 
         if (upErr){
           showNotice("err", "Falha no upload. Verifique policies do Storage bucket 'documents'.");
@@ -1339,23 +1551,51 @@
       setLoading(false);
     }
 
-    async function viewDoc(storagePath){
+    async function viewDoc(storagePath, title){
       hideNotice();
-      setLoading(true, "Carregando pré-visualização…");
+      setLoading(true, "Carregando arquivo…");
 
-      const { data, error } = await sb.storage
-        .from("documents")
-        .createSignedUrl(storagePath, 300);
+      try{
+        const { data, error } = await sb.storage
+          .from("documents")
+          .createSignedUrl(storagePath, 60);
 
-      if (error || !data?.signedUrl){
-        showNotice("err", "Não consegui gerar link para visualizar.");
-        setLoading(false);
-        return;
+        if (error || !data?.signedUrl){
+          showNotice("err", "Não consegui gerar link para visualizar.");
+          setLoading(false);
+          return;
+        }
+
+        const signedUrl = data.signedUrl;
+
+        const res = await fetch(signedUrl, { cache: "no-store" });
+        if (!res.ok){
+          showNotice("err", "Não consegui carregar o arquivo para pré-visualização.");
+          setLoading(false);
+          return;
+        }
+
+        const mime = res.headers.get("content-type") || "";
+        const blob = await res.blob();
+
+        if (viewerObjectUrl){
+          try{ URL.revokeObjectURL(viewerObjectUrl); }catch{}
+          viewerObjectUrl = null;
+        }
+
+        viewerObjectUrl = URL.createObjectURL(blob);
+
+        openViewer({
+          title: title || "Documento",
+          blobUrl: viewerObjectUrl,
+          mime,
+          signedUrl
+        });
+
+      } catch {
+        showNotice("err", "Falha ao abrir o arquivo.");
       }
 
-      const title = filenameFromPath(storagePath) || "Arquivo";
-      const ext = extFromPath(storagePath);
-      openPreview({ url: data.signedUrl, title, ext });
       setLoading(false);
     }
 
@@ -1380,37 +1620,33 @@
 
       if (error){
         showNotice("err", "Removido do Storage, mas falhou ao atualizar no banco.");
-      } else {
-        docsMap.set(docType, data || { doc_type: docType, status:"pending", storage_path:null, uploaded_at:null, approved_at:null });
-        renderDocuments();
-        showNotice("ok", "Arquivo removido.");
+        setLoading(false);
+        return;
       }
 
+      if (data) docsMap.set(docType, data);
+      else docsMap.delete(docType);
+
+      renderDocuments();
+      showNotice("ok", "Arquivo removido e status voltou para Pendente.");
       setLoading(false);
     }
 
-    async function refreshInbox(){
+    function renderInbox(){
       const list = document.getElementById("inboxList");
       const empty = document.getElementById("inboxEmpty");
       const badge = document.getElementById("inboxBadge");
       const tabBadge = document.getElementById("supportBadge");
-
-      const { data } = await sb
-        .from("client_messages")
-        .select("id, title, message, created_at, is_read")
-        .eq("user_id", currentUser.id)
-        .order("created_at", { ascending:false });
-
-      inboxMsgs = data || [];
 
       if (!list || !empty || !badge || !tabBadge) return;
 
       list.innerHTML = "";
 
       const unread = inboxMsgs.filter(m => !m.is_read).length;
+
       if (unread > 0){
         badge.style.display = "inline-flex";
-        badge.textContent = unread;
+        badge.textContent = `${unread} nova(s)`;
         tabBadge.style.display = "inline-flex";
         tabBadge.textContent = unread;
       } else {
@@ -1453,24 +1689,6 @@
 
         list.appendChild(box);
       });
-
-      renderInbox();
-    }
-
-    function renderInbox(){
-      // re-render badge counts only (list already built in refreshInbox)
-      const badge = document.getElementById("inboxBadge");
-      const tabBadge = document.getElementById("supportBadge");
-      const unread = inboxMsgs.filter(m => !m.is_read).length;
-      if (unread > 0){
-        badge.style.display = "inline-flex";
-        badge.textContent = unread;
-        tabBadge.style.display = "inline-flex";
-        tabBadge.textContent = unread;
-      } else {
-        badge.style.display = "none";
-        tabBadge.style.display = "none";
-      }
     }
 
     init();
