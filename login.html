@@ -13,30 +13,20 @@
       --blue-900:#0A0E27;
       --blue-800:#0F1B3D;
       --blue-700:#17306A;
-      --blue-600:#1F4ED1;
-      --blue-500:#2A6BFF;
-      --yellow-500:#FFD500;
-
       --text:#0D1220;
       --muted:#5B6475;
-
       --bg:#FFFFFF;
       --bg-soft:#F6F7FB;
       --sand:#F3E7C6;
       --sand-2:#F7F1DD;
       --line:rgba(13,18,32,.10);
-
       --radius:16px;
       --shadow: 0 18px 50px rgba(13,18,32,.10);
-      --ring: rgba(42,107,255,.18);
     }
 
     body{
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Arial, sans-serif;
-      background:
-        radial-gradient(900px 520px at 10% 10%, rgba(42,107,255,.12), transparent 55%),
-        radial-gradient(820px 520px at 90% 15%, rgba(255,213,0,.10), transparent 55%),
-        var(--bg-soft);
+      background: var(--bg-soft);
       color: var(--text);
       line-height: 1.6;
       min-height: 100vh;
@@ -49,12 +39,12 @@
       margin: 0 auto;
     }
 
-    /* Header */
+    /* Header (igual landing) */
     header{
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(255,255,255,.92);
+      background: rgba(255,255,255,.95);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--line);
     }
@@ -76,14 +66,12 @@
     .mark{
       width: 38px; height: 38px;
       border-radius: 12px;
-      background: linear-gradient(135deg, var(--yellow-500), var(--blue-500));
+      background: var(--blue-700);
       display:flex;
       align-items:center;
       justify-content:center;
-      color: rgba(10,14,39,.92);
-      font-weight: 950;
-      box-shadow: 0 14px 30px rgba(13,18,32,.10);
-      border: 1px solid rgba(13,18,32,.06);
+      color: white;
+      font-weight: 900;
     }
     .brand small{
       display:block;
@@ -106,7 +94,7 @@
       gap: 8px;
       padding: 12px 16px;
       border-radius: 999px;
-      font-weight: 850;
+      font-weight: 800;
       font-size: 14px;
       border: 1px solid var(--line);
       background: white;
@@ -118,18 +106,13 @@
     .btn:hover{
       transform: translateY(-1px);
       box-shadow: 0 10px 25px rgba(13,18,32,.08);
-      border-color: rgba(23,48,106,.18);
     }
     .btn-primary{
-      background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
+      background: var(--blue-700);
       color: white;
       border-color: rgba(255,255,255,.18);
-      box-shadow: 0 16px 34px rgba(42,107,255,.18);
     }
-    .btn-primary:hover{
-      filter: brightness(1.02);
-      box-shadow: 0 18px 40px rgba(42,107,255,.22);
-    }
+    .btn-primary:hover{ background: var(--blue-800); }
     .btn-ghost{ background: var(--bg-soft); }
     .btn:disabled{
       opacity: .65;
@@ -138,7 +121,10 @@
       box-shadow: none;
     }
 
-    main{ padding: 40px 0 64px; }
+    /* Page */
+    main{
+      padding: 40px 0 64px;
+    }
     .wrap{
       display:flex;
       align-items:center;
@@ -147,24 +133,13 @@
     }
     .card{
       width: 100%;
-      max-width: 580px;
-      background: rgba(255,255,255,.92);
+      max-width: 560px;
+      background: white;
       border: 1px solid var(--line);
       border-radius: calc(var(--radius) + 4px);
       box-shadow: var(--shadow);
       padding: 22px;
-      overflow: hidden;
-      position: relative;
     }
-    .card::before{
-      content:"";
-      position:absolute;
-      inset:-1px -1px auto -1px;
-      height: 10px;
-      background: linear-gradient(90deg, var(--yellow-500), var(--blue-500));
-      opacity: .85;
-    }
-
     .card-top{
       display:flex;
       align-items:flex-start;
@@ -172,7 +147,6 @@
       gap: 12px;
       flex-wrap: wrap;
       margin-bottom: 10px;
-      margin-top: 6px;
     }
     .tag{
       display:inline-flex;
@@ -180,13 +154,12 @@
       gap: 8px;
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(255,213,0,.18);
-      border: 1px solid rgba(255,213,0,.26);
-      font-weight: 850;
+      background: var(--sand-2);
+      border: 1px solid rgba(0,0,0,.08);
+      font-weight: 800;
       font-size: 13px;
-      color: rgba(13,18,32,.86);
+      color: rgba(43,47,55,.92);
     }
-
     h1{
       font-size: clamp(22px, 3.2vw, 28px);
       line-height: 1.15;
@@ -197,7 +170,7 @@
     .lead{
       color: var(--muted);
       font-size: 14px;
-      font-weight: 650;
+      font-weight: 600;
       margin-bottom: 18px;
       max-width: 70ch;
     }
@@ -212,7 +185,7 @@
       display:block;
       font-size: 13px;
       color: rgba(13,18,32,.72);
-      font-weight: 850;
+      font-weight: 800;
       margin-bottom: 6px;
     }
     input{
@@ -228,8 +201,8 @@
     }
     input::placeholder{ color: rgba(13,18,32,.38); font-weight: 650; }
     input:focus{
-      border-color: rgba(42,107,255,.35);
-      box-shadow: 0 0 0 4px var(--ring);
+      border-color: rgba(23,48,106,.35);
+      box-shadow: 0 0 0 4px rgba(23,48,106,.12);
     }
 
     .row{
@@ -238,7 +211,9 @@
       flex-wrap: wrap;
       margin-top: 6px;
     }
-    .row .btn{ width: 100%; }
+    .row .btn{
+      width: 100%;
+    }
 
     .msg{
       margin-top: 14px;
@@ -281,46 +256,7 @@
       color: rgba(13,18,32,.6);
       background: rgba(255,255,255,.7);
     }
-    footer a{ color: rgba(13,18,32,.75); font-weight: 850; }
-
-    /* Loading overlay */
-    .loading{
-      position: fixed;
-      inset: 0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background: rgba(246,247,251,.80);
-      backdrop-filter: blur(10px);
-      z-index: 200;
-    }
-    .loading.hidden{ display:none; }
-    .loading-card{
-      width: min(520px, 92vw);
-      border-radius: 22px;
-      border:1px solid rgba(13,18,32,.10);
-      background: rgba(255,255,255,.92);
-      box-shadow: 0 26px 60px rgba(13,18,32,.16);
-      padding: 18px 18px;
-      display:flex;
-      gap: 14px;
-      align-items:center;
-    }
-    .spinner{
-      width: 26px;
-      height: 26px;
-      border-radius: 999px;
-      border: 3px solid rgba(13,18,32,.10);
-      border-top-color: rgba(42,107,255,.85);
-      animation: spin 1s linear infinite;
-      flex:0 0 auto;
-    }
-    @keyframes spin{ to{ transform: rotate(360deg); } }
-    .loading-text{
-      font-weight: 900;
-      color: rgba(13,18,32,.86);
-      letter-spacing:-0.15px;
-    }
+    footer a{ color: rgba(13,18,32,.75); font-weight: 800; }
 
     @media (max-width: 520px){
       .container{ width: calc(100% - 28px); }
@@ -392,18 +328,11 @@
     </div>
   </footer>
 
-  <div class="loading hidden" id="loading" aria-live="polite" aria-busy="true">
-    <div class="loading-card">
-      <div class="spinner" aria-hidden="true"></div>
-      <div class="loading-text" id="loadingText">Carregando…</div>
-    </div>
-  </div>
-
-  <!-- ✅ versão travada para evitar que updates do CDN quebrem o login -->
+  <!-- ✅ SDK travado (não mexe em layout, só robustez) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.93.2"></script>
 
   <script>
-    // ✅ Suas variáveis (URL + ANON key podem ficar no front)
+    // ✅ Suas variáveis
     const SUPABASE_URL = "https://gqtkhimnfphllvtxkmjl.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxdGtoaW1uZnBobGx2dHhrbWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg5MDAsImV4cCI6MjA4NDYzNDkwMH0.I7GOmBZsUtyxuPxzhcg3i5qaDuIFWBHHNtlZS65Qt_k";
 
@@ -419,14 +348,6 @@
     const emailEl = document.getElementById("email");
     const btn = document.getElementById("btn");
     const msg = document.getElementById("msg");
-
-    const loadingEl = document.getElementById("loading");
-    const loadingText = document.getElementById("loadingText");
-
-    function setLoading(show, text){
-      if (text) loadingText.textContent = text;
-      loadingEl.classList.toggle("hidden", !show);
-    }
 
     function showMessage(text, type = "warn") {
       msg.style.display = "block";
@@ -445,7 +366,11 @@
       window.history.replaceState({}, document.title, clean);
     }
 
-    // ✅ Cooldown para evitar erro 429 (Supabase: 45s)
+    function currentPageUrl(){
+      return window.location.origin + window.location.pathname;
+    }
+
+    // Cooldown (pra evitar 429)
     const COOLDOWN_SECONDS = 45;
     const COOLDOWN_KEY = "goargentina_last_magiclink_ts";
 
@@ -470,14 +395,8 @@
 
     setInterval(updateCooldownUI, 500);
 
-    function currentPageUrl(){
-      // O link volta pra ESTA página, e daqui a gente conclui o login e redireciona
-      return window.location.origin + window.location.pathname;
-    }
-
     async function routeAfterLogin(){
-      // Tenta direcionar admin -> admin.html (sem depender do banco; é só UX)
-      // Se profiles não estiver acessível por RLS, cai no dashboard mesmo.
+      // tenta mandar admin -> admin.html (se RLS bloquear profiles, cai em dashboard)
       try{
         const { data: userData } = await sb.auth.getUser();
         const uid = userData?.user?.id;
@@ -502,7 +421,7 @@
     async function consumeCallbackIfPresent(){
       const url = new URL(window.location.href);
 
-      // Se vier erro pelo callback
+      // se vier erro pelo callback
       const err = url.searchParams.get("error");
       const errDesc = url.searchParams.get("error_description");
       if (err || errDesc){
@@ -511,13 +430,12 @@
         return;
       }
 
-      // ✅ PKCE (mais comum hoje): ?code=...
+      // ✅ PKCE: ?code=...
       const code = url.searchParams.get("code");
       if (code){
-        setLoading(true, "Concluindo login…");
+        showMessage("✅ Validando seu acesso…", "warn");
         const { error } = await sb.auth.exchangeCodeForSession(window.location.href);
         if (error){
-          setLoading(false);
           cleanUrl();
           showMessage("❌ Falha ao validar o link.\n\nDetalhe: " + (error.message || error), "error");
           return;
@@ -527,17 +445,16 @@
         return;
       }
 
-      // ✅ Fallback: links antigos podem voltar com #access_token=...
+      // ✅ fallback: links antigos com #access_token=...
       if (window.location.hash && window.location.hash.includes("access_token=")){
         const params = new URLSearchParams(window.location.hash.substring(1));
         const access_token = params.get("access_token");
         const refresh_token = params.get("refresh_token");
 
         if (access_token && refresh_token){
-          setLoading(true, "Concluindo login…");
+          showMessage("✅ Validando seu acesso…", "warn");
           const { error } = await sb.auth.setSession({ access_token, refresh_token });
           if (error){
-            setLoading(false);
             cleanUrl();
             showMessage("❌ Falha ao validar o link.\n\nDetalhe: " + (error.message || error), "error");
             return;
@@ -552,22 +469,18 @@
     async function redirectIfAlreadyLoggedIn(){
       const { data } = await sb.auth.getSession();
       if (data?.session){
-        setLoading(true, "Você já está logado. Redirecionando…");
+        showMessage("✅ Você já está logado. Redirecionando…", "success");
         await routeAfterLogin();
       }
     }
 
-    // 1) Consome callback (code/hash) primeiro
     (async function boot(){
       updateCooldownUI();
       clearMessage();
-
       await consumeCallbackIfPresent();
-      // 2) Se já está logado, manda direto
       await redirectIfAlreadyLoggedIn();
     })();
 
-    // 3) Submit do formulário (envia magic link)
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -579,30 +492,24 @@
 
       btn.disabled = true;
       clearMessage();
-      showMessage("📨 Enviando link de acesso…", "warn");
+      showMessage("📨 Enviando link de acesso...", "warn");
 
       try{
-        // Importante: voltar para esta página (callback)
-        const redirectTo = currentPageUrl();
-
         const { error } = await sb.auth.signInWithOtp({
           email,
           options: {
-            emailRedirectTo: redirectTo,
+            emailRedirectTo: currentPageUrl(),
             shouldCreateUser: true
           }
         });
 
         if (error){
-          // 429 típico: "For security purposes, you can only request this after 45 seconds."
-          const msgText = String(error.message || error);
-
-          if (msgText.toLowerCase().includes("45") || msgText.toLowerCase().includes("security purposes")){
+          const t = String(error.message || error);
+          if (t.toLowerCase().includes("45") || t.toLowerCase().includes("security purposes")){
             setCooldownNow();
             showMessage("⏳ Por segurança, você só pode pedir um novo link após 45 segundos.\n\nTente novamente em instantes.", "warn");
             return;
           }
-
           throw error;
         }
 
